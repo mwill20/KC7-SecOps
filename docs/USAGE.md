@@ -1,6 +1,6 @@
 # Using the course
 
-Open the approved course website in a browser. Loopback preview is for the development device. A future workplace host needs organizational approval.
+Open [KC7 SecOps](https://mwill20.github.io/KC7-SecOps/) in a browser. No install, account or terminal is needed. At work, use it only if your organization permits the site and optional browser storage. Loopback preview is for developers.
 
 1. Read and acknowledge the privacy boundary. Leave remembering off on a shared device.
 2. Read a lesson's briefing, objectives, and references. Earlier lessons are suggested preparation; all can be revisited.

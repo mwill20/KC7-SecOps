@@ -17,11 +17,11 @@ PRD and security/privacy contracts constrain every component. Validator and scor
 
 ## Current status
 
-Research, six lessons, and the static application are implemented. The private `mwill20/KC7-SecOps` repository was verified and the owner explicitly authorized initial commit/push on 2026-10-14; inspect main/origin/main for the uploaded commit. No deployment is authorized. CI configuration is manual-only and has not run remotely. Independent review, full manual assistive-technology checks, private tenant pilot, workplace/hosting approval, and any release license decision remain pending.
+Research, six lessons, and the static application are implemented. Initial source upload was authorized on 2026-10-14. On 2026-10-15 the owner made `mwill20/KC7-SecOps` public and authorized independent review followed by GitHub Pages publication without adding an open-source license. The separate AI review returned APPROVE; see `docs/SECURITY_REVIEW.md`. Pages is configured for manual Actions publication; consult `docs/DEPLOYMENT.md` and live GitHub run status for actual website evidence. Full manual assistive-technology checks, private tenant pilot and workplace-use/storage approval remain unverified.
 
 ## Preferred validation after implementation
 
-`npm run verify` runs content validation, unit/contract tests, build, artifact checks, and browser tests. Use the developer setup in `docs/INSTALLATION.md`; learners need only the future approved website. This command never runs tenant queries. `qa/TENANT_PILOT.md` describes the separate user-run tenant checks.
+`npm run verify` runs content validation, unit/contract tests, build, artifact checks, and browser tests. Use the developer setup in `docs/INSTALLATION.md`; learners need only the website, subject to workplace approval when used at work. `node tools/check-live.mjs` checks the published HTTPS assets against `dist/`; use it after building. Neither command runs tenant queries. `qa/TENANT_PILOT.md` describes the separate user-run tenant checks.
 
 ## No expansion
 

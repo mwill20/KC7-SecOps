@@ -2,9 +2,11 @@
 
 An original course for analysts learning **Google Security Operations SIEM Search with YARA-L 2.0**. Six lessons and twelve challenges teach query construction, investigation method, and appropriately bounded conclusions.
 
-The static app is implemented. The owner authorized its initial commit and push to the **private** [mwill20/KC7-SecOps](https://github.com/mwill20/KC7-SecOps) repository on 2026-10-14. Git history and the remote main branch identify the uploaded source. No website deployment is included. See [implementation status](docs/IMPLEMENTATION_STATUS.md) for validation and outstanding checks.
+**[Play KC7 SecOps →](https://mwill20.github.io/KC7-SecOps/)** — no install, account or setup command.
 
-**GitHub Pages attempt:** GitHub currently requires an upgrade or a public repository to enable Pages here. Source remains private; the candidate live URL returns 404. The course passes its local Pages-style subpath checks in Chromium, Chrome and Edge. See [deployment evidence](docs/DEPLOYMENT.md).
+Read the privacy notice, open the learning path and choose **Start at lesson 01**. Optional **Remember non-sensitive progress** lets you resume in the same browser. Leave it off on a shared device. Use workplace tools separately for any real query execution.
+
+Published on GitHub Pages on 2026-10-15 after the owner made the repository public and authorized independent review and publication. The separate AI security review approved the exact build; remote verification and real HTTPS/browser checks passed. See [deployment evidence](docs/DEPLOYMENT.md), [security review](docs/SECURITY_REVIEW.md) and [implementation status](docs/IMPLEMENTATION_STATUS.md). Workplace website/storage approval and tenant compatibility remain separate, unverified checks.
 
 ## Practice without exporting workplace data
 
@@ -25,7 +27,7 @@ npm start
 
 Open `http://127.0.0.1:4173`. Chrome and Edge must also be installed for their smoke tests. Stop preview before verification, which owns its own server. Preferred Node is 24.21.0; actual tested runtime is recorded in status. See [installation](docs/INSTALLATION.md), [usage](docs/USAGE.md), and [troubleshooting](docs/TROUBLESHOOTING.md).
 
-Learners do not install tools or run commands at work. Workplace browser access needs an approved hosting route. Private source does not automatically make a website private or policy-approved.
+Learners use the website link above. Workplace use requires organizational approval of the website and optional local storage. Public availability does not establish workplace approval.
 
 ## Repository map
 
@@ -36,11 +38,13 @@ Learners do not install tools or run commands at work. Workplace browser access 
 - [Sources](docs/research/SOURCE_MATRIX.md), [query reference](docs/QUERY_REFERENCE.md), [curriculum](docs/CURRICULUM.md), [validator contract](docs/specs/VALIDATOR.md), and [evaluation](docs/EVALUATION.md).
 - `tests/`, `qa/`, `schemas/`: executable checks, mutation fixtures, content/state contracts and private pilot protocol.
 - `dist/`, after building: thirteen allowlisted static files, excluding development/evidence files.
-- `.github/workflows/verify.yml`: pinned, manual-only CI configuration, not run remotely; no deployment.
+- `.github/workflows/verify.yml`: separate pinned, manual-only verification configuration.
+- `.github/workflows/pages.yml`: manual-only publication; verifies the course before uploading only `dist/`, then deploys through GitHub Pages. First run passed.
+- `tools/check-live.mjs`: verifies actual HTTPS asset bytes/MIME types and excluded development paths after publication.
 
 The original donor package remains preserved and ignored under `secops-query-academy-spec/`. Root code/documents govern current work. [CODEX_BUILD_BRIEF](CODEX_BUILD_BRIEF.md) is the original ordered brief; read live status before restarting anything.
 
-The root also contains a browser runtime snapshot matching the validated build at initial upload. Author application changes in `site/` and `content/`; `npm run build` generates `dist/`. Future hosting must serve the reviewed static artifact, not the complete source checkout.
+The root also contains a browser runtime snapshot matching the validated build at initial upload. Author application changes in `site/` and `content/`; `npm run build` generates `dist/`. Hosting serves the reviewed static artifact; never publish the complete source checkout.
 
 ## Boundaries and limitations
 
@@ -48,10 +52,10 @@ No runtime AI, backend, accounts, SIEM integration, event dataset, upload, raw e
 
 The validator supports a bounded Search subset, not Google's compiler. Queries are documentation-checked and **tenant-unverified**. Mapping, permissions, telemetry and features need private checks. L06 tumbling windows are preview/pre-GA and may be unavailable. Missing capability leaves practice pending; executed zero-result queries may qualify after limitation review.
 
-Independent review and full manual accessibility checks remain pending. Host metadata, compromised releases, same-origin scripts and extensions limit client-side protection. See [limitations](docs/LIMITATIONS.md).
+Independent AI release review completed with no supported security findings. Full manual accessibility checks and tenant validation remain unperformed. Host metadata, compromised releases, same-origin scripts and extensions limit client-side protection. See [limitations](docs/LIMITATIONS.md).
 
 ## Attribution and license
 
 Inspired by KC7's narrative investigations and graduated learning. Case, content, scoring and code are original; no KC7 question bank, artwork, code or datasets are included. Not affiliated with KC7, Google or Microsoft. Primary sources are linked in the matrix.
 
-TODO: owner chooses a license before public release. No public-use license has been selected.
+The owner approved publication without adding an open-source license. No license was added.

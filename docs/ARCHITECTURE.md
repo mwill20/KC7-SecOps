@@ -1,6 +1,6 @@
 # Architecture
 
-Implemented local path, 2026-10-14. Builder evidence is separate from independent acceptance and tenant verification.
+Implemented static path; public GitHub Pages deployment verified 2026-10-15. Builder, independent AI review, live hosting and tenant verification remain distinct evidence.
 
 ## Working boundary
 
@@ -8,7 +8,7 @@ Implemented local path, 2026-10-14. Builder evidence is separate from independen
 flowchart LR
   Content[Authored lesson JSON] --> Build[Validated static build]
   Code[Native browser modules] --> Build
-  Build --> Host[Approved static host - pending]
+  Build --> Host[Owner-approved public GitHub Pages]
   Build --> Preview[Developer loopback preview]
   Host --> Browser[Learner browser]
   Preview --> Browser
@@ -41,7 +41,7 @@ There is no programmatic connection to SecOps, runtime AI, backend, user account
 | `tools/serve.mjs` | Developer loopback server, exact GET/HEAD routes only, root/subpath support |
 | `tests/unit/`, `tests/browser/` | Goal/failure contracts and real built-browser flows |
 
-The generated `dist/content.js` bundles authored JSON. It is never hand-edited or fetched remotely. Runtime uses native ES modules and no dependencies. Development has exact Playwright 1.64.1 and a lockfile. Final verification passed on preferred Node 24.21.0; earlier development used installed Node 25.8.1/npm 11.11.0. The manual-only CI pins checkout/setup-node to revisions verified from their official repositories; it has not run remotely.
+The generated `dist/content.js` bundles authored JSON. It is never hand-edited or fetched remotely. Runtime uses native ES modules and no dependencies. Development has exact Playwright 1.64.1 and a lockfile. Verification passed on preferred Node 24.21.0 locally and in the remote Pages run; earlier development used installed Node 25.8.1/npm 11.11.0. Manual-only workflows pin direct actions to verified full revisions. See DEPLOYMENT.md for the actual run and reviewed artifact identity.
 
 ## Routes and state
 
