@@ -19,7 +19,7 @@ Updated 2026-10-14. This is builder evidence, not independent acceptance.
 | Accessibility | Automated keyboard/skip/focus/reflow/forced-color/reduced-motion checks pass; screenshots visually inspected. Manual screen-reader and actual 200% browser zoom checks remain pending |
 | Independent security review | Not performed; required before release |
 | Tenant compiler/execution pilot | Not performed; all examples remain tenant-unverified |
-| Hosting/workplace policy | Pending approved host/audience and workplace website/storage policy; no deployment |
+| Hosting/workplace policy | Owner requested GitHub Pages; signed-in Pages settings require an upgrade or public repo. Private source preserved; no deployment. Candidate live URL returns 404; Pages-style local path passes in three browsers. See DEPLOYMENT.md. Workplace policy remains external |
 | License | Pending owner decision before any public release |
 
 ## Milestones
@@ -32,4 +32,4 @@ Initial development used installed Node 25.8.1/npm 11.11.0. Final verification r
 
 Artifact aggregate hashes UTF-8 file names plus NUL, then exact bytes, in sorted allowlist order. The digest above identifies the tested local deliverable; Git history identifies committed source. Deliverable archive hashes are recorded outside the archives in the output manifest. Original donor specification remains unchanged/ignored. The 13 root runtime copies were present at the owner's push request and matched `dist/` byte-for-byte; they are included without deleting owner content.
 
-No user/employer query was run; no KC7 answer submitted, query executed, replay reset, enrollment or settings change performed. Source commit/push is now authorized. Deployment, paid activation, license selection and external messaging remain outside this request.
+No user/employer query was run; no KC7 answer submitted, query executed, replay reset, enrollment or settings change performed. Source commit/push and a GitHub Pages attempt are authorized. Pages eligibility currently prevents publishing. Paid activation, repository visibility changes, license selection and external messaging remain unauthorized.

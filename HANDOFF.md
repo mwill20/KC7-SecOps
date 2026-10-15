@@ -8,4 +8,6 @@ Private mwill20/KC7-SecOps was created; private metadata and empty remote were r
 
 Next release conditions: focused independent security review (docs/NEXT_REVIEW_BRIEF.md), full manual accessibility/zoom, private tenant compilation/capability pilot and approved host/audience/workplace policy. Do not call builder tests independent acceptance or claim work-browser deployment. No agents/chats have been created for review.
 
+Latest hosting request: the owner authorized trying GitHub Pages. Settings → Pages reports "Upgrade or make this repository public to enable Pages"; authenticated has_pages is false, Pages API and candidate live URL return 404. Three targeted local /KC7-SecOps/ browser smoke tests pass. No hosting, billing or visibility changes were made. Read docs/DEPLOYMENT.md before retrying; owner must choose an eligible plan or approve another host. Do not infer public-source or paid-upgrade permission.
+
 Runtime has no AI, backend, SIEM integration, actual event dataset, free-text values or uploads. Real identities/results stay in workplace tools. L06 fixed buckets are preview-dependent. Source matrix records authorized read-only Chrome observations; the temporary usage review block was resolved without bypass. Preserve those distinctions in future status.

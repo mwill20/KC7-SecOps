@@ -4,6 +4,8 @@ An original course for analysts learning **Google Security Operations SIEM Searc
 
 The static app is implemented. The owner authorized its initial commit and push to the **private** [mwill20/KC7-SecOps](https://github.com/mwill20/KC7-SecOps) repository on 2026-10-14. Git history and the remote main branch identify the uploaded source. No website deployment is included. See [implementation status](docs/IMPLEMENTATION_STATUS.md) for validation and outstanding checks.
 
+**GitHub Pages attempt:** GitHub currently requires an upgrade or a public repository to enable Pages here. Source remains private; the candidate live URL returns 404. The course passes its local Pages-style subpath checks in Chromium, Chrome and Edge. See [deployment evidence](docs/DEPLOYMENT.md).
+
 ## Practice without exporting workplace data
 
 Build queries from fixed fields, operators and symbols such as `[USER]`. A deterministic local validator checks structure and supported alternate forms. Practice separately in authorized workplace SecOps, substituting values only there. The course receives no identifiers, logs, results, tenant URLs, screenshots or notes.
