@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kc7-secops:progress:v1",
+  "title": "KC7 SecOps progress v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "courseVersion": {
+      "const": 1
+    },
+    "rememberProgress": {
+      "const": true
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "challengeId": {
+            "enum": [
+              "L01-C01",
+              "L01-C02",
+              "L02-C01",
+              "L02-C02",
+              "L03-C01",
+              "L03-C02",
+              "L04-C01",
+              "L04-C02",
+              "L05-C01",
+              "L05-C02",
+              "L06-C01",
+              "L06-C02"
+            ]
+          },
+          "contentVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "queryPoints": {
+            "enum": [
+              0,
+              10,
+              35,
+              45,
+              70
+            ]
+          },
+          "methodPoints": {
+            "enum": [
+              0,
+              10,
+              20
+            ]
+          },
+          "completionPoints": {
+            "enum": [
+              0,
+              10
+            ]
+          },
+          "practiced": {
+            "type": "boolean"
+          },
+          "highestHint": {
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ]
+          }
+        },
+        "required": [
+          "challengeId",
+          "contentVersion",
+          "queryPoints",
+          "methodPoints",
+          "completionPoints",
+          "practiced",
+          "highestHint"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "practiced": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "queryPoints": {
+                  "const": 70
+                },
+                "completionPoints": {
+                  "const": 10
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "completionPoints": {
+                  "const": 0
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 12
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "courseVersion",
+    "rememberProgress",
+    "records"
+  ]
+}

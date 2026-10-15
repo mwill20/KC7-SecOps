@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": 1,
+  "id": "L03",
+  "title": "Pivot to a host and process pattern",
+  "level": "developing",
+  "estimatedMinutes": 40,
+  "prerequisites": [
+    "L02"
+  ],
+  "objectives": [
+    "Select process launches on an exact actor host.",
+    "Use a bounded suffix regex with nocase.",
+    "Distinguish process presence from execution intent and maliciousness."
+  ],
+  "story": "Signal Desk asks whether an approved host launched a familiar shell. No execution is initiated by the course; you only search authorized telemetry. A process name is a pivot, not a verdict.",
+  "teaching": [
+    {
+      "heading": "From an identity to an endpoint",
+      "text": "An IOC enrichment workflow changes the next question as evidence appears. Here the pivot is an approved host selected privately in SecOps, represented as [HOST] externally. The symbolic task uses principal.hostname as the actor host and target.process.file.full_path as the launched process path. Verify this mapping in your source."
+    },
+    {
+      "heading": "Regex is a precise pattern",
+      "text": "The literal /\\\\powershell\\.exe$/ matches a Windows path ending with a backslash followed by powershell.exe. The escaped dot means a literal period, and $ means the suffix ends there. nocase handles filename case. A suffix does not verify the binary's hash, signer, command line, or intent."
+    },
+    {
+      "heading": "Know the engine",
+      "text": "SecOps documents RE2 regex behavior. Lookahead and lookbehind are not supported. Our app offers predefined patterns only and does not execute regex against data. A supported alternative can split shell names into OR branches or use the documented re.regex function; it must retain the same match semantics."
+    },
+    {
+      "heading": "Preserve the investigative boundary",
+      "text": "Do not run or simulate a suspicious command to generate a match. Use existing authorized process telemetry. If the source stores a different path shape, adapt only inside SecOps and retain the limitation in workplace notes."
+    }
+  ],
+  "challenges": [
+    {
+      "id": "L03-C01",
+      "title": "Find a PowerShell path suffix",
+      "prompt": "Select PROCESS_LAUNCH events on principal.hostname [HOST], with target.process.file.full_path ending in a Windows path suffix \\\\powershell.exe, case-insensitive. Return event rows.",
+      "symbolIds": [
+        "HOST"
+      ],
+      "referenceQuery": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\powershell\\.exe$/ nocase",
+      "acceptedVariants": [
+        "events:\n  principal.hostname = \"__HOST__\"\n  metadata.event_type = \"PROCESS_LAUNCH\"\n  re.regex(target.process.file.full_path, \"\\\\\\\\powershell\\\\.exe$\") nocase"
+      ],
+      "hints": [
+        "Keep event category and host scope before selecting a process pattern.",
+        "Choose the Windows PowerShell suffix pattern and enable nocase; the end anchor matters.",
+        "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\powershell\\.exe$/ nocase"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "What does this process pattern establish?",
+          "options": [
+            {
+              "id": "A",
+              "label": "That every PowerShell launch is malicious"
+            },
+            {
+              "id": "B",
+              "label": "That the binary has a trusted signer"
+            },
+            {
+              "id": "C",
+              "label": "That the normalized path matches the specified suffix"
+            }
+          ],
+          "correctOption": "C",
+          "rationale": "The pattern checks path text. It is not a hash, signer, execution intent, or compromise test."
+        },
+        {
+          "id": "M2",
+          "prompt": "Which proposed pattern feature needs rejection for RE2?",
+          "options": [
+            {
+              "id": "A",
+              "label": "A literal escaped period"
+            },
+            {
+              "id": "B",
+              "label": "A lookbehind assertion"
+            },
+            {
+              "id": "C",
+              "label": "An end anchor"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "Google documents RE2 without lookahead/lookbehind. Use supported pattern forms."
+        }
+      ],
+      "executeSteps": [
+        "Choose an approved host in SecOps and inspect the process event's field mapping.",
+        "Replace __HOST__ only there, run the query, and inspect available process details.",
+        "Do not launch any process to manufacture results.",
+        "If Linux paths or another mapping are used, note that this Windows-suffix exercise may be unavailable; complete symbolic mastery independently."
+      ],
+      "debrief": "Privately list contextual evidence you would need before escalating a shell launch. Never put command lines or process paths from work into the site."
+    },
+    {
+      "id": "L03-C02",
+      "title": "Allow either shell name without broadening scope",
+      "prompt": "Select PROCESS_LAUNCH events on [HOST] whose target process path ends with either \\\\powershell.exe or \\\\pwsh.exe, case-insensitive. Both alternatives must stay inside the event/host scope.",
+      "symbolIds": [
+        "HOST"
+      ],
+      "referenceQuery": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\(powershell|pwsh)\\.exe$/ nocase",
+      "acceptedVariants": [
+        "metadata.event_type = \"PROCESS_LAUNCH\" AND principal.hostname = \"__HOST__\" AND\n(target.process.file.full_path = /\\\\powershell\\.exe$/ nocase OR target.process.file.full_path = /\\\\pwsh\\.exe$/ nocase)"
+      ],
+      "hints": [
+        "The two shell names are alternatives; host and event type remain required.",
+        "Use the predefined combined suffix pattern or an OR of the two suffix patterns.",
+        "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\(powershell|pwsh)\\.exe$/ nocase"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "Why is an unanchored /powershell/ pattern not equivalent?",
+          "options": [
+            {
+              "id": "A",
+              "label": "It can match unrelated path substrings rather than the exact suffix"
+            },
+            {
+              "id": "B",
+              "label": "It automatically matches fewer fields"
+            },
+            {
+              "id": "C",
+              "label": "It creates a detection rule"
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "Anchors and escaping define intent. Looser matches may be useful elsewhere but do not meet this task."
+        },
+        {
+          "id": "M2",
+          "prompt": "No process rows appear. What should you do?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Conclude the host never launches shells"
+            },
+            {
+              "id": "B",
+              "label": "Check available endpoint telemetry, source mapping, range, and platform applicability"
+            },
+            {
+              "id": "C",
+              "label": "Install an agent on the work device"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "The course requires no installation and cannot establish telemetry coverage. Missing data remains a limitation."
+        }
+      ],
+      "executeSteps": [
+        "Reuse the authorized host privately and run the two-name query.",
+        "Check event details to distinguish path pattern matches from actual activity context.",
+        "Compare privately against the single-name filter if telemetry exists.",
+        "If unavailable, keep practice pending and continue the symbolic course; do not generate endpoint data."
+      ],
+      "debrief": "Explain why this expansion is intentional and bounded, whereas dropping the host filter is a different question."
+    }
+  ],
+  "sourceIds": [
+    "G02",
+    "G04",
+    "G11",
+    "G15"
+  ],
+  "verification": {
+    "documentationCheckedOn": "2026-10-14",
+    "tenantExecution": "not-tested"
+  }
+}

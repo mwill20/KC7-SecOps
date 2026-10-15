@@ -1,0 +1,22 @@
+name: Verify local course
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: kc7-course-verification
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: windows-2025
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5, verified 2026-10-14
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6, verified 2026-10-14
+        with:
+          node-version-file: .node-version
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npx playwright install chromium chrome msedge
+      - run: npm run verify

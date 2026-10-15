@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": 1,
+  "id": "L04",
+  "title": "Network pivots and directional fields",
+  "level": "developing",
+  "estimatedMinutes": 40,
+  "prerequisites": [
+    "L03"
+  ],
+  "objectives": [
+    "Search either directional IP role without dropping the event boundary.",
+    "Use CIDR and numeric port filters with correct data types.",
+    "Recognize repeated-field and direction limitations."
+  ],
+  "story": "Signal Desk now examines existing network records associated with an approved pivot. The exercise does not label the chosen IP or subnet malicious. All real pivots and their relationship to the host stay inside SecOps.",
+  "teaching": [
+    {
+      "heading": "An IP is a pivot, not an attribution",
+      "text": "Like a VT or WHOIS lookup, an IP observation needs context. NAT, proxies, shared infrastructure, and timing can affect interpretation. The course performs no external lookups. [IP] becomes the documentation address 192.0.2.17; it is only a safe stand-in."
+    },
+    {
+      "heading": "Direction matters",
+      "text": "principal.ip and target.ip represent different roles. Searching either role deliberately broadens direction while retaining NETWORK_CONNECTION scope. A grouped ip alias searches more fields and is not equivalent to this two-role task. Read the UDM event to establish how your product maps direction."
+    },
+    {
+      "heading": "Use the field type",
+      "text": "IP values and CIDR ranges are strings in these patterns. target.port is numeric: 443, not \"443\". net.ip_in_range_cidr returns a Boolean predicate. A port is not proof of a protocol or application, so port 443 does not by itself establish TLS or benign traffic."
+    },
+    {
+      "heading": "Repeated data requires care",
+      "text": "IP fields may contain multiple values. Search and rule evaluation differ around repeated fields. Equality can find an occurrence, but do not assume that != excludes every array element or that Boolean rewrites of negation preserve all engine semantics. The initial challenges use positive IP predicates only."
+    }
+  ],
+  "challenges": [
+    {
+      "id": "L04-C01",
+      "title": "Find the pivot on either side",
+      "prompt": "Select NETWORK_CONNECTION events where [IP] occurs in principal.ip OR target.ip. Use the fixed documentation address 192.0.2.17 on this site and return event rows.",
+      "symbolIds": [
+        "IP"
+      ],
+      "referenceQuery": "metadata.event_type = \"NETWORK_CONNECTION\" AND\n(principal.ip = \"192.0.2.17\" OR target.ip = \"192.0.2.17\")",
+      "acceptedVariants": [
+        "(target.ip = \"192.0.2.17\" OR principal.ip = \"192.0.2.17\") AND metadata.event_type = \"NETWORK_CONNECTION\"",
+        "(metadata.event_type = \"NETWORK_CONNECTION\" AND principal.ip = \"192.0.2.17\") OR (metadata.event_type = \"NETWORK_CONNECTION\" AND target.ip = \"192.0.2.17\")"
+      ],
+      "hints": [
+        "Keep NETWORK_CONNECTION required regardless of IP direction.",
+        "Group principal.ip and target.ip alternatives inside parentheses.",
+        "metadata.event_type = \"NETWORK_CONNECTION\" AND (principal.ip = \"192.0.2.17\" OR target.ip = \"192.0.2.17\")"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "Is the grouped ip alias an equivalent replacement here?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Yes, it always searches exactly those two fields"
+            },
+            {
+              "id": "B",
+              "label": "No; it can include additional UDM roles and broaden the task"
+            },
+            {
+              "id": "C",
+              "label": "It is a numeric port field"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "Grouped aliases cover a wider set of fields. Preserve the explicitly requested direction scope."
+        },
+        {
+          "id": "M2",
+          "prompt": "Why must an IP match be interpreted cautiously?",
+          "options": [
+            {
+              "id": "A",
+              "label": "An address alone proves the responsible person"
+            },
+            {
+              "id": "B",
+              "label": "Addresses never appear in arrays"
+            },
+            {
+              "id": "C",
+              "label": "Shared infrastructure, NAT/proxies, timing, and roles can affect attribution"
+            }
+          ],
+          "correctOption": "C",
+          "rationale": "A match is a lead. It needs additional contextual evidence inside the workplace investigation."
+        }
+      ],
+      "executeSteps": [
+        "Select an authorized IP from workplace evidence or an approved practice scope.",
+        "Replace 192.0.2.17 only inside SecOps; do not try to map it in the site.",
+        "Run and inspect principal/target direction and repeated values privately.",
+        "No rows may be a valid result; check range and network telemetry availability."
+      ],
+      "debrief": "Plan a next pivot privately without exporting an IP, domain, or row count."
+    },
+    {
+      "id": "L04-C02",
+      "title": "Bound a destination subnet and port",
+      "prompt": "Select NETWORK_CONNECTION events whose target.ip is in [CIDR] and target.port equals numeric 443. On this site [CIDR] is the documentation subnet 192.0.2.0/24. Return event rows.",
+      "symbolIds": [
+        "CIDR"
+      ],
+      "referenceQuery": "metadata.event_type = \"NETWORK_CONNECTION\"\nnet.ip_in_range_cidr(target.ip, \"192.0.2.0/24\")\ntarget.port = 443",
+      "acceptedVariants": [
+        "target.port = 443 AND net.ip_in_range_cidr(target.ip, \"192.0.2.0/24\") AND metadata.event_type = \"NETWORK_CONNECTION\""
+      ],
+      "hints": [
+        "Use the destination IP role and a CIDR function, not a string prefix guess.",
+        "Add net.ip_in_range_cidr(target.ip, [CIDR]) and numeric target.port = 443.",
+        "metadata.event_type = \"NETWORK_CONNECTION\"\nnet.ip_in_range_cidr(target.ip, \"192.0.2.0/24\")\ntarget.port = 443"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "What is the type of 443 in this filter?",
+          "options": [
+            {
+              "id": "A",
+              "label": "An unquoted numeric value"
+            },
+            {
+              "id": "B",
+              "label": "A quoted username string"
+            },
+            {
+              "id": "C",
+              "label": "A regex delimiter"
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "Port comparisons use the field's numeric type."
+        },
+        {
+          "id": "M2",
+          "prompt": "Do matches prove safe HTTPS traffic?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Yes, port 443 always means HTTPS"
+            },
+            {
+              "id": "B",
+              "label": "No; port, destination, action, application and event context need review"
+            },
+            {
+              "id": "C",
+              "label": "Yes, because the subnet uses CIDR"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "A port and subnet describe a selection criterion, not safety, protocol verification, or attribution."
+        }
+      ],
+      "executeSteps": [
+        "Choose an authorized destination subnet only in SecOps; inspect network field mapping.",
+        "Replace the documentation CIDR there and run within a bounded approved range.",
+        "Inspect direction, action, and product context privately.",
+        "Do not scan, connect to, block, or query reputation for the subnet as part of the course."
+      ],
+      "debrief": "Explain why a CIDR predicate is more precise than a textual IP-prefix match for subnet membership."
+    }
+  ],
+  "sourceIds": [
+    "G02",
+    "G04",
+    "G12",
+    "G14",
+    "P06"
+  ],
+  "verification": {
+    "documentationCheckedOn": "2026-10-14",
+    "tenantExecution": "not-tested"
+  }
+}

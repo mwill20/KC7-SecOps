@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "symbols": [
+    {
+      "id": "USER",
+      "label": "[USER]",
+      "literal": "__USER__",
+      "kind": "string",
+      "privateInstruction": "Select an authorized userid only inside SecOps."
+    },
+    {
+      "id": "HOST",
+      "label": "[HOST]",
+      "literal": "__HOST__",
+      "kind": "string",
+      "privateInstruction": "Select an authorized hostname only inside SecOps."
+    },
+    {
+      "id": "IP",
+      "label": "[IP]",
+      "literal": "192.0.2.17",
+      "kind": "string",
+      "privateInstruction": "Replace this documentation IP only inside SecOps."
+    },
+    {
+      "id": "CIDR",
+      "label": "[CIDR]",
+      "literal": "192.0.2.0/24",
+      "kind": "string",
+      "privateInstruction": "Replace this documentation subnet only inside SecOps."
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "K01",
+      "title": "Public homepage",
+      "url": "https://kc7cyber.com/"
+    },
+    {
+      "id": "K02",
+      "title": "Module catalog",
+      "url": "https://kc7cyber.com/modules"
+    },
+    {
+      "id": "K03",
+      "title": "Making the most of KC7",
+      "url": "https://kc7cyber.com/blog/making-the-most-of-kc7"
+    },
+    {
+      "id": "K04",
+      "title": "Host resources",
+      "url": "https://docs.kc7cyber.com/"
+    },
+    {
+      "id": "K05",
+      "title": "Dashboard overview",
+      "url": "https://docs.kc7cyber.com/dashboard/overview"
+    },
+    {
+      "id": "K06",
+      "title": "Public repository README",
+      "url": "https://github.com/KC7-Foundation/kc7"
+    },
+    {
+      "id": "K07",
+      "title": "models.py at inspected revision",
+      "url": "https://github.com/KC7-Foundation/kc7/blob/f1f054c2c271b0766392b2fb2cffcdc3cd3a539d/app/server/models.py"
+    },
+    {
+      "id": "K08",
+      "title": "game_functions.py",
+      "url": "https://github.com/KC7-Foundation/kc7/blob/f1f054c2c271b0766392b2fb2cffcdc3cd3a539d/app/server/game_functions.py"
+    },
+    {
+      "id": "K09",
+      "title": "views.py",
+      "url": "https://github.com/KC7-Foundation/kc7/blob/f1f054c2c271b0766392b2fb2cffcdc3cd3a539d/app/server/views.py"
+    },
+    {
+      "id": "K10",
+      "title": "docs/index.md",
+      "url": "https://github.com/KC7-Foundation/kc7/blob/f1f054c2c271b0766392b2fb2cffcdc3cd3a539d/docs/index.md"
+    },
+    {
+      "id": "K11",
+      "title": "Public training PDF entry",
+      "url": "https://github.com/KC7-Foundation/kc7/blob/main/training_materials/KC7%20-%20Cyber%20Challenge%20Training.pdf"
+    },
+    {
+      "id": "G01",
+      "title": "Understand search",
+      "url": "https://docs.cloud.google.com/chronicle/docs/investigation/udm-search"
+    },
+    {
+      "id": "G02",
+      "title": "Search syntax reference",
+      "url": "https://docs.cloud.google.com/chronicle/docs/investigation/search-syntax-reference"
+    },
+    {
+      "id": "G03",
+      "title": "Get started with YARA-L 2.0",
+      "url": "https://docs.cloud.google.com/chronicle/docs/yara-l/getting-started2"
+    },
+    {
+      "id": "G04",
+      "title": "UDM field list",
+      "url": "https://docs.cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "id": "G05",
+      "title": "Search best practices",
+      "url": "https://docs.cloud.google.com/chronicle/docs/investigation/udm-search-best-practices"
+    },
+    {
+      "id": "G06",
+      "title": "Statistics and aggregation",
+      "url": "https://docs.cloud.google.com/chronicle/docs/investigation/statistics-aggregations-in-udm-search"
+    },
+    {
+      "id": "G07",
+      "title": "Conditions in Search",
+      "url": "https://docs.cloud.google.com/chronicle/docs/investigation/yara-l-2-0-conditions"
+    },
+    {
+      "id": "G08",
+      "title": "Match syntax",
+      "url": "https://docs.cloud.google.com/chronicle/docs/yara-l/match-syntax"
+    },
+    {
+      "id": "G09",
+      "title": "Windowing logic",
+      "url": "https://docs.cloud.google.com/chronicle/docs/yara-l/windowing-logic"
+    },
+    {
+      "id": "G10",
+      "title": "Search-to-GoogleSQL examples",
+      "url": "https://docs.cloud.google.com/chronicle/docs/reference/standard-sql/yara-l-google-sql-translate"
+    },
+    {
+      "id": "G11",
+      "title": "re.regex",
+      "url": "https://docs.cloud.google.com/chronicle/docs/detection/yara-l-2-0-functions/re-regex"
+    },
+    {
+      "id": "G12",
+      "title": "net.ip_in_range_cidr",
+      "url": "https://docs.cloud.google.com/chronicle/docs/detection/yara-l-2-0-functions/net-ip_in_range_cidr"
+    },
+    {
+      "id": "G13",
+      "title": "Deduplicate search results",
+      "url": "https://docs.cloud.google.com/chronicle/docs/investigation/deduplication-yaral"
+    },
+    {
+      "id": "G14",
+      "title": "Search vs rule results",
+      "url": "https://docs.cloud.google.com/chronicle/docs/investigation/udm-search-vs-rules-results"
+    },
+    {
+      "id": "G15",
+      "title": "Data availability",
+      "url": "https://docs.cloud.google.com/chronicle/docs/investigation/expected-data-availability-for-search"
+    },
+    {
+      "id": "G16",
+      "title": "Single/multiple event examples",
+      "url": "https://docs.cloud.google.com/chronicle/docs/yara-l/yara-l-2-0-examples2"
+    },
+    {
+      "id": "P01",
+      "title": "GitHub Pages",
+      "url": "https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages"
+    },
+    {
+      "id": "P02",
+      "title": "GitHub Pages access control",
+      "url": "https://docs.github.com/en/enterprise-cloud@latest/pages/getting-started-with-github-pages/changing-the-visibility-of-your-github-pages-site"
+    },
+    {
+      "id": "P03",
+      "title": "GitHub repository creation",
+      "url": "https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository"
+    },
+    {
+      "id": "P04",
+      "title": "WCAG 2.2",
+      "url": "https://www.w3.org/TR/WCAG22/"
+    },
+    {
+      "id": "P05",
+      "title": "CSP standard",
+      "url": "https://w3c.github.io/webappsec-csp/"
+    },
+    {
+      "id": "P06",
+      "title": "RFC 5737",
+      "url": "https://www.rfc-editor.org/info/rfc5737/"
+    },
+    {
+      "id": "P07",
+      "title": "Microsoft Copilot enterprise data protection",
+      "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/enterprise-data-protection"
+    },
+    {
+      "id": "P08",
+      "title": "KQL where",
+      "url": "https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/whereoperator"
+    },
+    {
+      "id": "P09",
+      "title": "Node downloads",
+      "url": "https://nodejs.org/en/download"
+    }
+  ]
+}

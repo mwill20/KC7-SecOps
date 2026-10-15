@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": 1,
+  "id": "L05",
+  "title": "Summarize activity without inventing meaning",
+  "level": "intermediate",
+  "estimatedMinutes": 45,
+  "prerequisites": [
+    "L04"
+  ],
+  "objectives": [
+    "Group records and define count_distinct and sum outcomes.",
+    "Sort an aggregate result and limit displayed rows.",
+    "Separate distinct record IDs, vendor duplication, missing values, and real-world actions."
+  ],
+  "story": "Signal Desk asks for summaries to help choose what to inspect next. You will learn to measure records accurately before giving the count any security meaning. The app does not collect or know the numbers returned.",
+  "teaching": [
+    {
+      "heading": "Grouping changes the output",
+      "text": "KQL summarize groups records and calculates summaries. YARA-L Search uses match for the keys and outcome for calculations. The result is grouped rows, not the original event list. A YARA-L placeholder such as $user binds a field; it is unrelated to the synthetic [USER] label."
+    },
+    {
+      "heading": "Know what is being counted",
+      "text": "count(metadata.id) counts rows; count_distinct(metadata.id) counts distinct normalized IDs. Repeated fields and joins may multiply rows; distinct IDs help answer a distinct-record question. Two source products may still give different IDs to the same real action. Never label this number unique real-world incidents."
+    },
+    {
+      "heading": "Defaults and population matter",
+      "text": "The user nonempty filter removes an empty grouping identity. An aggregate's correctness still depends on source population and schema behavior. sum(network.sent_bytes) summarizes the normalized byte field, not a guaranteed complete transfer volume or proof of exfiltration. Check the product's mapping and units privately."
+    },
+    {
+      "heading": "Sort and limit do not define collection",
+      "text": "order sorts the aggregate result; limit 20 asks for a maximum of twenty displayed result rows. It does not search only twenty events or guarantee that only twenty entities exist. Recent data may become available to statistical Search after ingestion processing."
+    }
+  ],
+  "challenges": [
+    {
+      "id": "L05-C01",
+      "title": "Rank failed-login record counts by actor",
+      "prompt": "Select USER_LOGIN with FAIL action and nonempty principal.user.userid. Group by that user. Output the distinct metadata.id count, order that count descending, and limit to 20 rows. Do not filter to one specific user or add time buckets.",
+      "symbolIds": [],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
+      "acceptedVariants": [
+        "events:\n  security_result.action = \"FAIL\"\n  principal.user.userid != \"\"\n  metadata.event_type = \"USER_LOGIN\"\nmatch:\n  principal.user.userid\noutcome:\n  $total = count_distinct(metadata.id)\norder:\n  $total desc\nlimit:\n  20"
+      ],
+      "hints": [
+        "Filter events first, then group on the actor userid.",
+        "Use count_distinct(metadata.id) for a distinct-record count; order that outcome desc and limit 20.",
+        "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\nmatch:\n  principal.user.userid\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "What does the aggregate count represent?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Distinct real attackers"
+            },
+            {
+              "id": "B",
+              "label": "Distinct metadata.id values within each selected user group"
+            },
+            {
+              "id": "C",
+              "label": "The number of fields in each record"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "The requirement is distinct normalized records. It does not deduplicate every real action across source vendors."
+        },
+        {
+          "id": "M2",
+          "prompt": "What does limit 20 control?",
+          "options": [
+            {
+              "id": "A",
+              "label": "The number of events scanned"
+            },
+            {
+              "id": "B",
+              "label": "The earliest twenty login events only"
+            },
+            {
+              "id": "C",
+              "label": "The maximum number of returned aggregate rows"
+            }
+          ],
+          "correctOption": "C",
+          "rationale": "It limits output after the grouping/sorting pipeline, not investigation coverage."
+        }
+      ],
+      "executeSteps": [
+        "Verify USER_LOGIN, FAIL action, userid and metadata.id availability privately.",
+        "Run the grouped query with an approved narrow range; no identifier substitution is needed.",
+        "Inspect a selected group's underlying events in SecOps rather than treating the ranking as an incident verdict.",
+        "Keep usernames and counts in workplace tools; do not report them to the site."
+      ],
+      "debrief": "Explain privately why a high count might warrant context review but does not prove a brute-force attack."
+    },
+    {
+      "id": "L05-C02",
+      "title": "Summarize one host's destination ports",
+      "prompt": "Select NETWORK_CONNECTION records with principal.hostname [HOST]. Group by target.port. Output distinct metadata.id count and sum(network.sent_bytes), order by the byte sum descending, and limit to 20 rows. No time bucket or threshold.",
+      "symbolIds": [
+        "HOST"
+      ],
+      "referenceQuery": "metadata.event_type = \"NETWORK_CONNECTION\"\nprincipal.hostname = \"__HOST__\"\nmatch:\n  target.port\noutcome:\n  $events = count_distinct(metadata.id)\n  $bytes = sum(network.sent_bytes)\norder:\n  $bytes desc\nlimit:\n  20",
+      "acceptedVariants": [
+        "principal.hostname = \"__HOST__\"\nmetadata.event_type = \"NETWORK_CONNECTION\"\n$port = target.port\nmatch:\n  $port\noutcome:\n  $volume = sum(network.sent_bytes)\n  $total = count_distinct(metadata.id)\norder:\n  $volume desc\nlimit:\n  20"
+      ],
+      "hints": [
+        "The requested summary is per destination port, with two distinct metrics.",
+        "Group target.port; define count_distinct(metadata.id) and sum(network.sent_bytes), sorting the sum.",
+        "metadata.event_type = \"NETWORK_CONNECTION\"\nprincipal.hostname = \"__HOST__\"\nmatch:\n  target.port\noutcome:\n  $events = count_distinct(metadata.id)\n  $bytes = sum(network.sent_bytes)\norder:\n  $bytes desc\nlimit:\n  20"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "What must you verify before interpreting the byte sum?",
+          "options": [
+            {
+              "id": "A",
+              "label": "That every high-volume port is malicious"
+            },
+            {
+              "id": "B",
+              "label": "Whether network.sent_bytes is populated and what the source measures"
+            },
+            {
+              "id": "C",
+              "label": "That limit 20 scanned all network data"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "Mapping, units, missing values and source coverage determine how useful the metric is."
+        },
+        {
+          "id": "M2",
+          "prompt": "Which interpretation is justified by the query alone?",
+          "options": [
+            {
+              "id": "A",
+              "label": "It summarizes selected normalized records by target port"
+            },
+            {
+              "id": "B",
+              "label": "It proves data exfiltration"
+            },
+            {
+              "id": "C",
+              "label": "It proves the endpoint was compromised"
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "The query defines a descriptive summary. Security conclusions need independent context."
+        }
+      ],
+      "executeSteps": [
+        "Choose the approved host privately and inspect the network byte-field mapping.",
+        "Substitute __HOST__ only in SecOps, run, and inspect available aggregate output.",
+        "Check source units and missing/default values using approved event details.",
+        "If the byte field is unavailable, keep actual practice pending for this challenge and complete symbolic mastery."
+      ],
+      "debrief": "Privately identify how missing telemetry would affect this summary and what additional evidence would improve it."
+    }
+  ],
+  "sourceIds": [
+    "G03",
+    "G04",
+    "G06",
+    "G08",
+    "G15"
+  ],
+  "verification": {
+    "documentationCheckedOn": "2026-10-14",
+    "tenantExecution": "not-tested"
+  }
+}

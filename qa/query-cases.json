@@ -1,0 +1,454 @@
+{
+  "schemaVersion": 1,
+  "note": "Specification fixtures only. No parser implementation has run these yet.",
+  "cases": [
+    {
+      "id": "L01-C01-reference",
+      "challengeId": "L01-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L01-C01-alternate-1",
+      "challengeId": "L01-C01",
+      "query": "events:\n  metadata.event_type = \"USER_LOGIN\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L01-C01-alternate-2",
+      "challengeId": "L01-C01",
+      "query": "(metadata.event_type = \"USER_LOGIN\")",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L01-C02-reference",
+      "challengeId": "L01-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nprincipal.user.userid = \"__USER__\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L01-C02-alternate-1",
+      "challengeId": "L01-C02",
+      "query": "principal.user.userid = \"__USER__\" AND metadata.event_type = \"USER_LOGIN\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L01-C02-alternate-2",
+      "challengeId": "L01-C02",
+      "query": "events:\n  metadata.event_type = \"USER_LOGIN\" AND (principal.user.userid = \"__USER__\")",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L02-C01-reference",
+      "challengeId": "L02-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\" AND\n(principal.user.userid = \"__USER__\" OR target.user.userid = \"__USER__\")",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L02-C01-alternate-1",
+      "challengeId": "L02-C01",
+      "query": "(target.user.userid = \"__USER__\" OR principal.user.userid = \"__USER__\") AND metadata.event_type = \"USER_LOGIN\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L02-C01-alternate-2",
+      "challengeId": "L02-C01",
+      "query": "(metadata.event_type = \"USER_LOGIN\" AND principal.user.userid = \"__USER__\") OR (metadata.event_type = \"USER_LOGIN\" AND target.user.userid = \"__USER__\")",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L02-C02-reference",
+      "challengeId": "L02-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid = \"__USER__\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L02-C02-alternate-1",
+      "challengeId": "L02-C02",
+      "query": "principal.user.userid = \"__USER__\" AND security_result.action = \"FAIL\" AND metadata.event_type = \"USER_LOGIN\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L03-C01-reference",
+      "challengeId": "L03-C01",
+      "query": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\powershell\\.exe$/ nocase",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L03-C01-alternate-1",
+      "challengeId": "L03-C01",
+      "query": "events:\n  principal.hostname = \"__HOST__\"\n  metadata.event_type = \"PROCESS_LAUNCH\"\n  re.regex(target.process.file.full_path, \"\\\\\\\\powershell\\\\.exe$\") nocase",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L03-C02-reference",
+      "challengeId": "L03-C02",
+      "query": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\(powershell|pwsh)\\.exe$/ nocase",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L03-C02-alternate-1",
+      "challengeId": "L03-C02",
+      "query": "metadata.event_type = \"PROCESS_LAUNCH\" AND principal.hostname = \"__HOST__\" AND\n(target.process.file.full_path = /\\\\powershell\\.exe$/ nocase OR target.process.file.full_path = /\\\\pwsh\\.exe$/ nocase)",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L04-C01-reference",
+      "challengeId": "L04-C01",
+      "query": "metadata.event_type = \"NETWORK_CONNECTION\" AND\n(principal.ip = \"192.0.2.17\" OR target.ip = \"192.0.2.17\")",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L04-C01-alternate-1",
+      "challengeId": "L04-C01",
+      "query": "(target.ip = \"192.0.2.17\" OR principal.ip = \"192.0.2.17\") AND metadata.event_type = \"NETWORK_CONNECTION\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L04-C01-alternate-2",
+      "challengeId": "L04-C01",
+      "query": "(metadata.event_type = \"NETWORK_CONNECTION\" AND principal.ip = \"192.0.2.17\") OR (metadata.event_type = \"NETWORK_CONNECTION\" AND target.ip = \"192.0.2.17\")",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L04-C02-reference",
+      "challengeId": "L04-C02",
+      "query": "metadata.event_type = \"NETWORK_CONNECTION\"\nnet.ip_in_range_cidr(target.ip, \"192.0.2.0/24\")\ntarget.port = 443",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L04-C02-alternate-1",
+      "challengeId": "L04-C02",
+      "query": "target.port = 443 AND net.ip_in_range_cidr(target.ip, \"192.0.2.0/24\") AND metadata.event_type = \"NETWORK_CONNECTION\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L05-C01-reference",
+      "challengeId": "L05-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L05-C01-alternate-1",
+      "challengeId": "L05-C01",
+      "query": "events:\n  security_result.action = \"FAIL\"\n  principal.user.userid != \"\"\n  metadata.event_type = \"USER_LOGIN\"\nmatch:\n  principal.user.userid\noutcome:\n  $total = count_distinct(metadata.id)\norder:\n  $total desc\nlimit:\n  20",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L05-C02-reference",
+      "challengeId": "L05-C02",
+      "query": "metadata.event_type = \"NETWORK_CONNECTION\"\nprincipal.hostname = \"__HOST__\"\nmatch:\n  target.port\noutcome:\n  $events = count_distinct(metadata.id)\n  $bytes = sum(network.sent_bytes)\norder:\n  $bytes desc\nlimit:\n  20",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L05-C02-alternate-1",
+      "challengeId": "L05-C02",
+      "query": "principal.hostname = \"__HOST__\"\nmetadata.event_type = \"NETWORK_CONNECTION\"\n$port = target.port\nmatch:\n  $port\noutcome:\n  $volume = sum(network.sent_bytes)\n  $total = count_distinct(metadata.id)\norder:\n  $volume desc\nlimit:\n  20",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L06-C01-reference",
+      "challengeId": "L06-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user by 5m\noutcome:\n  $failures = count_distinct(metadata.id)\ncondition:\n  $failures > 3\norder:\n  $failures desc\nlimit:\n  20",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L06-C01-alternate-1",
+      "challengeId": "L06-C01",
+      "query": "events:\n  principal.user.userid != \"\"\n  security_result.action = \"FAIL\"\n  metadata.event_type = \"USER_LOGIN\"\nmatch:\n  principal.user.userid by 5m\noutcome:\n  $n = count_distinct(metadata.id)\ncondition:\n  $n >= 4\norder:\n  $n desc\nlimit:\n  20",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "L06-C02-reference",
+      "challengeId": "L06-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid = \"__USER__\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "The authored reference must satisfy its own challenge contract."
+    },
+    {
+      "id": "L06-C02-alternate-1",
+      "challengeId": "L06-C02",
+      "query": "principal.user.userid = \"__USER__\" AND metadata.event_type = \"USER_LOGIN\" AND security_result.action = \"ALLOW\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Accept a supported alternate structure without exact string matching."
+    },
+    {
+      "id": "scope-escape-user",
+      "challengeId": "L02-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\" AND principal.user.userid = \"__USER__\" OR target.user.userid = \"__USER__\"",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "OR target-user branch bypasses event type. Syntax 10, filter 0, empty pipeline 25."
+    },
+    {
+      "id": "wrong-target-role",
+      "challengeId": "L01-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\" AND target.user.userid = \"__USER__\"",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "Prompt specifically asks for principal role."
+    },
+    {
+      "id": "extra-nocase",
+      "challengeId": "L01-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nprincipal.user.userid = \"__USER__\" nocase",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "nocase broadens the required exact-case identity filter."
+    },
+    {
+      "id": "enum-case",
+      "challengeId": "L01-C01",
+      "query": "metadata.event_type = \"user_login\"",
+      "expectedStatus": "invalid",
+      "expectedQueryPoints": 0,
+      "reason": "Enum values must match catalog case."
+    },
+    {
+      "id": "unknown-literal",
+      "challengeId": "L01-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\" AND principal.user.userid = \"__NOT_ALLOWED__\"",
+      "expectedStatus": "invalid",
+      "expectedQueryPoints": 0,
+      "reason": "Unknown literal blocked without echo."
+    },
+    {
+      "id": "comment-keywords",
+      "challengeId": "L01-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\"\n// principal.user.userid = \"__USER__\"",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "Expected words in a comment are not filter conditions."
+    },
+    {
+      "id": "empty-user-guard-missing",
+      "challengeId": "L05-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "Filter differs. Pipeline still matches; syntax 10 + pipeline 25."
+    },
+    {
+      "id": "wrong-count",
+      "challengeId": "L05-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 45,
+      "reason": "Syntax 10 + filter 35; pipeline 0. Row count differs from distinct IDs."
+    },
+    {
+      "id": "wrong-limit",
+      "challengeId": "L05-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  10",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 45,
+      "reason": "Requested output limit is exactly 20."
+    },
+    {
+      "id": "sort-wrong-metric",
+      "challengeId": "L05-C02",
+      "query": "metadata.event_type = \"NETWORK_CONNECTION\"\nprincipal.hostname = \"__HOST__\"\nmatch:\n  target.port\noutcome:\n  $events = count_distinct(metadata.id)\n  $bytes = sum(network.sent_bytes)\norder:\n  $events desc\nlimit:\n  20",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 45,
+      "reason": "Sort must be byte sum, not event count."
+    },
+    {
+      "id": "bucket-missing",
+      "challengeId": "L06-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $failures = count_distinct(metadata.id)\ncondition:\n  $failures > 3\norder:\n  $failures desc\nlimit:\n  20",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 45,
+      "reason": "Fixed time bucket is part of the pipeline contract."
+    },
+    {
+      "id": "threshold-wrong",
+      "challengeId": "L06-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user by 5m\noutcome:\n  $failures = count_distinct(metadata.id)\ncondition:\n  $failures >= 3\norder:\n  $failures desc\nlimit:\n  20",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 45,
+      "reason": "Includes a count of 3 rather than at least 4."
+    },
+    {
+      "id": "unbound-outcome",
+      "challengeId": "L06-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user by 5m\noutcome:\n  $failures = count_distinct(metadata.id)\ncondition:\n  $volume > 3\norder:\n  $failures desc\nlimit:\n  20",
+      "expectedStatus": "invalid",
+      "expectedQueryPoints": 0,
+      "reason": "Condition uses an undefined alias."
+    },
+    {
+      "id": "quoted-port",
+      "challengeId": "L04-C02",
+      "query": "metadata.event_type = \"NETWORK_CONNECTION\"\nnet.ip_in_range_cidr(target.ip, \"192.0.2.0/24\")\ntarget.port = \"443\"",
+      "expectedStatus": "invalid",
+      "expectedQueryPoints": 0,
+      "reason": "Numeric port type and safe literal catalog both disallow this value."
+    },
+    {
+      "id": "cidr-wrong-role",
+      "challengeId": "L04-C02",
+      "query": "metadata.event_type = \"NETWORK_CONNECTION\"\nnet.ip_in_range_cidr(principal.ip, \"192.0.2.0/24\")\ntarget.port = 443",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "Destination role must be preserved."
+    },
+    {
+      "id": "regex-unanchored",
+      "challengeId": "L03-C01",
+      "query": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /powershell/ nocase",
+      "expectedStatus": "unsupported",
+      "expectedQueryPoints": 0,
+      "reason": "Well-formed platform pattern is outside the finite recognized catalog; not claimed invalid YARA-L."
+    },
+    {
+      "id": "ip-negation",
+      "challengeId": "L04-C01",
+      "query": "metadata.event_type = \"NETWORK_CONNECTION\" AND NOT (principal.ip = \"192.0.2.17\")",
+      "expectedStatus": "unsupported",
+      "expectedQueryPoints": 0,
+      "reason": "Repeated-field negation is outside the supported subset."
+    },
+    {
+      "id": "rule-envelope",
+      "challengeId": "L01-C01",
+      "query": "rule Demo {\n events:\n $e.metadata.event_type = \"USER_LOGIN\"\n condition:\n $e\n}",
+      "expectedStatus": "unsupported",
+      "expectedQueryPoints": 0,
+      "reason": "Detection rule context is not Search subset."
+    },
+    {
+      "id": "extra-dedup",
+      "challengeId": "L01-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\ndedup:\n principal.hostname",
+      "expectedStatus": "unsupported",
+      "expectedQueryPoints": 0,
+      "reason": "Do not silently ignore a platform section outside subset."
+    },
+    {
+      "id": "wrong-syntax-equals",
+      "challengeId": "L01-C01",
+      "query": "metadata.event_type == \"USER_LOGIN\"",
+      "expectedStatus": "invalid",
+      "expectedQueryPoints": 0,
+      "reason": "KQL double equality is not this grammar."
+    },
+    {
+      "id": "missing-paren",
+      "challengeId": "L02-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\" AND (principal.user.userid = \"__USER__\" OR target.user.userid = \"__USER__\"",
+      "expectedStatus": "invalid",
+      "expectedQueryPoints": 0,
+      "reason": "Balanced grammar is required."
+    },
+    {
+      "id": "duplicate-match",
+      "challengeId": "L05-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20\nmatch:\n principal.user.userid",
+      "expectedStatus": "invalid",
+      "expectedQueryPoints": 0,
+      "reason": "Duplicate section is an error, not ignored."
+    },
+    {
+      "id": "depth-limit",
+      "challengeId": "L01-C01",
+      "query": "(((((((((metadata.event_type = \"USER_LOGIN\")))))))))",
+      "expectedStatus": "limit-exceeded",
+      "expectedQueryPoints": 0,
+      "reason": "Maximum nesting 8."
+    },
+    {
+      "id": "byte-limit",
+      "challengeId": "L01-C01",
+      "query": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 metadata.event_type = \"USER_LOGIN\"",
+      "expectedStatus": "limit-exceeded",
+      "expectedQueryPoints": 0,
+      "reason": "Check UTF-8 size before trim or parse."
+    },
+    {
+      "id": "extra-filter",
+      "challengeId": "L01-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nprincipal.user.userid = \"__USER__\"",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "Narrowing is not equivalent when prompt asks for all login records."
+    },
+    {
+      "id": "extra-limit-on-event-rows",
+      "challengeId": "L01-C01",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nlimit:\n 20",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 45,
+      "reason": "Correct filter but unrequested pipeline changes output."
+    },
+    {
+      "id": "substring-wrong-host",
+      "challengeId": "L03-C01",
+      "query": "metadata.event_type = \"PROCESS_LAUNCH\"\ntarget.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\powershell\\.exe$/ nocase",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "Host role differs."
+    },
+    {
+      "id": "wrong-success-action",
+      "challengeId": "L06-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid = \"__USER__\"",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "Follow-up intent is successful/ALLOW action, not failure."
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": 2,
+  "id": "L06",
+  "title": "Time buckets and a cautious investigation capstone",
+  "level": "capstone",
+  "estimatedMinutes": 50,
+  "prerequisites": [
+    "L05"
+  ],
+  "objectives": [
+    "Build a five-minute tumbling summary with an outcome threshold.",
+    "Recognize bucket-boundary effects and threshold limitations.",
+    "Follow up with a focused success-action search and check chronology manually.",
+    "Distinguish Search output from detection rules and verified incident conclusions."
+  ],
+  "story": "Signal Desk asks you to review a potential concentration of login failures, then investigate related successful login records. You are expected to preserve uncertainty. No automatic correlation, attack verdict, or response action is authorized.",
+  "teaching": [
+    {
+      "heading": "A time bucket is not a rolling alert",
+      "text": "Google documents tumbling windows as preview/pre-GA, with availability dependent on customer and region. Verify availability privately before practice; do not enable preview features for this course. Where supported, match: $user by 5m groups selected records into fixed five-minute buckets within the Search range. A pattern spanning a bucket boundary may split across two groups. This is useful for exploratory summaries but is not equivalent to every rolling five-minute detection pattern."
+    },
+    {
+      "heading": "An outcome threshold filters summaries",
+      "text": "The example defines $failures = count_distinct(metadata.id), then condition: $failures > 3. It asks for groups with at least four distinct records. The threshold is a teaching constant, not an approved operational alert threshold. The conditions source explicitly documents outcome comparisons; tenant compiler support still needs private verification."
+    },
+    {
+      "heading": "Follow up without pretending to join",
+      "text": "After inspecting a candidate group in SecOps, choose its user privately and search for ALLOW login records. Compare event timestamps privately to determine whether any success follows the failures. Two independent searches do not prove causal sequence or the same session. Keep any timeline in approved workplace notes."
+    },
+    {
+      "heading": "Do not turn this into an automatic rule",
+      "text": "Search and detection rules share language constructs but have different envelopes, engines, windows, repeated-field behavior and deduplication. The course does not create, save, deploy or enable a rule, dashboard, case, SOAR action, or block. A completed course is query/method practice, not a verified security finding."
+    }
+  ],
+  "challenges": [
+    {
+      "id": "L06-C01",
+      "title": "Find five-minute groups above a teaching threshold",
+      "prompt": "Select USER_LOGIN, FAIL action, and nonempty principal.user.userid. Group by that user in fixed five-minute buckets. Output distinct metadata.id count, retain count > 3, order descending by that count, and limit to 20 rows.",
+      "symbolIds": [],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user by 5m\noutcome:\n  $failures = count_distinct(metadata.id)\ncondition:\n  $failures > 3\norder:\n  $failures desc\nlimit:\n  20",
+      "acceptedVariants": [
+        "events:\n  principal.user.userid != \"\"\n  security_result.action = \"FAIL\"\n  metadata.event_type = \"USER_LOGIN\"\nmatch:\n  principal.user.userid by 5m\noutcome:\n  $n = count_distinct(metadata.id)\ncondition:\n  $n >= 4\norder:\n  $n desc\nlimit:\n  20"
+      ],
+      "hints": [
+        "Extend the earlier grouped distinct-record summary with a five-minute tumbling bucket.",
+        "Use by 5m in match and compare the outcome count in condition; keep order and limit.",
+        "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\nmatch:\n  principal.user.userid by 5m\noutcome:\n  $failures = count_distinct(metadata.id)\ncondition:\n  $failures > 3\norder:\n  $failures desc\nlimit:\n  20"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "What might fixed bucket boundaries miss?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Every single failed login record"
+            },
+            {
+              "id": "B",
+              "label": "A burst split across two neighboring buckets that falls below the per-bucket threshold"
+            },
+            {
+              "id": "C",
+              "label": "Nothing; by 5m is identical to every rolling detection window"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "A fixed-bucket summary has boundary effects. Do not claim it is interchangeable with sliding/hop detection logic."
+        },
+        {
+          "id": "M2",
+          "prompt": "A group exceeds the teaching threshold. What does that prove?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Only that the selected normalized records met the query's grouping and count criterion"
+            },
+            {
+              "id": "B",
+              "label": "That an attack succeeded"
+            },
+            {
+              "id": "C",
+              "label": "That this should be deployed as a production rule without review"
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "A training threshold is not incident proof or an operational rule approval."
+        }
+      ],
+      "executeSteps": [
+        "Verify statistical Search, preview tumbling-window availability, and the condition syntax in the authorized tenant. Do not enable a preview setting for this course.",
+        "Run the summary on an approved range. If tenant capability is unavailable, keep practice pending without changing the scored syntax silently.",
+        "Inspect any candidate group privately and check its actual event timestamps and normalization.",
+        "No group above threshold is a legitimate outcome after checking telemetry and bucket limitations."
+      ],
+      "debrief": "Privately explain at least one alternative benign explanation and one coverage limitation. No user, count, or exact timestamp returns to the app."
+    },
+    {
+      "id": "L06-C02",
+      "title": "Perform a private follow-up pivot",
+      "prompt": "Select USER_LOGIN events with ALLOW action and principal.user.userid exactly [USER]. Return event rows. This query alone does not establish success-after-failure chronology.",
+      "symbolIds": [
+        "USER"
+      ],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid = \"__USER__\"",
+      "acceptedVariants": [
+        "principal.user.userid = \"__USER__\" AND metadata.event_type = \"USER_LOGIN\" AND security_result.action = \"ALLOW\""
+      ],
+      "hints": [
+        "Choose the candidate user inside SecOps; keep only [USER] on the site.",
+        "Use USER_LOGIN, ALLOW action, and the exact actor userid as required filters.",
+        "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid = \"__USER__\""
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "How do you check whether success occurred after failures?",
+          "options": [
+            {
+              "id": "A",
+              "label": "The two searches automatically prove the order"
+            },
+            {
+              "id": "B",
+              "label": "Upload both result sets to the site"
+            },
+            {
+              "id": "C",
+              "label": "Compare the relevant event timestamps and context inside approved workplace tools"
+            }
+          ],
+          "correctOption": "C",
+          "rationale": "The app performs no join and sees no results. Chronology and identity context must be reviewed privately."
+        },
+        {
+          "id": "M2",
+          "prompt": "What can the course's final completion badge mean?",
+          "options": [
+            {
+              "id": "A",
+              "label": "A verified compromise finding"
+            },
+            {
+              "id": "B",
+              "label": "That training challenges were mastered and any execution was self-attested"
+            },
+            {
+              "id": "C",
+              "label": "Official Google certification"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "The score is private formative feedback, not independent validation or certification."
+        }
+      ],
+      "executeSteps": [
+        "If a candidate exists in the previous results, choose that identity privately. Otherwise choose another authorized practice identity; do not invent an incident.",
+        "Replace __USER__ only in SecOps, check ALLOW normalization, and run.",
+        "Review chronology privately if relevant evidence exists; otherwise document the limitation in workplace notes.",
+        "Return only fixed execution/review acknowledgments. Do not deploy a detection or take a response action."
+      ],
+      "debrief": "Conclude the original training case with an appropriately bounded private statement: observation, interpretation, limitation, next authorized question."
+    }
+  ],
+  "sourceIds": [
+    "G07",
+    "G09",
+    "G10",
+    "G14",
+    "G16"
+  ],
+  "verification": {
+    "documentationCheckedOn": "2026-10-14",
+    "tenantExecution": "not-tested"
+  }
+}

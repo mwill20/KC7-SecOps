@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": 1,
+  "id": "L02",
+  "title": "Roles and Boolean boundaries",
+  "level": "foundation",
+  "estimatedMinutes": 35,
+  "prerequisites": [
+    "L01"
+  ],
+  "objectives": [
+    "Distinguish actor/principal and referenced/target identities.",
+    "Construct a parenthesized OR inside an event-type boundary.",
+    "Filter failure actions without equating failure with malicious intent."
+  ],
+  "story": "Signal Desk needs a broader identity investigation: the same identity may appear as actor or target in normalized login records. Your next task is to preserve that scope while adding a failure-action question.",
+  "teaching": [
+    {
+      "heading": "Principal and target answer different questions",
+      "text": "Like actor and affected asset fields in a SIEM event, principal and target describe roles rather than two interchangeable usernames. A parser may place the authenticated account differently for a particular product. Inspect the actual UDM event before drawing a conclusion. In the symbolic task, both fields are deliberately searched."
+    },
+    {
+      "heading": "Parentheses protect the question",
+      "text": "The intended structure is category AND (actor identity OR target identity). Without that grouping, an OR branch can admit unrelated event categories. A validator must check the whole Boolean structure, not reward the presence of field names. Think of a correlation rule whose exception branch accidentally bypasses the event filter."
+    },
+    {
+      "heading": "Failure is an action value",
+      "text": "security_result.action = \"FAIL\" is a documented UDM action filter. It does not encompass every source's raw failure representation unless normalization maps it that way. Failed login attempts also occur during ordinary user activity. Keep the hypothesis separate from the observable action."
+    },
+    {
+      "heading": "Transfer from KQL carefully",
+      "text": "The concepts of filtering and combining predicates transfer from KQL. The exact syntax does not: YARA-L uses field = value here, not KQL table pipes and ==. Omitted conjunctions imply AND, but explicit AND and parentheses are easier to review."
+    }
+  ],
+  "challenges": [
+    {
+      "id": "L02-C01",
+      "title": "Search either identity role",
+      "prompt": "Select only USER_LOGIN events in which [USER] appears in principal.user.userid OR target.user.userid. Preserve the event-type requirement for both branches. Use exact case-sensitive strings and return event rows.",
+      "symbolIds": [
+        "USER"
+      ],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\" AND\n(principal.user.userid = \"__USER__\" OR target.user.userid = \"__USER__\")",
+      "acceptedVariants": [
+        "(target.user.userid = \"__USER__\" OR principal.user.userid = \"__USER__\") AND metadata.event_type = \"USER_LOGIN\"",
+        "(metadata.event_type = \"USER_LOGIN\" AND principal.user.userid = \"__USER__\") OR (metadata.event_type = \"USER_LOGIN\" AND target.user.userid = \"__USER__\")"
+      ],
+      "hints": [
+        "The category must constrain every identity branch.",
+        "Place the two identity alternatives inside parentheses, then AND that group with USER_LOGIN.",
+        "metadata.event_type = \"USER_LOGIN\" AND (principal.user.userid = \"__USER__\" OR target.user.userid = \"__USER__\")"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "Why are the identity alternatives grouped?",
+          "options": [
+            {
+              "id": "A",
+              "label": "To make the query look shorter"
+            },
+            {
+              "id": "B",
+              "label": "To keep both alternatives inside the USER_LOGIN scope"
+            },
+            {
+              "id": "C",
+              "label": "To automatically join two different events"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "The group expresses alternatives within one event filter. It does not perform a multi-event join."
+        },
+        {
+          "id": "M2",
+          "prompt": "A username appears in target. What can you infer?",
+          "options": [
+            {
+              "id": "A",
+              "label": "It is necessarily the actor responsible"
+            },
+            {
+              "id": "B",
+              "label": "It is definitely compromised"
+            },
+            {
+              "id": "C",
+              "label": "Its role must be interpreted using the event and parser mapping"
+            }
+          ],
+          "correctOption": "C",
+          "rationale": "Field role and event context matter; names alone do not establish causality."
+        }
+      ],
+      "executeSteps": [
+        "Check how both identity roles are populated in an authorized login source.",
+        "Replace the synthetic user only inside SecOps and run with an approved range.",
+        "Compare a few relevant event details privately, checking what principal and target mean.",
+        "If no rows return, check mapping and identity case before assuming absence."
+      ],
+      "debrief": "Describe privately how a missing parenthesis would change scope. The app will demonstrate a synthetic counterexample, never a real event."
+    },
+    {
+      "id": "L02-C02",
+      "title": "Add the failure-action question",
+      "prompt": "Select USER_LOGIN events with security_result.action = FAIL and principal.user.userid exactly [USER]. No target-role OR is requested in this challenge. Return event rows.",
+      "symbolIds": [
+        "USER"
+      ],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid = \"__USER__\"",
+      "acceptedVariants": [
+        "principal.user.userid = \"__USER__\" AND security_result.action = \"FAIL\" AND metadata.event_type = \"USER_LOGIN\""
+      ],
+      "hints": [
+        "Keep category and exact actor identity, then add the documented action filter.",
+        "Use security_result.action = \"FAIL\" as another required condition.",
+        "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid = \"__USER__\""
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "Do failed login records prove an attack?",
+          "options": [
+            {
+              "id": "A",
+              "label": "No; inspect context and source normalization before forming an incident conclusion"
+            },
+            {
+              "id": "B",
+              "label": "Yes, FAIL always means malicious"
+            },
+            {
+              "id": "C",
+              "label": "Only if the query contains three fields"
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "A failure action is an observation. Frequency, source, baseline, and surrounding activity determine what it might mean."
+        },
+        {
+          "id": "M2",
+          "prompt": "The source records a different failure representation. What next?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Rename FAIL to an invented enum"
+            },
+            {
+              "id": "B",
+              "label": "Verify normalization and adapt the private workplace search if appropriate"
+            },
+            {
+              "id": "C",
+              "label": "Send the raw failure log to the course"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "Use actual supported fields and values from the source mapping; do not invent enum values."
+        }
+      ],
+      "executeSteps": [
+        "Privately confirm that the selected source populates security_result.action and the intended userid role.",
+        "Replace [USER] only in SecOps, run, and inspect action values in event details.",
+        "Keep any interpretation in approved workplace notes.",
+        "An empty result is a legitimate outcome after checking mapping and range."
+      ],
+      "debrief": "Separate the observation 'matched a failure action' from the hypothesis 'an attack is occurring'."
+    }
+  ],
+  "sourceIds": [
+    "G02",
+    "G04",
+    "G05",
+    "G03"
+  ],
+  "verification": {
+    "documentationCheckedOn": "2026-10-14",
+    "tenantExecution": "not-tested"
+  }
+}

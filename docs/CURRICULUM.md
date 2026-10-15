@@ -1,0 +1,48 @@
+# Curriculum and instructional design
+
+## Learning progression
+
+The case is **Signal Desk**, an original workplace-practice narrative. All practice is authorized read-only Search; selecting an employee, device, IP, or subnet does not imply wrongdoing. Estimated lesson durations below are planning estimates, not measured performance claims.
+
+| Lesson | Estimate | Objectives | New syntax | Evidence |
+|---|---:|---|---|---|
+| L01 — Question and safe search | 30 min | Manual YL2, category, exact identity, privacy, zero-result reasoning | UDM field = quoted value, implicit AND | Two complete event-filter challenges |
+| L02 — Roles and Boolean boundaries | 35 min | Actor vs target, constrained alternatives, failure-action interpretation | Explicit AND/OR and parentheses | Equivalent distribution accepted; broadened OR rejected |
+| L03 — Host/process pivot | 40 min | Endpoint roles, suffix precision, RE2, cautious interpretation | Regex literal, nocase, re.regex alternate | Single/combined suffix and split OR forms |
+| L04 — Network pivot | 40 min | Directional IPs, repeated-field caution, CIDR, numeric types | net.ip_in_range_cidr, numeric port | Positive direction predicates and type failures |
+| L05 — Aggregate summaries | 45 min | Group keys, distinct record IDs, byte-field limitations | match, outcome, count_distinct, sum, order, limit | Two exact pipeline contracts with alias alternatives |
+| L06 — Time and capstone | 50 min | Fixed buckets, count threshold, private timeline pivot, evidence limits | by 5m, outcome condition | Threshold/bucket mutation tests and private chronology review |
+
+The six lesson JSON files are complete authoring sources: four teaching blocks, two challenges, reference and alternate queries, three progressive hints, two scored method questions per challenge, private execution steps, debrief, and documentation status. No lesson requires real datasets or fixed SIEM answers on the site.
+
+## Learning loop
+
+1. **Explain:** a short concept tied to familiar SIEM/SOAR work.
+2. **Construct:** build a symbolic query from a blank token composer. No answer prefilled; syntax guide is available.
+3. **Check:** deterministic feedback identifies syntax, scope and pipeline problems separately.
+4. **Reason:** two multiple-choice investigation decisions, with explanations after grading.
+5. **Practice privately:** copy safe synthetic text and adapt inside workplace SecOps.
+6. **Reflect:** consider an original debrief in approved workplace notes; submit only fixed acknowledgment flags.
+7. **Revisit:** retry without penalty; saved mastery is separate from current attempt.
+
+## Assessment evidence
+
+- Observable locally: constructed query syntax in the supported subset, Boolean scope equivalence, group/outcome/threshold/order/limit structure, selected method answers.
+- Self-attested: actual SecOps compilation/execution and review, including an empty result with troubleshooting.
+- Unobservable: selected real values, real search results, private reasoning quality, actual incident detection, complete coverage, or query performance in the tenant.
+
+Hints are staged: conceptual nudge, syntax scaffold, worked answer. No points deducted. The UI records highest hint level as a non-sensitive flag and says hints support learning. Worked answers can produce full points; therefore mastery scores are formative, not proof of unassisted skill. Progress badges are personal and not shareable credentials.
+
+## Prerequisites and unavailable data
+
+Prerequisite links recommend order without locking later lessons. If authorized telemetry/capability is missing, learners can achieve symbolic mastery (90/100) and leave workplace practice pending. Practice completion requires a query that actually ran, not merely opening SecOps. Zero results can count after reviewing the range/mapping/coverage limitation. Do not fabricate matching activity, generate suspicious events, or bypass access restrictions.
+
+## Later course progression — not part of initial build
+
+1. Dedup and repeated-field quantifiers with source-specific examples.
+2. Cross-event correlation and joins in Search.
+3. Entity context and data tables only when authorized/available.
+4. Investigation coverage and tuning methodology.
+5. Detection rule literacy as a separately scoped course; deployment still needs employer authority.
+
+These are backlog, not additional initial lessons. Do not add SOAR or operational automation.

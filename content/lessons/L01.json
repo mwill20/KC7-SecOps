@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": 1,
+  "id": "L01",
+  "title": "Start with a question and a safe search",
+  "level": "foundation",
+  "estimatedMinutes": 30,
+  "prerequisites": [],
+  "objectives": [
+    "Identify the manual YL2 Search context and the external site's privacy boundary.",
+    "Construct an event-type filter and narrow it to an exact symbolic user.",
+    "Distinguish a compiled query, a returned event, and a justified conclusion."
+  ],
+  "story": "Signal Desk assigns your first practice task: examine login telemetry for an authorized identity. This is a learning exercise, not an allegation about a real user. Select the identity privately in SecOps; the training site calls it [USER].",
+  "teaching": [
+    {
+      "heading": "A filter is a question about events",
+      "text": "A SIEM correlation filter decides which normalized events are relevant. A Search filter does the same initial selection without deploying a rule. Start by asking for USER_LOGIN events. metadata.event_type names the normalized event category; it is not a vendor's raw event ID. The string enum is quoted and uses its documented uppercase value."
+    },
+    {
+      "heading": "Choose the correct editor and range",
+      "text": "In workplace SecOps, use manual Search in the YL2 dialect and choose an authorized short time range using the UI. Do not use natural-language/Gemini generation as part of this AI-free course. Search range is a separate UI control, not a value the training site collects. Your tenant may use older UI wording."
+    },
+    {
+      "heading": "Symbols are not variables",
+      "text": "The training symbol [USER] serializes as the synthetic string \"__USER__\". Only inside SecOps do you replace it with an approved value. A YARA-L variable such as $user is a different concept taught later. Never paste the substituted query or its results back here."
+    },
+    {
+      "heading": "Empty results are evidence with limits",
+      "text": "Compiler success only establishes that the platform accepts the query. An empty result might reflect time range, permissions, normalization, ingestion delay, or no matching activity. It is not proof that a person is safe or malicious. Inspect available event details and field mapping privately."
+    }
+  ],
+  "challenges": [
+    {
+      "id": "L01-C01",
+      "title": "Find the event category",
+      "prompt": "Construct a Search query selecting USER_LOGIN events. Return event rows, with no aggregate, condition, order, limit, or rule wrapper.",
+      "symbolIds": [],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\"",
+      "acceptedVariants": [
+        "events:\n  metadata.event_type = \"USER_LOGIN\"",
+        "(metadata.event_type = \"USER_LOGIN\")"
+      ],
+      "hints": [
+        "Choose the normalized event category field, not a raw vendor event code.",
+        "Use metadata.event_type, equality, and the quoted USER_LOGIN enum.",
+        "metadata.event_type = \"USER_LOGIN\""
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "Where should this query be run?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Manual SecOps Search with YL2 selected"
+            },
+            {
+              "id": "B",
+              "label": "The detection Rules editor as a new deployed rule"
+            },
+            {
+              "id": "C",
+              "label": "A query box on this external training site"
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "This lesson is interactive Search. The training site checks symbolic structure and never executes SIEM queries."
+        },
+        {
+          "id": "M2",
+          "prompt": "The query runs and returns no events. What is the best next step?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Declare there were no logins anywhere"
+            },
+            {
+              "id": "B",
+              "label": "Check the range, access, data availability, and normalization inside SecOps"
+            },
+            {
+              "id": "C",
+              "label": "Upload a raw log here so the site can repair it"
+            }
+          ],
+          "correctOption": "B",
+          "rationale": "Zero results have several possible causes. Troubleshooting stays inside authorized workplace tools."
+        }
+      ],
+      "executeSteps": [
+        "Open the already-approved SecOps environment manually; do not enter its URL here.",
+        "Select YL2 and an authorized short time range.",
+        "Run the category query and inspect any available normalized event in SecOps.",
+        "If no events return, check range, permissions and available telemetry; widen only within policy."
+      ],
+      "debrief": "State privately what this filter establishes and one thing it cannot establish. On the site, attest only that it ran and the result or limitation was reviewed."
+    },
+    {
+      "id": "L01-C02",
+      "title": "Narrow to an exact actor identity",
+      "prompt": "Select USER_LOGIN events whose principal.user.userid exactly equals [USER]. Exact case-sensitive matching is required. Return event rows without further sections.",
+      "symbolIds": [
+        "USER"
+      ],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\"\nprincipal.user.userid = \"__USER__\"",
+      "acceptedVariants": [
+        "principal.user.userid = \"__USER__\" AND metadata.event_type = \"USER_LOGIN\"",
+        "events:\n  metadata.event_type = \"USER_LOGIN\" AND (principal.user.userid = \"__USER__\")"
+      ],
+      "hints": [
+        "Add an identity constraint to the category filter; both must hold.",
+        "The training actor identity field is principal.user.userid. Use [USER] and AND.",
+        "metadata.event_type = \"USER_LOGIN\"\nprincipal.user.userid = \"__USER__\""
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "What should you verify before substituting a real value?",
+          "options": [
+            {
+              "id": "A",
+              "label": "That the user field is populated and represents the intended role in this log source"
+            },
+            {
+              "id": "B",
+              "label": "That every source places usernames in principal"
+            },
+            {
+              "id": "C",
+              "label": "That a display name always equals userid"
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "The dictionary defines the field, but the parser/source determines which role and identifier are populated."
+        },
+        {
+          "id": "M2",
+          "prompt": "Where do you replace __USER__ and keep observations?",
+          "options": [
+            {
+              "id": "A",
+              "label": "In this site's local storage"
+            },
+            {
+              "id": "B",
+              "label": "In a GitHub issue"
+            },
+            {
+              "id": "C",
+              "label": "Only in workplace SecOps and approved workplace notes"
+            }
+          ],
+          "correctOption": "C",
+          "rationale": "Real values and observations never enter this external training app."
+        }
+      ],
+      "executeSteps": [
+        "Choose an authorized identity inside SecOps; do not record the mapping on this site.",
+        "Inspect the actual source's UDM mapping before applying principal.user.userid.",
+        "Replace __USER__ only in SecOps and run the narrowed query.",
+        "If that source maps the relevant user to target instead, adapt privately and record the mapping in workplace notes; the scored symbolic task still teaches the specified principal role."
+      ],
+      "debrief": "Compare the broad and narrowed searches privately. Do not return row counts or usernames. Explain why a narrower search better answers this particular question."
+    }
+  ],
+  "sourceIds": [
+    "G01",
+    "G02",
+    "G04",
+    "G15"
+  ],
+  "verification": {
+    "documentationCheckedOn": "2026-10-14",
+    "tenantExecution": "not-tested"
+  }
+}
