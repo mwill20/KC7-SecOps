@@ -55,7 +55,13 @@ The build contains exactly thirteen allowlisted files: HTML, CSS, SVG mark, eigh
 
 Early meta CSP permits only same-origin scripts/styles/images, with connections, forms, workers, frames, objects, fonts and other defaults denied. No inline executable code/style, eval, dynamic code, fetch, clipboard read, service worker or telemetry exists. Reference links are fixed HTTPS, explicit, no-opener/no-referrer. Copy writes only synthetic text.
 
-Meta CSP cannot enforce frame-ancestors. Before hosting, configure response framing restrictions, MIME protections, referrer and permissions policies on a dedicated approved HTTPS origin. Host logs and same-origin release compromise remain residual risks. The loopback preview is not a production hosting solution.
+Meta CSP cannot enforce frame-ancestors. The owner approved GitHub Pages on 2026-10-15; Pages does not expose custom response-header configuration in this deployment. Do not claim framing or Permissions-Policy headers that the host does not supply. The actual HTTPS response MIME types and bytes are checked by `tools/check-live.mjs`; the HTML retains its no-referrer policy and early CSP. Framing is a documented low-severity residual for this course with no privileged action. Host logs, other scripts on the same `mwill20.github.io` origin and release compromise remain residual risks; the repository path is not an origin-isolation boundary. The loopback preview is for developers.
+
+## Pages publication
+
+`.github/workflows/pages.yml` is manually dispatched on `main`. Its read-only build job installs locked development dependencies, runs the full verification suite and uploads only `dist/`. The separate deployment job has only Pages/OIDC write permissions and uses the `github-pages` environment. All directly referenced actions use verified full commit SHAs. No source push automatically publishes a release. The official upload action omits dotfiles, so the twelve web assets are published; `.nojekyll` is a build marker and not needed by Actions publication.
+
+`tools/check-live.mjs` checks the fixed HTTPS address, every published asset's exact bytes and MIME type, and 404 responses for development paths. Actual browser interaction at that address is additional evidence; local browser tests alone do not establish a working deployment. See DEPLOYMENT.md for actual run status rather than inferring deployment from configuration.
 
 ## Design choices and limits
 

@@ -1,6 +1,6 @@
 # Product requirements — KC7 SecOps
 
-Version 1.0 • 2026-10-14 • owner: mwill20. Local implementation is underway/validated separately; see IMPLEMENTATION_STATUS.md for evidence. Requirements below remain the product contract.
+Version 1.1 • 2026-10-15 • owner: mwill20. See IMPLEMENTATION_STATUS.md for implementation and deployment evidence. The owner changed the repository to public and authorized independent review followed by GitHub Pages publication without adding an open-source license.
 
 ## Goal and learner
 
@@ -32,7 +32,7 @@ Attempt to enter/paste a real username, IP, tenant URL, log, or result into the 
 | R10 | Distinguish Search, detection rules, UDM schema, and KQL; show documentation and tenant verification status accurately | T03, T15 |
 | R11 | First build milestone proves one real composed app path with success and should-fail tests | T01, T05–T10 |
 | R12 | Build a static output artifact that works at root and repository subpath without leaking development files | T12, T16 |
-| R13 | Private GitHub repository `mwill20/KC7-SecOps`, display title KC7 SecOps; no automatic public deployment | T17 |
+| R13 | Owner-approved public GitHub repository `mwill20/KC7-SecOps`, display title KC7 SecOps; manually initiated, tested Pages publication of only the reviewed static artifact | T17 |
 | R14 | Optional Copilot use stays separate, approved, symbolic, and untrusted; it never grades or powers the app | T12, T15 |
 
 Test IDs refer to `docs/TEST_PLAN.md`.
@@ -54,11 +54,11 @@ Not included: rule creation/deployment, SOAR, response actions, dashboards creat
 
 ## Repository and hosting
 
-The owner requested a **private** repository named KC7 SecOps. GitHub does not allow spaces in repository names, so use `KC7-SecOps` and retain the display title. Verify the authenticated account and existing repository visibility; never change a repository to public.
+The repository was initially created private as requested. On 2026-10-15 the owner stated that they had made it public; live metadata confirmed `private: false`. The owner then explicitly authorized a separate review agent, resolution of supported blockers, and public GitHub Pages publication without adding an open-source license. Codex did not change repository visibility. Retain slug `KC7-SecOps` and display title KC7 SecOps.
 
-Build locally and prepare a static artifact. Hosting is unresolved: free Pages applies to public repositories; Pages from private repositories requires an eligible paid plan, and private Pages access control has separate Enterprise organization requirements. A private source repository does not automatically make a deployed website private. Do not purchase, enable Pages, create a separate public deployment repo, or substitute another host without explicit owner approval. [GitHub Pages availability](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), [Pages access control](https://docs.github.com/en/enterprise-cloud@latest/pages/getting-started-with-github-pages/changing-the-visibility-of-your-github-pages-site), [repository naming](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository).
+Use GitHub Pages for the owner-approved public course. The manual-only publication workflow must verify the application before uploading only `dist/`; publishing the complete checkout is prohibited. Use the default GitHub HTTPS address, no paid service, custom domain or runtime integration. Record the exact deployment revision, artifact and live checks in DEPLOYMENT.md. Repository public visibility does not establish workplace-use approval. Do not change visibility, purchase a plan or substitute another host. [GitHub Pages availability](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), [custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
 
-Workplace web access, external training approval, allowed local storage, telemetry, and Search capability remain unknown. If public hosting is approved later, publish only non-sensitive authored static assets. No additional paid dependency is assumed.
+Workplace web access, external training approval, allowed local storage, telemetry, and Search capability remain unknown. Public publication is authorized; workplace approval and tenant capability are separate external checks. Publish only non-sensitive authored static assets. No additional paid dependency is assumed.
 
 ## Definition of done for this specification task
 

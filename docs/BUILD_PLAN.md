@@ -74,7 +74,7 @@ Dependencies: M4. Review actual implementation and built output against privacy/
 
 Dependencies: app build ready; external owner access/policy. Use `qa/TENANT_PILOT.md`. Record only fixed challenge IDs and capability/compiler status; no identifiers or actual results returned. Keep tenant-untested labels until source/capability checks actually occur.
 
-**Acceptance for deploy:** exact repository/private visibility known, license decision made if public content release is intended, approved host/audience and workplace use confirmed, costs explicitly approved if applicable, reviewed static build selected, privacy metadata/embedding limitations disclosed, smoke test runs at actual URL. No public repository or separate deployment repo created silently.
+**Acceptance for public deploy (owner correction 2026-10-15):** exact repository/current public visibility known, owner-approved GitHub Pages/public audience and publication without adding an open-source license, independent reviewed static build selected, privacy metadata/embedding limitations disclosed, full application checks before uploading only `dist/`, and smoke tests at the actual HTTPS URL. No paid service or separate deployment repository. Workplace use/local-storage approval and tenant compilation remain separate external checks; retain truthful tenant-unverified labels. The owner changed visibility; Codex must not change it.
 
 **Acceptance when host remains unresolved:** deliver working static artifact and build evidence, retain private source, state deployment blocked only by the identified owner/environment decision. Do not claim the work-browser goal is already fulfilled.
 

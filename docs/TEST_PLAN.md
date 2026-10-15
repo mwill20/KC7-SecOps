@@ -22,7 +22,7 @@ The rows below define implementation acceptance coverage and bind PRD requiremen
 | T14 | R09 | Keyboard-only complete flow, screen-reader status, contrast, zoom/reflow and target checks | No inaccessible drag-only action, focus trap/hidden focus, color-only errors; automated checks insufficient alone |
 | T15 | R10,R14 | Correct language/context labels, sourced limits, private substitution instructions, Copilot optional | No claim query was executed or incident verified; no actual values requested for pilot |
 | T16 | R01,R12 | Chrome and Edge smoke tests; root and `/KC7-SecOps/` asset paths; reload/hash routing | 404/missing modules, blocked clipboard, disabled storage, invalid route handled; no workplace command required |
-| T17 | R13 | Exact repository owner/slug and private visibility verified if created; artifact prepared separately | No automatic deployment/public visibility/paid activation; source privacy never used as website-access proof |
+| T17 | R13 | Exact owner/slug and current public visibility verified; owner-authorized manual Pages workflow publishes only tested `dist/`; live HTTPS assets match the checked build | No automatic push deployment, unauthorized visibility/paid activation or source-checkout hosting; five development paths return 404; public website is not workplace-use approval |
 
 ## Fixtures and adversarial cases
 

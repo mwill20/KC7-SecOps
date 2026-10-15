@@ -17,8 +17,8 @@ Authentication, RLS, secret storage, and server audit logs are not applicable be
 
 ## Reporting a vulnerability
 
-TODO: owner configures a private reporting route, preferably GitHub private vulnerability reporting, before public release. Do not include employer identifiers, actual queries, logs, or screenshots in a public issue. A report may identify an affected component, synthetic reproduction, expected/actual behavior, and build version.
+GitHub private vulnerability reporting was enabled and verified on 2026-10-15. Use the repository's [Security → Advisories](https://github.com/mwill20/KC7-SecOps/security/advisories) reporting flow to report privately. Do not include employer identifiers, actual queries, logs, or screenshots in any report. A report may identify an affected component, synthetic reproduction, expected/actual behavior, and build version.
 
 ## Release boundary
 
-Public hosting requires org policy approval and an independent review of the implemented data boundary. Host IP logging and browser/extension observation are outside the app's control and must be disclosed. See `docs/PRIVACY.md` and `docs/threat-models/THREAT_MODEL.md`.
+Public hosting requires owner approval of the host/audience and an independent review of the implemented data boundary. The owner explicitly approved public GitHub Pages publication on 2026-10-15, following review, without adding an open-source license. Workplace use and optional browser storage still require organizational policy approval separately. Host IP logging and browser/extension observation are outside the app's control and must be disclosed. See `docs/PRIVACY.md` and `docs/threat-models/THREAT_MODEL.md`.
