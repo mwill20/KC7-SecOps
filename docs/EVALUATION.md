@@ -1,6 +1,6 @@
 # Evaluation — investigation learning revision (2026-10-16)
 
-Builder evidence below covers the current training-editor revision. The separate AI review in SECURITY_REVIEW_2026-10-16.md returned APPROVE with zero supported security findings and independently reproduced the full suite plus additional hostile/count/title/storage probes for the exact artifact. Republishing is pending. Historical review/deployment remain preserved separately; they do not accept changed runtime bytes.
+Builder evidence below covers the current training-editor revision. The separate AI review in SECURITY_REVIEW_2026-10-16.md returned APPROVE with zero supported security findings and independently reproduced the full suite plus additional hostile/count/title/storage probes for the exact artifact. Pages run 38919299268 also passed the complete suite and published the identical artifact; actual HTTPS assets and all sixteen live mission pages were checked. See DEPLOYMENT.md for precise scope. Historical review/deployment remain preserved separately.
 
 Preferred command `npm run verify`, with the official checksum-verified Node 24.21.0 executable on PATH, passed: **116 unit tests, 18 browser tests, content/build/artifact checks**. The thirteen-file artifact aggregate SHA256 is `00699c3dd6d7a92efae223daaa9ad893c11d185848eeb1bfc17da294a852e11c`. Browser tests use isolated profiles: complete flow in test Chromium; root/subpath smoke in installed Chrome and Edge. No signed-in browser profile was reused for automated tests.
 

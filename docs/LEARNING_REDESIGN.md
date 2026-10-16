@@ -1,5 +1,7 @@
 # Investigation-led learning revision — 2026-10-16
 
+Completed and published: source 07e311bda6dd7afd1610a43697af745a59aedf2a, Pages run 38919299268. Local, separate reviewer and hosted full verification pass 116 unit/18 browser tests; focused review APPROVE; exact-byte HTTPS and all sixteen live mission-page checks pass. See IMPLEMENTATION_STATUS.md and DEPLOYMENT.md for actual evidence and remaining external limits. No new application stack or host was introduced.
+
 Owner correction: teach beginners through an engaging original investigation. Show a complete query and explain its parts before asking for a variation. Gradually remove supplied syntax, retain progressive hints, and grade the query rather than any workplace output. Passing application tests alone did not establish a usable beginner lesson.
 
 ## Working plan

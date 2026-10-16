@@ -1,5 +1,23 @@
 # GitHub Pages deployment
 
+## Current learning revision — 2026-10-16
+
+**[Play the revised course](https://mwill20.github.io/KC7-SecOps/#L01)** — original case, six chapters, sixteen query missions, supplied examples and explanations, guided starters, training-query editor and progressive hints. No install or account.
+
+- Published source: `07e311bda6dd7afd1610a43697af745a59aedf2a`.
+- Successful manual Pages run: [38919299268](https://github.com/mwill20/KC7-SecOps/actions/runs/38919299268), build and deployment both successful.
+- Remote exact Node 24.21.0 verification passed: six chapters/16 missions/37 sources/73 query fixtures, 116 unit tests, 18 browser tests, build and artifact checks.
+- Exact artifact SHA256: `00699c3dd6d7a92efae223daaa9ad893c11d185848eeb1bfc17da294a852e11c`; matches builder, independent reviewer and hosted build.
+- Focused independent AI review: [APPROVE, zero supported security findings](SECURITY_REVIEW_2026-10-16.md). It reviews the new text boundary directly; it does not treat historical closed-composer acceptance as current.
+- Actual HTTPS checker passed: twelve web assets byte-identical with expected MIME, five development paths return 404. Pages remains workflow mode with HTTPS enforced; no visibility/host/paid-service change.
+- Actual Chrome walkthrough verified all six briefings and sixteen mission pages after their expected headings rendered: editor and hints visible, practice initially disabled. First briefing supplies the complete query/breakdown. Typed synthetic text clears on leaving/revisiting the independent mission. No grading/hint/practice/storage-write controls were used in this shared-profile walkthrough, preserving existing remembered state; functional grading/storage failures were exercised in isolated local, reviewer and hosted test profiles against these identical bytes.
+- Existing remembered progress correctly displayed the changed-lesson notice. Changed content versions require reassessment; old values were not manually cleared or rewritten by the live walkthrough.
+- Temporary local-preview/research tabs were closed. The revised live first chapter was left open. No workplace/KC7 query was run and no actual learner execution was attested.
+
+The official pinned actions still produced the upstream Node20-declaration/forced-Node24 maintenance warning; all jobs passed. This is not an application error or a reason to weaken supply-chain pins. The prior host-header/framing/shared-origin limitations below remain relevant. Tenant compilation/title population/preview capability, full manual accessibility and workplace website/storage approval remain unverified.
+
+## Historical release record
+
 ## Live course — 2026-10-15
 
 **[Play KC7 SecOps](https://mwill20.github.io/KC7-SecOps/)**. No installation, terminal or account is required. Acknowledge the privacy boundary, open the learning path and start lesson 01. Optional non-sensitive browser progress supports resuming in the same browser. Workplace website/storage approval remains separate.

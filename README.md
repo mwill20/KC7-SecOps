@@ -6,7 +6,7 @@ An original course for analysts learning **Google Security Operations SIEM Searc
 
 Read the privacy notice, open the learning path and choose **Start the case**. Optional **Remember non-sensitive progress** lets you resume in the same browser. Leave it off on a shared device. Use workplace tools separately for any real query execution.
 
-Published on GitHub Pages on 2026-10-15 after the owner made the repository public and authorized independent review and publication. The separate AI security review approved the exact build; remote verification and real HTTPS/browser checks passed. See [deployment evidence](docs/DEPLOYMENT.md), [security review](docs/SECURITY_REVIEW.md) and [implementation status](docs/IMPLEMENTATION_STATUS.md). Workplace website/storage approval and tenant compatibility remain separate, unverified checks.
+Revised course published on GitHub Pages on 2026-10-16. The owner made the repository public and authorized independent review and publication. The [focused AI security review](docs/SECURITY_REVIEW_2026-10-16.md) approved this editor revision; local/reviewer/remote verification passed 116 unit and 18 browser tests, and actual HTTPS assets/all sixteen live mission pages were checked. See [deployment evidence](docs/DEPLOYMENT.md) and [implementation status](docs/IMPLEMENTATION_STATUS.md). Workplace website/storage approval and tenant compatibility remain separate, unverified checks.
 
 ## Practice without exporting workplace data
 
@@ -52,7 +52,7 @@ No runtime AI, backend, accounts, SIEM integration, event dataset, upload, clipb
 
 The validator supports a bounded Search subset, not Google's compiler. Queries are documentation-checked and **tenant-unverified**. Mapping, permissions, telemetry and features need private checks. L06 tumbling windows are preview/pre-GA and may be unavailable. Missing capability leaves practice pending; executed zero-result queries may qualify after limitation review.
 
-Independent AI release review completed with no supported security findings. Full manual accessibility checks and tenant validation remain unperformed. Host metadata, compromised releases, same-origin scripts and extensions limit client-side protection. See [limitations](docs/LIMITATIONS.md).
+Independent AI release review completed with no supported security findings. Full manual accessibility checks and tenant validation remain unperformed. Host metadata, compromised releases, same-origin scripts and extensions limit client-side protection. See [limitations](docs/LIMITATIONS.md). Updated lessons require reassessment of older saved content versions; query text is never part of saved progress.
 
 ## Attribution and license
 

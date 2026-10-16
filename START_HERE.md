@@ -17,6 +17,8 @@ PRD and security/privacy contracts constrain every component. Validator and scor
 
 ## Current status
 
+The 2026-10-16 learning revision is LIVE: six chapters/16 missions, explained examples before testing, guided blanks and a training-query text editor approved by the owner. Local/reviewer/remote full verification passes 116 unit/18 browser tests. The focused independent AI review is SECURITY_REVIEW_2026-10-16.md; actual published source/run/HTTPS/browser evidence is in DEPLOYMENT.md. Read the newest status before the historical release record below. Query text is never saved or sent by app code; accidental real-value entry remains possible and prohibited.
+
 Research, six lessons, and the static application are implemented. Initial source upload was authorized on 2026-10-14. On 2026-10-15 the owner made `mwill20/KC7-SecOps` public and authorized independent review followed by GitHub Pages publication without adding an open-source license. The separate AI review returned APPROVE; see `docs/SECURITY_REVIEW.md`. Pages is configured for manual Actions publication; consult `docs/DEPLOYMENT.md` and live GitHub run status for actual website evidence. Full manual assistive-technology checks, private tenant pilot and workplace-use/storage approval remain unverified.
 
 ## Preferred validation after implementation
