@@ -19,7 +19,7 @@ The build may transform these JSON files into one local `site/content.js` ES mod
 
 ## Semantic validation beyond JSON Schema
 
-Before a build, require exactly six lesson IDs, twelve globally unique challenge IDs, matching Lxx parents, contentVersion >=1, no duplicate prerequisites/self-dependency/cycles, unique source/symbol IDs, source IDs resolving to the source map, exactly M1/M2 method IDs, and exactly one A/B/C option each with a matching answer key. Reference and alternate queries must parse/type-check within catalog/limits. Every alternate must produce query 70 against its challenge. Query fixtures must refer to existing challenge IDs. No unbound symbol or unknown literal allowed.
+Before a build, require exactly six lesson IDs, sixteen globally unique challenge IDs, matching Lxx parents, contentVersion >=1, no duplicate prerequisites/self-dependency/cycles, unique source/symbol IDs, source IDs resolving to the source map, exactly M1/M2 method IDs, and exactly one A/B/C option each with a matching answer key. Reference and alternate queries must parse/type-check within catalog/limits. Every alternate must produce query 70 against its challenge. Query fixtures must refer to existing challenge IDs. No unbound symbol or unknown literal allowed.
 
 Never accept a content file from URL parameters, storage, file upload, paste, or a network API. Invalid bundled content prevents grading and displays `CONTENT_INVALID`; it does not silently fall back to permissive evaluation.
 
@@ -28,15 +28,15 @@ Never accept a content file from URL parameters, storage, file upload, paste, or
 Memory only:
 
 ```text
-Attempt { challengeId, tokenIds[], queryResult|null,
+Attempt { challengeId, queryText, tokenIds[], queryResult|null,
           methodChoices: {M1:"A"|"B"|"C"|null,M2:...}, methodResult|null,
           executedAcknowledged:boolean, reviewedAcknowledged:boolean,
           highestHint:0|1|2|3 }
 ```
 
-Every token ID is from the predefined palette. `serializeTokens` maps these IDs to trusted lexemes. The view provides native labelled selects/buttons for field, operator, value, section, alias, punctuation and ordering. Values are chosen; no textbox/textarea/contenteditable/datalist custom option. Disable paste/drop/clipboard-reading flows by not creating an input surface. Controls still support ordinary keyboard navigation and selection.
+The owner-approved training textarea accepts symbolic query typing/paste, bounded to 8,192 UTF-8 bytes by the parser and 8,192 characters by the UI. Query text stays in memory/DOM only, clears on route exit/reload, and never enters storage, URLs, diagnostics, telemetry or requests. Edits reset all current grades, method choices and practice attestations immediately without moving the typing caret. Fixed diagnostics never echo unknown input. Optional preset gap selections insert only authored fragments. Copy is user-triggered, write-only; a clipboard denial falls back to selecting text manually. No programmatic clipboard reading, workplace deep links, result inputs, uploads or sanitization of production queries.
 
-Learners can remove/reorder tokens and compose parentheses and sections, so alternative syntax and errors remain possible. Move buttons provide a keyboard alternative to dragging; no drag-only UI. Preview is read-only code text. Copy Synthetic Query is user-triggered write-only clipboard access; if blocked, show a selectable read-only code block for manual copy. Never read clipboard, inspect other tabs, launch workplace links, or try to sanitize a pasted production query.
+Each challenge has required `mission` content: support (shown/guided/independent), beat, example, starter, syntax explanation pairs, remember, fictional caseUpdate, caveat and gaps. Shown examples/starters must grade 70. Guided starters contain unique declared markers and their allowed answers must reconstruct a 70-point solution. Independent starts empty. New concepts can still receive complete examples in later chapters. L01 has six missions, each other chapter two. The schema and semantic validator enforce these contracts.
 
 ## Persisted schema and API
 
@@ -73,4 +73,4 @@ Routes contain only fixed lesson/challenge/view IDs. No query values in query st
 
 ## Limitations
 
-This design prevents supported UI entry of employer values; it cannot stop a browser owner editing JavaScript/DOM/localStorage or a compromised release. There is no privacy claim based on heuristic PII detection. Same-origin scripts/extensions may inspect non-sensitive state. Scores and practice flags are untrusted personal learning records, not audit evidence.
+This editor can receive accidental employer values. Only training catalog literals are supported by grading, and no entered query is persisted or transmitted by app code. It cannot stop entry, endpoint/browser observation, a compromised release or browser-owner tampering. There is no privacy claim based on heuristic PII detection. Same-origin scripts/extensions may inspect non-sensitive state. Scores and practice flags are untrusted personal learning records, not audit evidence.

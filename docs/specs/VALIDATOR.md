@@ -2,7 +2,7 @@
 
 ## Purpose and platform
 
-Grade the authored YARA-L **Search subset** against each challenge's intent without AI, remote compilation, datasets, or exact query-string matching. The parser consumes the composer's serialized text independently of the composer. An AST is a structured description of syntax, analogous to the conditions and grouping in a normalized SIEM correlation rule.
+Grade the authored YARA-L **Search subset** against each challenge's intent without AI, remote compilation, datasets, or exact query-string matching. The parser consumes the training editor's text independently of the composer. An AST is a structured description of syntax, analogous to the conditions and grouping in a normalized SIEM correlation rule.
 
 This is not Google's compiler, a full YARA-L implementation, a regex equivalence solver, or a detector of real incidents. It may conservatively decline valid platform syntax. Unsupported forms receive **Unsupported by this course validator**, never **Invalid YARA-L**. There is no manual override or self-graded query credit in v1.0.
 
@@ -19,6 +19,7 @@ No worker, network, dynamic code, arbitrary imports, eval, or `new Function`. Us
 | metadata.event_type | enum, scalar | = / != with USER_LOGIN, PROCESS_LAUNCH, NETWORK_CONNECTION |
 | security_result.action | enum under repeated security_result | Positive = with FAIL, ALLOW, BLOCK; no negation rewrites |
 | principal.user.userid, target.user.userid | string, scalar at these paths | = / != with __USER__ or empty; optional nocase is recognized but not equivalent to exact matching |
+| principal.user.title, target.user.title | string, scalar | nonempty filter using != empty; grouping/binding; no actual title literal |
 | principal.hostname, target.hostname | string, scalar | = / != with __HOST__; optional nocase |
 | principal.ip, target.ip | string, repeated | Positive = with 192.0.2.17; CIDR call; no NOT/!= in supported IP subset |
 | target.process.file.full_path | string, scalar | = with catalog regex; re.regex alternate; nocase |
@@ -26,7 +27,7 @@ No worker, network, dynamic code, arbitrary imports, eval, or `new Function`. Us
 | network.sent_bytes | integer, scalar | Numeric comparisons or sum aggregate |
 | metadata.id | string, scalar | count/count_distinct aggregate only; never a filter predicate |
 
-String literal allowlist: `__USER__`, `__HOST__`, empty string, the above enums, `192.0.2.17`, `192.0.2.0/24`, and the predefined function-pattern encodings. No hostname/domain/IP/identity literal outside that catalog. Numeric palette: integers 0–20 plus 80 and 443; no arbitrary numeric entry. Duration palette: `1m`, `5m`, `10m`, `1h`; L06 requires exactly `by 5m`. Variables: `$user`, `$account`, `$u`, `$port`, `$events`, `$total`, `$failures`, `$n`, `$bytes`, `$volume`. Preset names limit the composer; the parser's internal contract recognizes those names only. Same query can use any suitable distinct preset aliases.
+String literal allowlist: `__USER__`, `__HOST__`, empty string, the above enums, `192.0.2.17`, `192.0.2.0/24`, and the predefined function-pattern encodings. No hostname/domain/IP/identity literal outside that catalog. Numeric catalog: integers 0–20 plus 80 and 443; arbitrary numbers are rejected. Duration palette: `1m`, `5m`, `10m`, `1h`; L06 requires exactly `by 5m`. Variables: `$user`, `$account`, `$u`, `$port`, `$events`, `$total`, `$failures`, `$n`, `$bytes`, `$volume`, `$users`, `$unique_users`, `$title`. Preset names limit the composer; the parser's internal contract recognizes those names only. Same query can use any suitable distinct preset aliases.
 
 Catalog values are safe authored data. A raw custom value is rejected with `UNSAFE_LITERAL` and no echoed value. There is no redaction heuristic that permits arbitrary strings after attempting to identify PII.
 
@@ -80,7 +81,7 @@ Outcome { name, function:"count"|"count_distinct"|"sum", field }
 Sort { outcomeName, direction:"asc"|"desc" }
 ```
 
-Parser/type checks prove only conformity to this grammar/catalog. Aggregate argument types, duplicates, group bindings and outcome references must be checked. Numeric outcome conditions require a defined numeric aggregate; match is mandatory for the course's conditional aggregates. Sum supports only network.sent_bytes in this course. Count/count_distinct support metadata.id. Match uses userid or target.port for current challenges; other catalog fields may parse but fail challenge intent. Default sort direction is asc.
+Parser/type checks prove only conformity to this grammar/catalog. Aggregate argument types, duplicates, group bindings and outcome references must be checked. Numeric outcome conditions require a defined numeric aggregate; match is mandatory for the course's conditional aggregates. Sum supports only network.sent_bytes in this course. Count/count_distinct support metadata.id; count_distinct also supports principal.user.userid and target.user.userid. Match uses userid, recorded user title or target.port for current challenges; other catalog fields may parse but fail challenge intent. Default sort direction is asc.
 
 ## Normalization and equivalence
 
@@ -101,7 +102,7 @@ Do not merely check that a required predicate appears somewhere. Example `A AND 
 
 Result: `{status, queryPoints, checks, diagnostics}`. Status is `supported-correct`, `supported-incorrect`, `invalid`, `unsupported`, or `limit-exceeded`. Checks are fixed IDs `syntax`, `filter`, `pipeline` with booleans. Diagnostics are bounded arrays of `{code, tokenIndex|null, messageId}`; message IDs refer to authored safe feedback, not source text. Query points follow the scoring contract. Invalid/unsupported/limit-exceeded earn 0 query points and no completion eligibility.
 
-Internal `parseSearch(text)` is called only on safe serialized tokens or bundled QA fixtures. It is not exposed through UI, URL parameters, postMessage, clipboard, network, or storage. This separation is part of the privacy boundary.
+`evaluateText(text, reference)` consumes untrusted training-editor text, enforces bounds through `parseSearch`, returns fixed diagnostics and catches parser errors without echoing the input. This is a local function, never an HTTP endpoint. The legacy token API remains tested but is not the learner UI. Text is not read from URLs, postMessage, storage or programmatic clipboard access. Never claim the textarea prevents accidental real entry.
 
 ## Required failures and validation
 

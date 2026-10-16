@@ -5,8 +5,9 @@ export const fields = Object.freeze({
   'principal.ip': 'ip', 'target.ip': 'ip',
   'target.process.file.full_path': 'process', 'target.port': 'number',
   'network.sent_bytes': 'number', 'metadata.id': 'id',
+  'principal.user.title': 'title', 'target.user.title': 'title',
 });
-export const aliases = Object.freeze(['$user', '$account', '$u', '$port', '$events', '$total', '$failures', '$n', '$bytes', '$volume']);
+export const aliases = Object.freeze(['$user', '$account', '$u', '$port', '$events', '$total', '$failures', '$n', '$bytes', '$volume', '$users', '$unique_users', '$title']);
 export const patterns = Object.freeze([String.raw`\\powershell\.exe$`, String.raw`\\pwsh\.exe$`, String.raw`\\(powershell|pwsh)\.exe$`]);
 export const literals = Object.freeze(['USER_LOGIN', 'PROCESS_LAUNCH', 'NETWORK_CONNECTION', 'FAIL', 'ALLOW', 'BLOCK', '__USER__', '__HOST__', '', '192.0.2.17', '192.0.2.0/24']);
 export const numbers = Object.freeze([...Array.from({ length: 21 }, (_, i) => i), 80, 443]);

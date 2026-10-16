@@ -26,7 +26,7 @@ External approvals/tenant access may remain pending while local implementation c
 
 **Issue 02: Build L01 from teaching through assessment and state.**
 
-Dependencies: package import. Planned files: shell/styles/router, lesson renderer, closed composer, serializer, parser/evaluator for scalar filters, scoring and progress.
+Dependencies: package import. Planned files: shell/styles/router, lesson renderer, training-query editor, serializer, parser/evaluator for scalar filters, scoring and progress.
 
 - Native static runtime and generated bundled content.
 - Privacy onboarding, session-only default and optional local progress.
@@ -42,7 +42,7 @@ Dependencies: package import. Planned files: shell/styles/router, lesson rendere
 
 Dependencies: M1. Implement typed catalog, aliases, implicit AND, Boolean equivalence, finite regex normalization, CIDR predicate, match/outcome/condition/order/limit. No arbitrary regex evaluation or general-purpose YARA-L engine.
 
-**Acceptance:** all 56 initial query fixtures pass expected statuses/points; every lesson alternate gives 70; should-fail mutations and limits reject safely; unsupported distinct from invalid; tests prove scope and pipeline semantics, not keyword presence.
+**Acceptance:** all 73 current query fixtures pass expected statuses/points; every lesson alternate gives 70; completed guided starters reconstruct valid solutions; should-fail mutations and limits reject safely; unsupported distinct from invalid; tests prove scope and pipeline semantics, not keyword presence.
 
 ## M3 — Full original curriculum and learning flow
 
@@ -50,7 +50,7 @@ Dependencies: M1. Implement typed catalog, aliases, implicit AND, Boolean equiva
 
 Dependencies: M2. Render all teaching/challenge/hint/method/private steps from JSON, source links from fixed map, and honest verification labels. Support revisiting any lesson and show saved best separately from current attempt. No actual-result answer field.
 
-**Acceptance:** T02–T04/T10/T15 pass; twelve challenges, six lessons, no content placeholders requiring a future author, maximum 1,200 points; unavailable telemetry leaves practice pending without blocking symbolic mastery.
+**Acceptance:** T02–T04/T10/T15 pass; sixteen missions, six lessons, no content placeholders requiring a future author, maximum 1,600 points; unavailable telemetry leaves practice pending without blocking symbolic mastery.
 
 ## M4 — Browser, privacy, accessibility and artifact validation
 

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "contentVersion": 1,
+  "contentVersion": 2,
   "id": "L05",
-  "title": "Summarize activity without inventing meaning",
+  "title": "Turn the noise into a shortlist",
   "level": "intermediate",
   "estimatedMinutes": 45,
   "prerequisites": [
@@ -13,29 +13,29 @@
     "Sort an aggregate result and limit displayed rows.",
     "Separate distinct record IDs, vendor duplication, missing values, and real-world actions."
   ],
-  "story": "Signal Desk asks for summaries to help choose what to inspect next. You will learn to measure records accurately before giving the count any security meaning. The app does not collect or know the numbers returned.",
+  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 5 — Mira cannot review a wall of fictional access and network activity one record at a time. Build summaries that rank useful leads. Keep the difference between a record count, an account count and a byte sum clear.",
   "teaching": [
     {
-      "heading": "Grouping changes the output",
-      "text": "KQL summarize groups records and calculates summaries. YARA-L Search uses match for the keys and outcome for calculations. The result is grouped rows, not the original event list. A YARA-L placeholder such as $user binds a field; it is unrelated to the synthetic [USER] label."
+      "heading": "Reuse the summary tools",
+      "text": "You already used outcome to calculate a value and match to group by a title. Now group by account or port. The names after $ label the summaries."
     },
     {
-      "heading": "Know what is being counted",
-      "text": "count(metadata.id) counts rows; count_distinct(metadata.id) counts distinct normalized IDs. Repeated fields and joins may multiply rows; distinct IDs help answer a distinct-record question. Two source products may still give different IDs to the same real action. Never label this number unique real-world incidents."
+      "heading": "Choose what to count",
+      "text": "count_distinct(metadata.id) counts different event IDs. count_distinct(principal.user.userid) counts different account IDs. Those questions are not interchangeable."
     },
     {
-      "heading": "Defaults and population matter",
-      "text": "The user nonempty filter removes an empty grouping identity. An aggregate's correctness still depends on source population and schema behavior. sum(network.sent_bytes) summarizes the normalized byte field, not a guaranteed complete transfer volume or proof of exfiltration. Check the product's mapping and units privately."
+      "heading": "Sort after you summarize",
+      "text": "order chooses which calculated metric to sort and desc puts the largest values first. limit controls how many summary rows are shown, not how many source events are searched."
     },
     {
-      "heading": "Sort and limit do not define collection",
-      "text": "order sorts the aggregate result; limit 20 asks for a maximum of twenty displayed result rows. It does not search only twenty events or guarantee that only twenty entities exist. Recent data may become available to statistical Search after ingestion processing."
+      "heading": "Bytes need context",
+      "text": "sum(network.sent_bytes) adds the normalized byte values within a group. Missing fields, units and repeated data affect interpretation. A high total does not prove exfiltration."
     }
   ],
   "challenges": [
     {
       "id": "L05-C01",
-      "title": "Rank failed-login record counts by actor",
+      "title": "Rank failed-login records by account",
       "prompt": "Select USER_LOGIN with FAIL action and nonempty principal.user.userid. Group by that user. Output the distinct metadata.id count, order that count descending, and limit to 20 rows. Do not filter to one specific user or add time buckets.",
       "symbolIds": [],
       "referenceQuery": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
@@ -95,11 +95,43 @@
         "Inspect a selected group's underlying events in SecOps rather than treating the ranking as an incident verdict.",
         "Keep usernames and counts in workplace tools; do not report them to the site."
       ],
-      "debrief": "Explain privately why a high count might warrant context review but does not prove a brute-force attack."
+      "debrief": "Explain privately why a high count might warrant context review but does not prove a brute-force attack.",
+      "mission": {
+        "support": "shown",
+        "beat": "The fictional access story has become a queue of leads. Ask for the accounts with the largest distinct failed-record counts.",
+        "example": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
+        "starter": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
+        "explanation": [
+          {
+            "part": "$user = principal.user.userid",
+            "meaning": "Give the grouping field a short local alias. This differs from the synthetic [USER] value."
+          },
+          {
+            "part": "match: $user",
+            "meaning": "One group per account ID."
+          },
+          {
+            "part": "$events = count_distinct(metadata.id)",
+            "meaning": "Count different normalized record IDs inside each group."
+          },
+          {
+            "part": "order: $events desc",
+            "meaning": "Put the largest record counts first."
+          },
+          {
+            "part": "limit: 20",
+            "meaning": "Show at most twenty summary rows after sorting."
+          }
+        ],
+        "remember": "Group, calculate, sort, display.",
+        "caseUpdate": "Case card unlocked: you can build an account shortlist without inventing a conclusion.",
+        "caveat": "Distinct record IDs may still represent multiple products' records of the same real action.",
+        "gaps": []
+      }
     },
     {
       "id": "L05-C02",
-      "title": "Summarize one host's destination ports",
+      "title": "Rank the host's ports by recorded bytes",
       "prompt": "Select NETWORK_CONNECTION records with principal.hostname [HOST]. Group by target.port. Output distinct metadata.id count and sum(network.sent_bytes), order by the byte sum descending, and limit to 20 rows. No time bucket or threshold.",
       "symbolIds": [
         "HOST"
@@ -161,7 +193,46 @@
         "Check source units and missing/default values using approved event details.",
         "If the byte field is unavailable, keep actual practice pending for this challenge and complete symbolic mastery."
       ],
-      "debrief": "Privately identify how missing telemetry would affect this summary and what additional evidence would improve it."
+      "debrief": "Privately identify how missing telemetry would affect this summary and what additional evidence would improve it.",
+      "mission": {
+        "support": "guided",
+        "beat": "Mira asks for a different shortlist: destination ports for the fictional host, ordered by recorded byte volume.",
+        "example": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
+        "starter": "metadata.event_type = \"NETWORK_CONNECTION\"\nprincipal.hostname = \"__HOST__\"\nmatch:\n  target.port\noutcome:\n  $events = count_distinct(metadata.id)\n  $bytes = sum(network.sent_bytes)\norder:\n  ___1___ desc\nlimit:\n  20",
+        "explanation": [
+          {
+            "part": "match: target.port",
+            "meaning": "One group for each destination port."
+          },
+          {
+            "part": "$events = count_distinct(metadata.id)",
+            "meaning": "Keep a distinct-record count alongside the volume summary."
+          },
+          {
+            "part": "$bytes = sum(network.sent_bytes)",
+            "meaning": "Add the normalized sent-byte values within each group."
+          },
+          {
+            "part": "order uses a summary alias",
+            "meaning": "Choose the byte summary for this question, not the event count."
+          }
+        ],
+        "remember": "Sort by the thing the question asks about.",
+        "caseUpdate": "Case card unlocked: your shortlist separates record volume from byte volume. The final chapter adds time.",
+        "caveat": "Verify units, field population and duplication before interpreting a workplace sum.",
+        "gaps": [
+          {
+            "marker": "___1___",
+            "label": "Sort by byte volume",
+            "options": [
+              "$events",
+              "$bytes",
+              "$user"
+            ],
+            "answer": "$bytes"
+          }
+        ]
+      }
     }
   ],
   "sourceIds": [
@@ -172,7 +243,7 @@
     "G15"
   ],
   "verification": {
-    "documentationCheckedOn": "2026-10-14",
+    "documentationCheckedOn": "2026-10-16",
     "tenantExecution": "not-tested"
   }
 }

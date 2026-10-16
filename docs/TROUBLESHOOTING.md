@@ -10,10 +10,10 @@
 
 **Storage invalid/unavailable:** continue session-only. Invalid/future data stays untouched until Clear progress or a deliberate new remember choice. Changed lesson versions drop only stale records. Clearing affects one course key.
 
-**Clipboard blocked:** select and manually copy the read-only synthetic preview. The app never reads the clipboard.
+**Clipboard blocked:** select and manually copy the training-query text or example. The app never reads the clipboard.
 
-**Unsupported query:** check the course subset and sources. Valid Google syntax outside it can be unsupported here. There is no raw editor or manual credit override.
+**Unsupported query:** check the course subset and sources. Valid Google syntax outside it can be unsupported here. The training editor accepts only the documented course catalog for grading; no manual credit override. Never paste production values.
 
 **SecOps compilation failure:** retain detailed errors and actual query privately. Check YL2, mapping, features and public documentation. Share only a symbolic template and a permitted pilot status when a correction is needed.
 
-**CLI GitHub authentication fails:** browser login is separate. The private repo exists; the owner can complete normal CLI login when pushing is authorized. Do not extract browser credentials. Nothing has been committed or pushed.
+**CLI GitHub authentication fails:** browser login is separate. The repository exists and is public by owner decision. Recheck ordinary authenticated CLI access; browser login is separate. Do not extract browser credentials or infer that historical authentication errors are permanent.

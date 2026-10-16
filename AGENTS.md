@@ -3,8 +3,8 @@
 Build only the behavior in `docs/PRD.md` and the referenced contracts. Inspect live state before editing. The root now contains a local application; read `docs/IMPLEMENTATION_STATUS.md` and `HANDOFF.md` for current evidence. The preserved specification subfolder is a donor snapshot.
 
 - Start with the one-lesson composed path in `docs/BUILD_PLAN.md`; include the real composer, serializer, parser, evaluator, scoring, and privacy-safe progress reducer.
-- Maintain browser-only learner use, no runtime AI, no SIEM integration, and no real-data input surfaces.
-- Use closed-choice controls. Never add a raw query editor, free-text field, custom URL field, file upload, or clipboard read as a convenience.
+- Maintain browser-only learner use, no runtime AI, no SIEM integration, and no supported workplace-data input.
+- Owner correction 2026-10-16 authorizes one training-query textarea with placeholders, optional preset gap help and local structural grading. Query text must never persist or transmit. Accidental real text can enter; disclose this honestly. Do not add free-text notes, tenant/custom URLs, uploads, result fields or programmatic clipboard reads.
 - No server-side learner storage. Persist only the projection in `schemas/progress.schema.json`; never persist query text, ASTs, method responses, or actual results.
 - No runtime dependencies, CDN assets, external fonts, trackers, automatic external requests, service worker, or remote content loading.
 - Tests must prove the requested behavior and should-fail cases. Do not replace the AST evaluator with string comparison, regex keyword counting, or AI grading.

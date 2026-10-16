@@ -1,6 +1,6 @@
 # Privacy contract
 
-**What the learner can enter:** closed-choice syntax tokens, method quiz selections, and completion acknowledgments. Every choice is authored and non-sensitive. There is no field for real usernames, IPs, hostnames, domains, identifiers, tenant addresses, timestamps, results, notes, or screenshots.
+**What the learner can enter:** a training-query text editor using predefined placeholders, optional preset gap choices, method selections and practice acknowledgments. The owner approved this editor on 2026-10-16. It can receive accidental real text; the app cannot prevent or undo that entry. Only symbolic values are supported by grading. Do not type/paste real identities, addresses, logs, results or internal URLs.
 
 **What the app persists, when enabled:** fixed lesson/challenge IDs and versions, query/method/completion point totals, a practiced flag, and highest hint level. No query, AST, responses, actual-result category, date/time, browser identifier, user profile, or event history. Progress is learning feedback and can be cleared.
 
@@ -8,7 +8,7 @@
 
 ## Private substitution procedure
 
-1. On the site, choose only `[USER]`, `[HOST]`, `[IP]`, or another predefined symbol.
+1. On the site, type only training syntax and `[USER]`, `[HOST]`, `[IP]`, or another predefined symbol.
 2. Copy the displayed **synthetic** Search query. The app never reads the clipboard.
 3. Switch to the employer's SecOps query editor manually.
 4. Replace the synthetic values there with authorized workplace values; escape quotes/backslashes appropriately inside SecOps.
@@ -16,7 +16,7 @@
 6. Inspect events, any returned counts, and investigative notes inside employer tools only.
 7. Return and select fixed statements confirming execution and review. Do not bring data back.
 
-The symbol catalog is not a mapping table. The app never asks what `[USER]` means. It cannot substitute or preview the real query. No automatic SecOps deep link carries the query. No screenshot or copy-back proof is requested.
+The symbol catalog is not a mapping table. The app never asks what `[USER]` means. Query text is held only in the current mission's tab memory and DOM, discarded on route change/reload, and never submitted, logged, included in URLs or persisted by application code. A managed device/work network does not turn this public origin into an employer system. Extensions, browser features and compromised/same-origin code can observe entered text. It cannot substitute or preview the real query. No automatic SecOps deep link carries the query. No screenshot or copy-back proof is requested.
 
 ## Browser storage
 

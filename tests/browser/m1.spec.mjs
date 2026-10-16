@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { enter, compose } from './helpers.mjs';
 import { STORAGE_KEY } from '../../site/state/progress.js';
-test('T01 M1 real L01 composer→grade→method→private progress, and wrong role fails', async ({ page }) => {
-  await enter(page, '#L01-C02');
+test('T01 M1 real L01 editor→grade→method→private progress, and wrong role fails', async ({ page }) => {
+  await enter(page, '#L01-C06');
   await compose(page, 'principal.user.userid = "__USER__" AND (metadata.event_type = "USER_LOGIN")');
   await page.locator('#check-query').click(); await expect(page.locator('#query-result')).toContainText('70 / 70');
   await page.locator('#M1-A').check(); await page.locator('#M2-C').check(); await page.locator('#check-method').click();
@@ -13,13 +13,15 @@ test('T01 M1 real L01 composer→grade→method→private progress, and wrong ro
   expect(await page.evaluate(() => localStorage.length)).toBe(0);
   await page.goto('/#progress'); await page.locator('#remember').check();
   const saved = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), STORAGE_KEY);
-  expect(saved.records[0]).toEqual({ challengeId: 'L01-C02', contentVersion: 1, queryPoints: 70, methodPoints: 20, completionPoints: 10, practiced: true, highestHint: 0 });
-  await page.goto('/#L01-C02'); await page.locator('#clear-query').click();
+  expect(saved.records[0]).toEqual({ challengeId: 'L01-C06', contentVersion: 2, queryPoints: 70, methodPoints: 20, completionPoints: 10, practiced: true, highestHint: 0 });
+  await page.goto('/#L01-C06'); await page.locator('#clear-query').click();
   await expect(page.locator('#executedAcknowledged')).not.toBeChecked(); await expect(page.locator('#executedAcknowledged')).toBeDisabled();
   await compose(page, 'target.user.userid = "__USER__" AND metadata.event_type = "USER_LOGIN"'); await page.locator('#check-query').click();
   await expect(page.locator('#query-result')).toContainText('35 / 70'); await expect(page.locator('#executedAcknowledged')).toBeDisabled();
-  const before = await page.locator('#query-preview').textContent();
-  await page.locator('#query-preview').focus(); await page.keyboard.type('PRIVATE_SENTINEL');
-  expect(await page.locator('#query-preview').textContent()).toBe(before);
-  await expect(page.locator('input[type=text],input[type=file],textarea,[contenteditable],form')).toHaveCount(0);
+  await page.locator('#query-editor').fill('principal.user.userid = "SYNTHETIC_PRIVATE_SENTINEL"');
+  await page.locator('#check-query').click();
+  await expect(page.locator('#query-result')).toContainText('0 / 70');
+  await expect(page.locator('#query-result')).not.toContainText('SYNTHETIC_PRIVATE_SENTINEL');
+  await expect(page.locator('textarea')).toHaveCount(1);
+  await expect(page.locator('input[type=text],input[type=file],[contenteditable],form')).toHaveCount(0);
 });

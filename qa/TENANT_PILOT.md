@@ -10,7 +10,9 @@ Confirm manual YL2 Search access, an approved investigation range, source teleme
 
 | Challenge(s) | Private verification | Allowed compatibility status to share |
 |---|---|---|
-| L01-C01/C02 | Category filter and exact user filter compile; chosen user role populated | compiled / unavailable / syntax correction needed |
+| L01-C01/C02 | USER_LOGIN category and ALLOW action compile; source normalization checked | compiled / unavailable / syntax correction needed |
+| L01-C03/C04 | Distinct nonempty user IDs counted; optional principal.user.title grouping compiles and title population/enrichment limits are understood | compiled / field unavailable / syntax correction needed |
+| L01-C05/C06 | FAIL distinct metadata.id count and exact symbolic-user pivot compile after private substitution | compiled / unavailable / syntax correction needed |
 | L02-C01/C02 | Boolean grouping and documented action normalization behave as intended | compiled / unavailable / syntax correction needed |
 | L03-C01/C02 | RE2 suffix/nocase and process path mapping available; no process is launched | compiled / telemetry unavailable / platform mismatch |
 | L04-C01/C02 | Direction/repeated IP mapping and CIDR/port syntax compile | compiled / unavailable / syntax correction needed |

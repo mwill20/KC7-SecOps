@@ -1,6 +1,6 @@
 # Search reference and language boundaries
 
-Checked 2026-10-14; examples are documentation-checked, not tenant-compiled. Each lesson carries source IDs from the research matrix.
+Checked 2026-10-14; distinct-user/title additions checked 2026-10-16. Examples are documentation-checked, not tenant-compiled. Each lesson carries source IDs from the research matrix.
 
 ## Three different concepts
 
@@ -75,7 +75,21 @@ This asks about fixed five-minute buckets within the Search UI range. It does no
 
 The platform also documents grouped aliases (`ip`, `hostname`, etc.), dedup, arrays, more aggregates, joins, entities, data tables, and more. Those are not all graded in v1.0. Grouped aliases broaden the selected fields and are not equivalent to a directional field. Repeated IP equality in Search matches an occurrence; do not assume `!=` excludes all occurrences or transfer negation rewrites to rules. [Grouped fields](https://docs.cloud.google.com/chronicle/docs/investigation/search-syntax-reference), [dedup](https://docs.cloud.google.com/chronicle/docs/investigation/deduplication-yaral), [Search/rules differences](https://docs.cloud.google.com/chronicle/docs/investigation/udm-search-vs-rules-results).
 
-## KQL bridge
+## First-chapter additions: users and recorded titles
+
+The Search time picker supplies the last 30 minutes. `USER_LOGIN` selects attempts; adding `security_result.action = "ALLOW"` selects records with a normalized allow action. This distinct-account question excludes blank IDs:
+
+```yaral
+metadata.event_type = "USER_LOGIN"
+security_result.action = "ALLOW"
+principal.user.userid != ""
+outcome:
+  $users = count_distinct(principal.user.userid)
+```
+
+For recorded job-title groups, add `principal.user.title != ""` to the filter and `match: principal.user.title` before outcome. Keep the same distinct-user metric. User `title` is documented, but logs/enrichment may not supply it. It is not a permission role, and a recorded/enriched value does not establish the person's historical title at login time. Users can appear in more than one title group across records, so group counts need not sum to the global distinct-user total. [Official distinct-user example](https://docs.cloud.google.com/chronicle/docs/yara-l/transition_spl_yaral), [UDM User fields](https://docs.cloud.google.com/chronicle/docs/reference/udm-field-list).
+
+## KQL comparison
 
 | Familiar KQL idea | Search counterpart | Important difference |
 |---|---|---|

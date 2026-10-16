@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "note": "Specification fixtures only. No parser implementation has run these yet.",
+  "note": "Expected behavior exercised by the course parser and structural evaluator. No query was tenant-compiled or executed.",
   "cases": [
     {
       "id": "L01-C01-reference",
@@ -27,24 +27,24 @@
       "reason": "Accept a supported alternate structure without exact string matching."
     },
     {
-      "id": "L01-C02-reference",
-      "challengeId": "L01-C02",
+      "id": "L01-C06-reference",
+      "challengeId": "L01-C06",
       "query": "metadata.event_type = \"USER_LOGIN\"\nprincipal.user.userid = \"__USER__\"",
       "expectedStatus": "supported-correct",
       "expectedQueryPoints": 70,
       "reason": "The authored reference must satisfy its own challenge contract."
     },
     {
-      "id": "L01-C02-alternate-1",
-      "challengeId": "L01-C02",
+      "id": "L01-C06-alternate-1",
+      "challengeId": "L01-C06",
       "query": "principal.user.userid = \"__USER__\" AND metadata.event_type = \"USER_LOGIN\"",
       "expectedStatus": "supported-correct",
       "expectedQueryPoints": 70,
       "reason": "Accept a supported alternate structure without exact string matching."
     },
     {
-      "id": "L01-C02-alternate-2",
-      "challengeId": "L01-C02",
+      "id": "L01-C06-alternate-2",
+      "challengeId": "L01-C06",
       "query": "events:\n  metadata.event_type = \"USER_LOGIN\" AND (principal.user.userid = \"__USER__\")",
       "expectedStatus": "supported-correct",
       "expectedQueryPoints": 70,
@@ -236,7 +236,7 @@
     },
     {
       "id": "wrong-target-role",
-      "challengeId": "L01-C02",
+      "challengeId": "L01-C06",
       "query": "metadata.event_type = \"USER_LOGIN\" AND target.user.userid = \"__USER__\"",
       "expectedStatus": "supported-incorrect",
       "expectedQueryPoints": 35,
@@ -244,7 +244,7 @@
     },
     {
       "id": "extra-nocase",
-      "challengeId": "L01-C02",
+      "challengeId": "L01-C06",
       "query": "metadata.event_type = \"USER_LOGIN\"\nprincipal.user.userid = \"__USER__\" nocase",
       "expectedStatus": "supported-incorrect",
       "expectedQueryPoints": 35,
@@ -260,7 +260,7 @@
     },
     {
       "id": "unknown-literal",
-      "challengeId": "L01-C02",
+      "challengeId": "L01-C06",
       "query": "metadata.event_type = \"USER_LOGIN\" AND principal.user.userid = \"__NOT_ALLOWED__\"",
       "expectedStatus": "invalid",
       "expectedQueryPoints": 0,
@@ -268,7 +268,7 @@
     },
     {
       "id": "comment-keywords",
-      "challengeId": "L01-C02",
+      "challengeId": "L01-C06",
       "query": "metadata.event_type = \"USER_LOGIN\"\n// principal.user.userid = \"__USER__\"",
       "expectedStatus": "supported-incorrect",
       "expectedQueryPoints": 35,
@@ -449,6 +449,142 @@
       "expectedStatus": "supported-incorrect",
       "expectedQueryPoints": 35,
       "reason": "Follow-up intent is successful/ALLOW action, not failure."
+    },
+    {
+      "id": "L01-C02-reference",
+      "challengeId": "L01-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Complete supplied solution answers the investigative query goal."
+    },
+    {
+      "id": "L01-C02-alternate-1",
+      "challengeId": "L01-C02",
+      "query": "security_result.action = \"ALLOW\" AND metadata.event_type = \"USER_LOGIN\"",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Alternate syntax must preserve whole-filter and aggregation intent."
+    },
+    {
+      "id": "L01-C03-reference",
+      "challengeId": "L01-C03",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\noutcome:\n  $users = count_distinct(principal.user.userid)",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Complete supplied solution answers the investigative query goal."
+    },
+    {
+      "id": "L01-C03-alternate-1",
+      "challengeId": "L01-C03",
+      "query": "security_result.action = \"ALLOW\" AND principal.user.userid != \"\" AND metadata.event_type = \"USER_LOGIN\"\noutcome:\n  $unique_users = count_distinct(principal.user.userid)",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Alternate syntax must preserve whole-filter and aggregation intent."
+    },
+    {
+      "id": "L01-C04-reference",
+      "challengeId": "L01-C04",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\nprincipal.user.title != \"\"\nmatch:\n  principal.user.title\noutcome:\n  $users = count_distinct(principal.user.userid)",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Complete supplied solution answers the investigative query goal."
+    },
+    {
+      "id": "L01-C04-alternate-1",
+      "challengeId": "L01-C04",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\nprincipal.user.title != \"\"\n$title = principal.user.title\nmatch:\n  $title\noutcome:\n  $unique_users = count_distinct(principal.user.userid)",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Alternate syntax must preserve whole-filter and aggregation intent."
+    },
+    {
+      "id": "L01-C05-reference",
+      "challengeId": "L01-C05",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\noutcome:\n  $failures = count_distinct(metadata.id)",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Complete supplied solution answers the investigative query goal."
+    },
+    {
+      "id": "L01-C05-alternate-1",
+      "challengeId": "L01-C05",
+      "query": "security_result.action = \"FAIL\" AND metadata.event_type = \"USER_LOGIN\"\noutcome:\n  $events = count_distinct(metadata.id)",
+      "expectedStatus": "supported-correct",
+      "expectedQueryPoints": 70,
+      "reason": "Alternate syntax must preserve whole-filter and aggregation intent."
+    },
+    {
+      "id": "L01-C02-failure-instead-of-success",
+      "challengeId": "L01-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "Failed logins do not answer a successful-login question."
+    },
+    {
+      "id": "L01-C02-broad-or",
+      "challengeId": "L01-C02",
+      "query": "metadata.event_type = \"USER_LOGIN\" OR security_result.action = \"ALLOW\"",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "An OR admits unrelated records and failed logins."
+    },
+    {
+      "id": "L01-C03-records-instead-of-users",
+      "challengeId": "L01-C03",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\noutcome:\n  $users = count_distinct(metadata.id)",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 45,
+      "reason": "Counting event IDs counts records, not distinct account IDs."
+    },
+    {
+      "id": "L01-C03-missing-user-coverage",
+      "challengeId": "L01-C03",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\noutcome:\n  $users = count_distinct(principal.user.userid)",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "The requested population explicitly excludes blank account identifiers."
+    },
+    {
+      "id": "L01-C03-non-distinct-users",
+      "challengeId": "L01-C03",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\noutcome:\n  $users = count(principal.user.userid)",
+      "expectedStatus": "invalid",
+      "expectedQueryPoints": 0,
+      "reason": "The course rejects unsupported count(user) instead of silently treating it as distinct users."
+    },
+    {
+      "id": "L01-C04-missing-title-coverage",
+      "challengeId": "L01-C04",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\nmatch:\n  principal.user.title\noutcome:\n  $users = count_distinct(principal.user.userid)",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "The requested grouping excludes blank titles."
+    },
+    {
+      "id": "L01-C04-wrong-group",
+      "challengeId": "L01-C04",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\nprincipal.user.title != \"\"\nmatch:\n  principal.user.userid\noutcome:\n  $users = count_distinct(principal.user.userid)",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 45,
+      "reason": "Grouping by person does not answer the recorded-title question."
+    },
+    {
+      "id": "L01-C05-no-failure-filter",
+      "challengeId": "L01-C05",
+      "query": "metadata.event_type = \"USER_LOGIN\"\noutcome:\n  $failures = count_distinct(metadata.id)",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 35,
+      "reason": "All login records are not failed login records."
+    },
+    {
+      "id": "L01-C05-non-distinct-record-count",
+      "challengeId": "L01-C05",
+      "query": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\noutcome:\n  $failures = count(metadata.id)",
+      "expectedStatus": "supported-incorrect",
+      "expectedQueryPoints": 45,
+      "reason": "The mission requests distinct normalized event records."
     }
   ]
 }

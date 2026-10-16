@@ -103,7 +103,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "pattern": "^L0[1-6]-C0[12]$"
+            "pattern": "^L0[1-6]-C0[1-6]$"
           },
           "title": {
             "type": "string",
@@ -235,6 +235,126 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 2000
+          },
+          "mission": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "support": {
+                "enum": [
+                  "shown",
+                  "guided",
+                  "independent"
+                ]
+              },
+              "beat": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              },
+              "example": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 8192
+              },
+              "starter": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 8192
+              },
+              "explanation": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 8,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "part": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    },
+                    "meaning": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1000
+                    }
+                  },
+                  "required": [
+                    "part",
+                    "meaning"
+                  ]
+                }
+              },
+              "remember": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "caseUpdate": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              },
+              "caveat": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 2000
+              },
+              "gaps": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 4,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "marker": {
+                      "type": "string",
+                      "pattern": "^___[1-4]___$"
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    },
+                    "options": {
+                      "type": "array",
+                      "minItems": 2,
+                      "maxItems": 6,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 500
+                      }
+                    },
+                    "answer": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    }
+                  },
+                  "required": [
+                    "marker",
+                    "label",
+                    "options",
+                    "answer"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "support",
+              "beat",
+              "example",
+              "starter",
+              "explanation",
+              "remember",
+              "caseUpdate",
+              "caveat",
+              "gaps"
+            ]
           }
         },
         "required": [
@@ -247,11 +367,12 @@
           "hints",
           "methodQuestions",
           "executeSteps",
-          "debrief"
+          "debrief",
+          "mission"
         ]
       },
       "minItems": 2,
-      "maxItems": 2
+      "maxItems": 6
     },
     "sourceIds": {
       "type": "array",

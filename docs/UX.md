@@ -1,3 +1,7 @@
+# Current flow — 2026-10-16
+
+This revision supersedes the earlier token-only wireframe below. Keep the existing responsive shell. Home introduces Midnight at Meridian; a chapter briefing immediately shows its first complete query and explanation. Mission pages show story beat → investigative question → supplied example or previous building block → concise syntax breakdown → training-query editor → query feedback and fictional earned case card → optional method and private practice → next mission. A numbered chapter trail and visible hint panel support movement. Guidance fades from full examples to marked blanks to an empty editor; new concepts still get examples. There is no SIEM-output question or actual-data field. Query editing must preserve caret/focus, clear stale current grades, and retain only non-sensitive saved best. Copy is write-only; failures select text for manual copy. Keyboard, screen-reader status, forced colors, reduced motion and 320px reflow remain targets. The old wireframe is historical design rationale where it conflicts.
+
 # Accessible flow and wireframes
 
 ## Interaction decisions

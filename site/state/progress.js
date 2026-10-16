@@ -4,7 +4,7 @@ const recordKeys = ['challengeId', 'contentVersion', 'queryPoints', 'methodPoint
 const shape = (x, keys) => x !== null && typeof x === 'object' && !Array.isArray(x) && Object.keys(x).length === keys.length && keys.every(k => Object.hasOwn(x, k));
 export const projectProgress = records => ({ schemaVersion: 1, courseVersion: 1, rememberProgress: true, records: records.map(r => ({ challengeId: r.challengeId, contentVersion: r.contentVersion, queryPoints: r.queryPoints, methodPoints: r.methodPoints, completionPoints: r.completionPoints, practiced: r.practiced, highestHint: r.highestHint })) });
 export function validateProgress(input, versions) {
-  if (!shape(input, rootKeys) || input.schemaVersion !== 1 || input.courseVersion !== 1 || input.rememberProgress !== true || !Array.isArray(input.records) || input.records.length > 12) throw new Error('PROGRESS_INVALID');
+  if (!shape(input, rootKeys) || input.schemaVersion !== 1 || input.courseVersion !== 1 || input.rememberProgress !== true || !Array.isArray(input.records) || input.records.length > 16) throw new Error('PROGRESS_INVALID');
   const ids = new Set(); let stale = false;
   const records = [];
   for (const r of input.records) {

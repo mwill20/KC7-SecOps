@@ -82,3 +82,8 @@ The owner explicitly authorized read-only inspection of the logged-in Chrome tab
 Our translation is an original lesson briefing, symbolic query workspace, progressive hints and private progress. No KC7 question text, scenario prose, profile identifiers, scores or assets were retained. Exact hint penalties, answer normalization, live grading internals and all private curriculum content remain unverified. The temporary approval-review usage block cleared after the owner reported restored capacity; normal read-only inspection then succeeded. No bypass was used.
 
 During implementation, official Google Search syntax, aggregation, conditions and windowing references were rechecked. L06 contentVersion is now 2 to add the explicit preview availability caveat. This remains documentation evidence, never tenant compilation.
+# Research additions — investigation-led revision (2026-10-16)
+
+G17 — [Distinct users in Search](https://docs.cloud.google.com/chronicle/docs/yara-l/transition_spl_yaral), official Google documentation. Documents USER_LOGIN plus outcome count_distinct(principal.user.userid). L01 adds explicit ALLOW and nonempty-user filters for its successful-account question. Documentation checked; tenant compilation remains untested.
+
+Authorized KC7 module-flow observations and the limits of that inspection are recorded in [KC7 flow review](KC7_FLOW_REVIEW_2026-10-16.md). These inform teaching sequence, not copied course prose or answers.

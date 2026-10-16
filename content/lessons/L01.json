@@ -1,40 +1,42 @@
 {
   "schemaVersion": 1,
-  "contentVersion": 1,
+  "contentVersion": 2,
   "id": "L01",
-  "title": "Start with a question and a safe search",
+  "title": "The midnight roll call",
   "level": "foundation",
-  "estimatedMinutes": 30,
+  "estimatedMinutes": 45,
   "prerequisites": [],
   "objectives": [
-    "Identify the manual YL2 Search context and the external site's privacy boundary.",
-    "Construct an event-type filter and narrow it to an exact symbolic user.",
-    "Distinguish a compiled query, a returned event, and a justified conclusion."
+    "Read a YARA-L Search query before building it.",
+    "Separate login attempts, allowed logins and failures.",
+    "Count different account IDs and event records.",
+    "Group job titles only where the logs supply them.",
+    "Run queries separately in SecOps; return no workplace observations."
   ],
-  "story": "Signal Desk assigns your first practice task: examine login telemetry for an authorized identity. This is a learning exercise, not an allegation about a real user. Select the identity privately in SecOps; the training site calls it [USER].",
+  "story": "MIDNIGHT AT MERIDIAN — an original fictional case. The planetarium's launch show starts in one hour. Its Mars display has become a giant dancing potato. Director Mira calls: “Please tell me this is a rehearsal.” You are the analyst on the desk. Start with access records and build your first queries. Your workplace logs are separate practice; they do not contain this fictional case.",
   "teaching": [
     {
-      "heading": "A filter is a question about events",
-      "text": "A SIEM correlation filter decides which normalized events are relevant. A Search filter does the same initial selection without deploying a rule. Start by asking for USER_LOGIN events. metadata.event_type names the normalized event category; it is not a vendor's raw event ID. The string enum is quoted and uses its documented uppercase value."
+      "heading": "One case, one small move at a time",
+      "text": "Read a mission and its explanation, then copy the example into authorized SecOps. Return to build the training query and choose Check query. First you get the whole query, then gaps to fill, then an independent task. Hints are always available."
     },
     {
-      "heading": "Choose the correct editor and range",
-      "text": "In workplace SecOps, use manual Search in the YL2 dialect and choose an authorized short time range using the UI. Do not use natural-language/Gemini generation as part of this AI-free course. Search range is a separate UI control, not a value the training site collects. Your tenant may use older UI wording."
+      "heading": "An event is one record of something happening",
+      "text": "A login record can describe an attempt that worked or failed. A field is a named detail in that record. metadata.event_type is the “what happened?” label. Each mission explains the new pieces before you use them."
     },
     {
-      "heading": "Symbols are not variables",
-      "text": "The training symbol [USER] serializes as the synthetic string \"__USER__\". Only inside SecOps do you replace it with an approved value. A YARA-L variable such as $user is a different concept taught later. Never paste the substituted query or its results back here."
+      "heading": "Set the range in SecOps",
+      "text": "Choose manual Search with YARA-L 2.0, then Relative time: 30 Minutes. Keep that range while comparing these queries. Time is a separate Search control; do not add KQL ago() or a detection-rule window to these examples."
     },
     {
-      "heading": "Empty results are evidence with limits",
-      "text": "Compiler success only establishes that the platform accepts the query. An empty result might reflect time range, permissions, normalization, ingestion delay, or no matching activity. It is not proof that a person is safe or malicious. Inspect available event details and field mapping privately."
+      "heading": "The story is fictional; workplace practice stays private",
+      "text": "Case updates are authored fiction, not claims about your employer. Your results can be different or empty. Never return actual identifiers, records, counts, titles tied to people or screenshots. Replace course symbols only inside workplace tools."
     }
   ],
   "challenges": [
     {
       "id": "L01-C01",
-      "title": "Find the event category",
-      "prompt": "Construct a Search query selecting USER_LOGIN events. Return event rows, with no aggregate, condition, order, limit, or rule wrapper.",
+      "title": "Open the login door",
+      "prompt": "What login records are available? Select the USER_LOGIN event category. In SecOps, use the last 30 minutes. This first query returns records, not a count.",
       "symbolIds": [],
       "referenceQuery": "metadata.event_type = \"USER_LOGIN\"",
       "acceptedVariants": [
@@ -89,17 +91,445 @@
         }
       ],
       "executeSteps": [
-        "Open the already-approved SecOps environment manually; do not enter its URL here.",
-        "Select YL2 and an authorized short time range.",
-        "Run the category query and inspect any available normalized event in SecOps.",
-        "If no events return, check range, permissions and available telemetry; widen only within policy."
+        "Open authorized SecOps Search manually and select YARA-L 2.0.",
+        "Set Relative time to 30 Minutes, or an approved equivalent short range.",
+        "Copy and run the example. No real identifier is needed for this first query.",
+        "Keep records and counts inside workplace tools. If empty, check range and source coverage."
       ],
-      "debrief": "State privately what this filter establishes and one thing it cannot establish. On the site, attest only that it ran and the result or limitation was reviewed."
+      "debrief": "The query is the submission. Do not type its row count or any event into the course.",
+      "mission": {
+        "support": "shown",
+        "beat": "Mira needs a starting point. Ignore the potato for a moment: find the access records that could tell a useful story.",
+        "example": "metadata.event_type = \"USER_LOGIN\"",
+        "starter": "metadata.event_type = \"USER_LOGIN\"",
+        "explanation": [
+          {
+            "part": "metadata",
+            "meaning": "The event's label card: details that describe the record."
+          },
+          {
+            "part": ".event_type",
+            "meaning": "The “what happened?” box on that card. Dots lead through the field path."
+          },
+          {
+            "part": "=",
+            "meaning": "Keep only records matching the value on the right."
+          },
+          {
+            "part": "\"USER_LOGIN\"",
+            "meaning": "Google's login-event label. Keep the capitals and quotation marks."
+          }
+        ],
+        "remember": "Show me records wearing the login badge.",
+        "caseUpdate": "Case card unlocked: access records are a useful starting place. Next, ask which attempts were allowed.",
+        "caveat": "",
+        "gaps": []
+      }
     },
     {
       "id": "L01-C02",
-      "title": "Narrow to an exact actor identity",
-      "prompt": "Select USER_LOGIN events whose principal.user.userid exactly equals [USER]. Exact case-sensitive matching is required. Return event rows without further sections.",
+      "title": "Keep the successful sign-ins",
+      "prompt": "Keep USER_LOGIN records and add security_result.action = ALLOW. Return the matching records.",
+      "symbolIds": [],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"",
+      "acceptedVariants": [
+        "security_result.action = \"ALLOW\" AND metadata.event_type = \"USER_LOGIN\""
+      ],
+      "hints": [
+        "Keep the category and add an action requirement.",
+        "Use the quoted ALLOW value. Both filters must hold.",
+        "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\""
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "Why add an action filter?",
+          "options": [
+            {
+              "id": "A",
+              "label": "USER_LOGIN includes attempts; ALLOW selects the recorded allowed action."
+            },
+            {
+              "id": "B",
+              "label": "Every USER_LOGIN means success."
+            },
+            {
+              "id": "C",
+              "label": "ALLOW proves the account owner personally logged in."
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "An allowed action does not establish who controlled the account."
+        },
+        {
+          "id": "M2",
+          "prompt": "How do consecutive filter lines combine?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Both must hold: an implicit AND."
+            },
+            {
+              "id": "B",
+              "label": "Only the final line applies."
+            },
+            {
+              "id": "C",
+              "label": "Either line can match independently."
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "Explicit AND is also supported and makes the combination easy to read."
+        }
+      ],
+      "executeSteps": [
+        "In authorized SecOps Search, select YARA-L 2.0 and keep the approved 30-minute range.",
+        "Check the relevant fields and source mapping privately, then run the example or adapt it there.",
+        "Keep identities, records, counts, titles and observations in workplace tools. Return only the training query."
+      ],
+      "debrief": "A query score checks this training task. It does not verify workplace execution, data coverage or incident conclusions.",
+      "mission": {
+        "support": "shown",
+        "beat": "Some door-opening attempts fail. Mira now asks which login records say the door opened.",
+        "example": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"",
+        "starter": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"",
+        "explanation": [
+          {
+            "part": "metadata.event_type = \"USER_LOGIN\"",
+            "meaning": "Keep the category from the previous mission."
+          },
+          {
+            "part": "security_result.action = \"ALLOW\"",
+            "meaning": "Choose a normalized allowed action. Check your source's mapping privately."
+          },
+          {
+            "part": "Two filter lines",
+            "meaning": "Both requirements must hold; an explicit AND works too."
+          }
+        ],
+        "remember": "Category asks what happened. Action asks how it was recorded.",
+        "caseUpdate": "Case card unlocked: a login attempt and an allowed login are different questions.",
+        "caveat": "",
+        "gaps": []
+      }
+    },
+    {
+      "id": "L01-C03",
+      "title": "Count accounts, not repeated logins",
+      "prompt": "Count distinct nonempty principal.user.userid values in ALLOW USER_LOGIN records. Return one count without grouping.",
+      "symbolIds": [],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\noutcome:\n  $users = count_distinct(principal.user.userid)",
+      "acceptedVariants": [
+        "security_result.action = \"ALLOW\" AND principal.user.userid != \"\" AND metadata.event_type = \"USER_LOGIN\"\noutcome:\n  $unique_users = count_distinct(principal.user.userid)"
+      ],
+      "hints": [
+        "Count different user IDs, not login event IDs.",
+        "Skip the empty user ID, then put count_distinct(principal.user.userid) in outcome.",
+        "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\noutcome:\n  $users = count_distinct(principal.user.userid)"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "An account logs in repeatedly. What does this count do?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Counts that user ID once."
+            },
+            {
+              "id": "B",
+              "label": "Counts each login as a different user."
+            },
+            {
+              "id": "C",
+              "label": "Counts all fields in each event."
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "Distinct means each different ID once. Accounts and humans are not interchangeable."
+        },
+        {
+          "id": "M2",
+          "prompt": "Why inspect the source's user mapping?",
+          "options": [
+            {
+              "id": "A",
+              "label": "The relevant account might be stored under principal or target."
+            },
+            {
+              "id": "B",
+              "label": "This course already knows every tenant's mapping."
+            },
+            {
+              "id": "C",
+              "label": "An empty principal field proves no login occurred."
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "Adapt privately to the populated role before interpreting a workplace count."
+        }
+      ],
+      "executeSteps": [
+        "In authorized SecOps Search, select YARA-L 2.0 and keep the approved 30-minute range.",
+        "Check the relevant fields and source mapping privately, then run the example or adapt it there.",
+        "Keep identities, records, counts, titles and observations in workplace tools. Return only the training query."
+      ],
+      "debrief": "A query score checks this training task. It does not verify workplace execution, data coverage or incident conclusions.",
+      "mission": {
+        "support": "guided",
+        "beat": "One badge can open the door twenty times. Mira wants different account badges, not door swings.",
+        "example": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"",
+        "starter": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\noutcome:\n  $users = ___1___(principal.user.userid)",
+        "explanation": [
+          {
+            "part": "principal.user.userid",
+            "meaning": "The account ID in the principal role. Confirm the source mapping privately."
+          },
+          {
+            "part": "!= \"\"",
+            "meaning": "Skip an empty value. != means “not equal.”"
+          },
+          {
+            "part": "outcome:",
+            "meaning": "Start the summary calculation. The colon starts this section."
+          },
+          {
+            "part": "$users",
+            "meaning": "A name for the calculated count, not a workplace username."
+          },
+          {
+            "part": "count_distinct(...)",
+            "meaning": "Count each different value once; here those values are account IDs."
+          }
+        ],
+        "remember": "Twenty door swings can still be one badge.",
+        "caseUpdate": "Case card unlocked: you can separate account population from event volume.",
+        "caveat": "This covers only populated IDs in the selected field, not every employee or every human.",
+        "gaps": [
+          {
+            "marker": "___1___",
+            "label": "Count each different account once",
+            "options": [
+              "count",
+              "count_distinct",
+              "sum"
+            ],
+            "answer": "count_distinct"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L01-C04",
+      "title": "Which job titles are recorded?",
+      "prompt": "For ALLOW USER_LOGIN records, require nonempty principal.user.userid and principal.user.title. Group by principal.user.title and count distinct user IDs within each title.",
+      "symbolIds": [],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\nprincipal.user.title != \"\"\nmatch:\n  principal.user.title\noutcome:\n  $users = count_distinct(principal.user.userid)",
+      "acceptedVariants": [
+        "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\nprincipal.user.title != \"\"\n$title = principal.user.title\nmatch:\n  $title\noutcome:\n  $unique_users = count_distinct(principal.user.userid)"
+      ],
+      "hints": [
+        "Job titles, event roles and system permissions are different concepts.",
+        "Keep the successful-login filters, skip missing user/title values, group by title and count distinct user IDs.",
+        "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\nprincipal.user.title != \"\"\nmatch:\n  principal.user.title\noutcome:\n  $users = count_distinct(principal.user.userid)"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "What does principal.user.title describe?",
+          "options": [
+            {
+              "id": "A",
+              "label": "A recorded job title, if supplied by the source or enrichment."
+            },
+            {
+              "id": "B",
+              "label": "Whether a user has administrator permission."
+            },
+            {
+              "id": "C",
+              "label": "Whether the user is the event's target."
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "The UDM schema permits a job title; that does not mean every login includes one."
+        },
+        {
+          "id": "M2",
+          "prompt": "What if your records have no job titles?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Leave this practice pending and note the coverage limit privately."
+            },
+            {
+              "id": "B",
+              "label": "Infer titles from usernames."
+            },
+            {
+              "id": "C",
+              "label": "Conclude nobody with a job logged in."
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "Missing context is not evidence of no activity. Enrichment may also lack historical accuracy."
+        }
+      ],
+      "executeSteps": [
+        "In authorized SecOps Search, select YARA-L 2.0 and keep the approved 30-minute range.",
+        "Check the relevant fields and source mapping privately, then run the example or adapt it there.",
+        "Keep identities, records, counts, titles and observations in workplace tools. Return only the training query."
+      ],
+      "debrief": "A query score checks this training task. It does not verify workplace execution, data coverage or incident conclusions.",
+      "mission": {
+        "support": "shown",
+        "beat": "Mira's fictional roster includes different staff jobs. Ask which job titles are recorded on sign-ins. The logs must supply that context; you cannot invent it.",
+        "example": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\nprincipal.user.title != \"\"\nmatch:\n  principal.user.title\noutcome:\n  $users = count_distinct(principal.user.userid)",
+        "starter": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\nprincipal.user.title != \"\"\nmatch:\n  principal.user.title\noutcome:\n  $users = count_distinct(principal.user.userid)",
+        "explanation": [
+          {
+            "part": "principal.user.title",
+            "meaning": "A recorded job title, not an administrator-permission flag."
+          },
+          {
+            "part": "principal.user.title != \"\"",
+            "meaning": "Keep records that actually contain a title."
+          },
+          {
+            "part": "match:",
+            "meaning": "Make one summary group for each different key listed below it."
+          },
+          {
+            "part": "principal.user.title under match",
+            "meaning": "Use the recorded title as the group label."
+          },
+          {
+            "part": "count_distinct(principal.user.userid)",
+            "meaning": "Count different account IDs within each title, rather than repeated logins."
+          }
+        ],
+        "remember": "Group by the label; count the badges in each group.",
+        "caseUpdate": "Case card unlocked: job context gives you a new question without confusing jobs with permissions.",
+        "caveat": "Optional workplace capability: many login sources have no job title. Leave practice pending if unavailable. This query does not prove a person's authoritative job at that historical time.",
+        "gaps": []
+      }
+    },
+    {
+      "id": "L01-C05",
+      "title": "Count the attempts that failed",
+      "prompt": "Count distinct metadata.id values in USER_LOGIN records with FAIL action. Return one count, without grouping or restricting to one account.",
+      "symbolIds": [],
+      "referenceQuery": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\noutcome:\n  $failures = count_distinct(metadata.id)",
+      "acceptedVariants": [
+        "security_result.action = \"FAIL\" AND metadata.event_type = \"USER_LOGIN\"\noutcome:\n  $events = count_distinct(metadata.id)"
+      ],
+      "hints": [
+        "Use the login category, the failure action and a summary count.",
+        "Count metadata.id, not user IDs; those answer different questions.",
+        "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\noutcome:\n  $failures = count_distinct(metadata.id)"
+      ],
+      "methodQuestions": [
+        {
+          "id": "M1",
+          "prompt": "What are you counting now?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Distinct normalized failed-login event IDs."
+            },
+            {
+              "id": "B",
+              "label": "Different employees with any activity."
+            },
+            {
+              "id": "C",
+              "label": "Confirmed attacks."
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "Distinct records are not automatically distinct real-world attempts across source products."
+        },
+        {
+          "id": "M2",
+          "prompt": "What does the count prove by itself?",
+          "options": [
+            {
+              "id": "A",
+              "label": "Only the volume selected by this query; interpretation needs context."
+            },
+            {
+              "id": "B",
+              "label": "That every failure was an attack."
+            },
+            {
+              "id": "C",
+              "label": "That zero records proves every attempt succeeded."
+            }
+          ],
+          "correctOption": "A",
+          "rationale": "Ordinary mistakes, configuration and missing telemetry all affect interpretation."
+        }
+      ],
+      "executeSteps": [
+        "In authorized SecOps Search, select YARA-L 2.0 and keep the approved 30-minute range.",
+        "Check the relevant fields and source mapping privately, then run the example or adapt it there.",
+        "Keep identities, records, counts, titles and observations in workplace tools. Return only the training query."
+      ],
+      "debrief": "A query score checks this training task. It does not verify workplace execution, data coverage or incident conclusions.",
+      "mission": {
+        "support": "guided",
+        "beat": "Mira asks one more opening question: how much activity was rejected? Reuse the category, action and counting tools.",
+        "example": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"ALLOW\"\nprincipal.user.userid != \"\"\noutcome:\n  $users = count_distinct(principal.user.userid)",
+        "starter": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = ___1___\noutcome:\n  $failures = count_distinct(___2___)",
+        "explanation": [
+          {
+            "part": "\"FAIL\"",
+            "meaning": "The normalized failure action. Verify the product mapping privately."
+          },
+          {
+            "part": "metadata.id",
+            "meaning": "The normalized record ID. Counting distinct IDs avoids recounting the same ID."
+          },
+          {
+            "part": "$failures",
+            "meaning": "A name for the calculated summary. No actual count is submitted here."
+          },
+          {
+            "part": "count_distinct(metadata.id)",
+            "meaning": "Count different matching records, not different users."
+          }
+        ],
+        "remember": "Same counting tool, different thing inside the parentheses.",
+        "caseUpdate": "Case card unlocked: you now have a failure-volume question. Next, follow one account.",
+        "caveat": "Separate products can give different record IDs to the same real action. This is not automatically a unique real-world attempt count.",
+        "gaps": [
+          {
+            "marker": "___1___",
+            "label": "Recorded failed action",
+            "options": [
+              "\"ALLOW\"",
+              "\"FAIL\"",
+              "\"BLOCK\""
+            ],
+            "answer": "\"FAIL\""
+          },
+          {
+            "marker": "___2___",
+            "label": "Count event records, not users",
+            "options": [
+              "principal.user.userid",
+              "metadata.id",
+              "target.port"
+            ],
+            "answer": "metadata.id"
+          }
+        ]
+      }
+    },
+    {
+      "id": "L01-C06",
+      "title": "Follow one account",
+      "prompt": "Select USER_LOGIN records whose principal.user.userid exactly equals [USER]. Keep \"__USER__\" in the course. Choose and substitute the real account only inside SecOps.",
       "symbolIds": [
         "USER"
       ],
@@ -161,17 +591,54 @@
         "Replace __USER__ only in SecOps and run the narrowed query.",
         "If that source maps the relevant user to target instead, adapt privately and record the mapping in workplace notes; the scored symbolic task still teaches the specified principal role."
       ],
-      "debrief": "Compare the broad and narrowed searches privately. Do not return row counts or usernames. Explain why a narrower search better answers this particular question."
+      "debrief": "Compare the broad and narrowed searches privately. Do not return row counts or usernames. Explain why a narrower search better answers this particular question.",
+      "mission": {
+        "support": "guided",
+        "beat": "The fictional case now has an account lead. Mira hands you a sealed badge card. The site calls it [USER]; the actual mapping belongs only in SecOps.",
+        "example": "metadata.event_type = \"USER_LOGIN\"",
+        "starter": "metadata.event_type = \"USER_LOGIN\"\n___1___ = \"__USER__\"",
+        "explanation": [
+          {
+            "part": "principal.user.userid",
+            "meaning": "The exact account ID in the actor field requested by this mission."
+          },
+          {
+            "part": "\"__USER__\"",
+            "meaning": "A training placeholder. Replace it only in workplace SecOps."
+          },
+          {
+            "part": "Two filters",
+            "meaning": "Keep the event category attached to the account requirement."
+          }
+        ],
+        "remember": "Follow the badge, but keep the event label attached.",
+        "caseUpdate": "Chapter 1 complete: your toolkit covers category, action, counts, job context and a focused account pivot.",
+        "caveat": "This task teaches the specified principal role. Inspect and adapt source-specific mappings privately.",
+        "gaps": [
+          {
+            "marker": "___1___",
+            "label": "The requested actor identity field",
+            "options": [
+              "target.user.userid",
+              "principal.user.userid",
+              "principal.hostname"
+            ],
+            "answer": "principal.user.userid"
+          }
+        ]
+      }
     }
   ],
   "sourceIds": [
     "G01",
     "G02",
     "G04",
-    "G15"
+    "G15",
+    "G06",
+    "G17"
   ],
   "verification": {
-    "documentationCheckedOn": "2026-10-14",
+    "documentationCheckedOn": "2026-10-16",
     "tenantExecution": "not-tested"
   }
 }

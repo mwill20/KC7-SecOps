@@ -162,7 +162,7 @@ export function parseSearch(text) {
       n.op = 'regex'; n.type = 'regex';
       if (n.value === patterns[2]) return node({ kind: 'or', children: patterns.slice(0, 2).map(pattern => node({ ...n, value: pattern })) });
     } else {
-      const choices = { event: ['USER_LOGIN', 'PROCESS_LAUNCH', 'NETWORK_CONNECTION'], action: ['FAIL', 'ALLOW', 'BLOCK'], user: ['__USER__', ''], host: ['__HOST__'], ip: ['192.0.2.17'] };
+      const choices = { event: ['USER_LOGIN', 'PROCESS_LAUNCH', 'NETWORK_CONNECTION'], action: ['FAIL', 'ALLOW', 'BLOCK'], user: ['__USER__', ''], title: [''], host: ['__HOST__'], ip: ['192.0.2.17'] };
       if (type === 'number') { if (n.type !== 'number' || n.nocase) fail('NUMBER_TYPE'); }
       else if (!choices[type]?.includes(n.value) || n.type !== 'string' || !['=', '!='].includes(n.op) || (n.nocase && !['user', 'host'].includes(type))) fail('FIELD_VALUE_TYPE');
     }
@@ -173,7 +173,9 @@ export function parseSearch(text) {
   const outcomes = new Map(); const signatures = new Set();
   for (const o of q.outcomes) {
     o.field = resolve(o.field);
-    if ((o.fn === 'sum' && o.field !== 'network.sent_bytes') || (o.fn !== 'sum' && o.field !== 'metadata.id')) fail('AGGREGATE_TYPE');
+    const eventCount = ['count', 'count_distinct'].includes(o.fn) && o.field === 'metadata.id';
+    const userCount = o.fn === 'count_distinct' && ['principal.user.userid', 'target.user.userid'].includes(o.field);
+    if (!(eventCount || userCount || o.fn === 'sum' && o.field === 'network.sent_bytes')) fail('AGGREGATE_TYPE');
     o.signature = o.fn + ':' + o.field;
     if (outcomes.has(o.name) || signatures.has(o.signature) || bindings.has(o.name)) fail('DUPLICATE_OUTCOME');
     outcomes.set(o.name, o); signatures.add(o.signature);

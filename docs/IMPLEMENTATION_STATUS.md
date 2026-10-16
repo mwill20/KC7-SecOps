@@ -1,3 +1,16 @@
+# Current learning revision — 2026-10-16
+
+The owner requested KC7's story → explained example → incremental query → hints flow, with query grading and separate workplace execution. The owner selected a training-query text editor after disclosure that accidental real text can enter. This authorizes transient symbolic input, not workplace data collection.
+
+- Implemented: existing shell retained; original Midnight at Meridian case; six chapters/16 missions; immediate first query/breakdown, faded guidance, visible hints and earned fictional case cards; distinct-user and recorded-title support; 70/20/10 scoring; strict optional completion projection.
+- Evidence: content/schema/mission-solution checks, 73 query fixtures, 116 unit tests and 18 browser tests pass on exact Node 24.21.0. Full npm run verify passed. First chapter was exercised without hints; all missions reach symbolic mastery with supported worked examples. Hostile input, stale-state, network/storage and 320px keyboard/reflow tests pass. One guided-help panel bug found by the initial run was corrected and verified.
+- Artifact: 13 allowlisted files; aggregate SHA256 `00699c3dd6d7a92efae223daaa9ad893c11d185848eeb1bfc17da294a852e11c`.
+- Independent review: separate AI reviewer APPROVE, zero supported security findings; independently repeated 116 unit/18 browser tests and hostile-input/count/title/storage probes for the exact artifact. See SECURITY_REVIEW_2026-10-16.md. This is not a human audit or employer approval.
+- Pending: authorized commit/push/manual Pages republish and exact-byte/live-browser checks. The prior site remains available; the historical review below covers the previous release only.
+- External limitations: no tenant compilation or work-log access by Codex, titles may be absent, L06 preview capability may be unavailable; workplace website/storage approval and full manual AT remain unverified.
+
+## Historical 2026-10-15 release record
+
 # Implementation status
 
 Updated 2026-10-15. Builder, independent AI review and actual deployment evidence are distinguished below; none is workplace approval or tenant validation.

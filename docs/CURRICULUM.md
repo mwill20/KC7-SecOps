@@ -2,23 +2,23 @@
 
 ## Learning progression
 
-The case is **Signal Desk**, an original workplace-practice narrative. All practice is authorized read-only Search; selecting an employee, device, IP, or subnet does not imply wrongdoing. Estimated lesson durations below are planning estimates, not measured performance claims.
+The case is **Midnight at Meridian**, an original fictional planetarium investigation. All practice is authorized read-only Search; selecting an employee, device, IP, or subnet does not imply wrongdoing. Estimated lesson durations below are planning estimates, not measured performance claims.
 
 | Lesson | Estimate | Objectives | New syntax | Evidence |
 |---|---:|---|---|---|
-| L01 — Question and safe search | 30 min | Manual YL2, category, exact identity, privacy, zero-result reasoning | UDM field = quoted value, implicit AND | Two complete event-filter challenges |
+| L01 — The midnight roll call | 45 min | Category, success/failure, distinct users vs records, recorded job titles, private identity pivot | field path, =, AND, != empty, outcome, count_distinct, match | Six missions: full examples then guided gaps |
 | L02 — Roles and Boolean boundaries | 35 min | Actor vs target, constrained alternatives, failure-action interpretation | Explicit AND/OR and parentheses | Equivalent distribution accepted; broadened OR rejected |
 | L03 — Host/process pivot | 40 min | Endpoint roles, suffix precision, RE2, cautious interpretation | Regex literal, nocase, re.regex alternate | Single/combined suffix and split OR forms |
 | L04 — Network pivot | 40 min | Directional IPs, repeated-field caution, CIDR, numeric types | net.ip_in_range_cidr, numeric port | Positive direction predicates and type failures |
 | L05 — Aggregate summaries | 45 min | Group keys, distinct record IDs, byte-field limitations | match, outcome, count_distinct, sum, order, limit | Two exact pipeline contracts with alias alternatives |
 | L06 — Time and capstone | 50 min | Fixed buckets, count threshold, private timeline pivot, evidence limits | by 5m, outcome condition | Threshold/bucket mutation tests and private chronology review |
 
-The six lesson JSON files are complete authoring sources: four teaching blocks, two challenges, reference and alternate queries, three progressive hints, two scored method questions per challenge, private execution steps, debrief, and documentation status. No lesson requires real datasets or fixed SIEM answers on the site.
+The six lesson JSON files are complete authoring sources: chapter field guides, six L01 missions and two in each later chapter, reference and alternate queries, three progressive hints, two scored method questions per challenge, private execution steps, debrief, and documentation status. No lesson requires real datasets or fixed SIEM answers on the site.
 
 ## Learning loop
 
-1. **Explain:** a short concept tied to familiar SIEM/SOAR work.
-2. **Construct:** build a symbolic query from a blank token composer. No answer prefilled; syntax guide is available.
+1. **Show and explain:** a short story beat, complete query or previous building block, then concise syntax explanations and a memory hook.
+2. **Construct:** start with a supplied query, then guided blanks, then an independent query. New concepts still receive examples. Type/paste training syntax with placeholders; never actual work values.
 3. **Check:** deterministic feedback identifies syntax, scope and pipeline problems separately.
 4. **Reason:** two multiple-choice investigation decisions, with explanations after grading.
 5. **Practice privately:** copy safe synthetic text and adapt inside workplace SecOps.

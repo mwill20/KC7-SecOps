@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "contentVersion": 1,
+  "contentVersion": 2,
   "id": "L04",
-  "title": "Network pivots and directional fields",
+  "title": "The trail leaves the dome",
   "level": "developing",
   "estimatedMinutes": 40,
   "prerequisites": [
@@ -13,29 +13,29 @@
     "Use CIDR and numeric port filters with correct data types.",
     "Recognize repeated-field and direction limitations."
   ],
-  "story": "Signal Desk now examines existing network records associated with an approved pivot. The exercise does not label the chosen IP or subnet malicious. All real pivots and their relationship to the host stay inside SecOps.",
+  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 4 — A new fictional case card points toward network activity around the display host. Mira asks where the lead appears and then whether a destination belongs to a subnet. Learn direction and numeric field types before drawing conclusions.",
   "teaching": [
     {
-      "heading": "An IP is a pivot, not an attribution",
-      "text": "Like a VT or WHOIS lookup, an IP observation needs context. NAT, proxies, shared infrastructure, and timing can affect interpretation. The course performs no external lookups. [IP] becomes the documentation address 192.0.2.17; it is only a safe stand-in."
+      "heading": "An address is a search lead",
+      "text": "The course uses 192.0.2.17 and 192.0.2.0/24: reserved documentation values. Replace them only inside authorized SecOps. Do not run a lookup or connection from this site."
     },
     {
-      "heading": "Direction matters",
-      "text": "principal.ip and target.ip represent different roles. Searching either role deliberately broadens direction while retaining NETWORK_CONNECTION scope. A grouped ip alias searches more fields and is not equivalent to this two-role task. Read the UDM event to establish how your product maps direction."
+      "heading": "Check both ends deliberately",
+      "text": "principal.ip and target.ip describe different event roles. Searching either means using a grouped OR. It does not establish who owns an IP or that both roles were involved in one real incident."
     },
     {
-      "heading": "Use the field type",
-      "text": "IP values and CIDR ranges are strings in these patterns. target.port is numeric: 443, not \"443\". net.ip_in_range_cidr returns a Boolean predicate. A port is not proof of a protocol or application, so port 443 does not by itself establish TLS or benign traffic."
+      "heading": "Keep numbers numeric",
+      "text": "target.port = 443 uses a number. Quoting 443 makes it a string and changes its type. A port by itself does not prove a protocol or safety."
     },
     {
-      "heading": "Repeated data requires care",
-      "text": "IP fields may contain multiple values. Search and rule evaluation differ around repeated fields. Equality can find an occurrence, but do not assume that != excludes every array element or that Boolean rewrites of negation preserve all engine semantics. The initial challenges use positive IP predicates only."
+      "heading": "A subnet is a range",
+      "text": "net.ip_in_range_cidr tests whether an address is within the stated subnet. IP fields can have multiple values; the supplied positive tests avoid making unsupported claims about negation."
     }
   ],
   "challenges": [
     {
       "id": "L04-C01",
-      "title": "Find the pivot on either side",
+      "title": "Look for the address at either end",
       "prompt": "Select NETWORK_CONNECTION events where [IP] occurs in principal.ip OR target.ip. Use the fixed documentation address 192.0.2.17 on this site and return event rows.",
       "symbolIds": [
         "IP"
@@ -98,11 +98,39 @@
         "Run and inspect principal/target direction and repeated values privately.",
         "No rows may be a valid result; check range and network telemetry availability."
       ],
-      "debrief": "Plan a next pivot privately without exporting an IP, domain, or row count."
+      "debrief": "Plan a next pivot privately without exporting an IP, domain, or row count.",
+      "mission": {
+        "support": "shown",
+        "beat": "Mira's fictional network card has an address lead. Ask whether it appears at either end of a network record.",
+        "example": "metadata.event_type = \"NETWORK_CONNECTION\" AND\n(principal.ip = \"192.0.2.17\" OR target.ip = \"192.0.2.17\")",
+        "starter": "metadata.event_type = \"NETWORK_CONNECTION\" AND\n(principal.ip = \"192.0.2.17\" OR target.ip = \"192.0.2.17\")",
+        "explanation": [
+          {
+            "part": "\"NETWORK_CONNECTION\"",
+            "meaning": "The category for the network-connection records requested here."
+          },
+          {
+            "part": "principal.ip / target.ip",
+            "meaning": "Two different directional roles; inspect how the source populates them."
+          },
+          {
+            "part": "192.0.2.17",
+            "meaning": "A documentation address, not a real case indicator."
+          },
+          {
+            "part": "AND (left OR right)",
+            "meaning": "Keep both address alternatives inside the event category."
+          }
+        ],
+        "remember": "Two ends, one clear question.",
+        "caseUpdate": "Case card unlocked: the address pivot is scoped. The next card asks about a destination subnet.",
+        "caveat": "NAT, proxies, shared systems and timing limit attribution. An IP match is not proof of an attacker.",
+        "gaps": []
+      }
     },
     {
       "id": "L04-C02",
-      "title": "Bound a destination subnet and port",
+      "title": "Narrow the destination range and port",
       "prompt": "Select NETWORK_CONNECTION events whose target.ip is in [CIDR] and target.port equals numeric 443. On this site [CIDR] is the documentation subnet 192.0.2.0/24. Return event rows.",
       "symbolIds": [
         "CIDR"
@@ -164,7 +192,42 @@
         "Inspect direction, action, and product context privately.",
         "Do not scan, connect to, block, or query reputation for the subnet as part of the course."
       ],
-      "debrief": "Explain why a CIDR predicate is more precise than a textual IP-prefix match for subnet membership."
+      "debrief": "Explain why a CIDR predicate is more precise than a textual IP-prefix match for subnet membership.",
+      "mission": {
+        "support": "guided",
+        "beat": "The next fictional card gives a destination subnet and a port. Reuse the network category and keep the direction specific.",
+        "example": "metadata.event_type = \"NETWORK_CONNECTION\" AND\n(principal.ip = \"192.0.2.17\" OR target.ip = \"192.0.2.17\")",
+        "starter": "metadata.event_type = \"NETWORK_CONNECTION\"\nnet.ip_in_range_cidr(target.ip, \"192.0.2.0/24\")\ntarget.port = ___1___",
+        "explanation": [
+          {
+            "part": "net.ip_in_range_cidr(target.ip, ...)",
+            "meaning": "Test whether the target address falls within the documentation subnet."
+          },
+          {
+            "part": "target.port",
+            "meaning": "The numeric destination port requested by this task."
+          },
+          {
+            "part": "443",
+            "meaning": "A number, without quotation marks."
+          }
+        ],
+        "remember": "A port number is a number, not a promise of HTTPS.",
+        "caseUpdate": "Case card unlocked: the destination question is precise. Next, summarize useful leads.",
+        "caveat": "Replace addresses and ranges only inside workplace SecOps.",
+        "gaps": [
+          {
+            "marker": "___1___",
+            "label": "Numeric port 443",
+            "options": [
+              "443",
+              "\"443\"",
+              "80"
+            ],
+            "answer": "443"
+          }
+        ]
+      }
     }
   ],
   "sourceIds": [
@@ -175,7 +238,7 @@
     "P06"
   ],
   "verification": {
-    "documentationCheckedOn": "2026-10-14",
+    "documentationCheckedOn": "2026-10-16",
     "tenantExecution": "not-tested"
   }
 }

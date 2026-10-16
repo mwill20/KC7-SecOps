@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { newAttempt, changeTokens, gradeMethod, reduceAttempt, bestAttempt, total } from '../../site/state/scoring.js';
+import { newAttempt, changeTokens, changeQuery, gradeMethod, reduceAttempt, bestAttempt, total } from '../../site/state/scoring.js';
 import { STORAGE_KEY, validateProgress, projectProgress, loadProgress, saveProgress, clearProgress } from '../../site/state/progress.js';
 import { assertSchema } from '../../tools/schema.mjs';
 import { contentBundle } from '../../tools/validate-content.mjs';
 import fs from 'node:fs';
 const bundle = contentBundle(), challenge = bundle.lessons[0].challenges[0];
 const versions = new Map(bundle.lessons.flatMap(l => l.challenges.map(c => [c.id, l.contentVersion])));
-const record = () => ({ challengeId: 'L01-C01', contentVersion: 1, queryPoints: 70, methodPoints: 20, completionPoints: 10, practiced: true, highestHint: 0 });
+const record = () => ({ challengeId: 'L01-C01', contentVersion: 2, queryPoints: 70, methodPoints: 20, completionPoints: 10, practiced: true, highestHint: 0 });
 const storage = () => { const map = new Map([['unrelated-course', 'keep']]); return { map, getItem: k => map.get(k) ?? null, setItem: (k, v) => map.set(k, v), removeItem: k => map.delete(k) }; };
 test('T10 full 70/20/10 requires current query and two acknowledgments', () => {
   const a = newAttempt(challenge.id); a.methodChoices = { M1: 'A', M2: 'B' }; a.methodPoints = gradeMethod(a, challenge); assert.equal(a.methodPoints, 20);
@@ -36,7 +36,7 @@ test('T13 hostile stored state rejected without deletion or echo', () => {
   for (const raw of ['{', ' '.repeat(16385)]) { const s = storage(); s.setItem(STORAGE_KEY, raw); assert.equal(loadProgress(s, versions).warningCode, 'PROGRESS_INVALID'); }
 });
 test('T13 content-version invalidation is selective; blocked/quota storage falls back', () => {
-  const changed = new Map(versions); changed.set('L01-C01', 2); const s = storage(); s.setItem(STORAGE_KEY, JSON.stringify(projectProgress([record()])));
+  const changed = new Map(versions); changed.set('L01-C01', 3); const s = storage(); s.setItem(STORAGE_KEY, JSON.stringify(projectProgress([record()])));
   const loaded = loadProgress(s, changed); assert.equal(loaded.warningCode, 'LESSON_CHANGED'); assert.equal(loaded.progress.records.length, 0);
   const blocked = { getItem() { throw new Error('blocked'); }, setItem() { throw new Error('quota'); }, removeItem() { throw new Error('blocked'); } };
   assert.equal(loadProgress(blocked, versions).warningCode, 'STORAGE_UNAVAILABLE'); assert.equal(saveProgress(blocked, [record()], versions), 'STORAGE_UNAVAILABLE'); assert.equal(clearProgress(blocked), 'STORAGE_UNAVAILABLE');
@@ -47,4 +47,15 @@ test('T02 schema validator rejects unknown keys, invalid type and correlation', 
   assert.throws(() => assertSchema(projectProgress([{ ...record(), queryPoints: '70' }]), schema));
   assert.throws(() => assertSchema({ ...projectProgress([]), extra: true }, schema));
   assert.throws(() => assertSchema(projectProgress([{ ...record(), queryPoints: 0 }]), schema));
+});
+
+test('T05/T10 typed-query edit clears all current grades and practice without persisting text', () => {
+  const a = { ...newAttempt('L01-C01'), queryText: 'old', queryResult: { queryPoints: 70 }, methodChoices: { M1: 'A', M2: 'B' }, methodPoints: 20, executedAcknowledged: true, reviewedAcknowledged: true, highestHint: 2 };
+  const next = changeQuery(a, 'SYNTHETIC_PRIVATE_SENTINEL');
+  assert.equal(next.queryResult, null); assert.equal(next.methodPoints, null);
+  assert.deepEqual(next.methodChoices, { M1: null, M2: null });
+  assert.equal(next.executedAcknowledged, false); assert.equal(next.reviewedAcknowledged, false); assert.equal(next.highestHint, 2);
+  assert.equal(next.queryText, 'SYNTHETIC_PRIVATE_SENTINEL');
+  const projection = JSON.stringify(projectProgress([reduceAttempt(next, 2)]));
+  assert.doesNotMatch(projection, /SYNTHETIC_PRIVATE_SENTINEL|queryText|tokenIds|methodChoices/);
 });

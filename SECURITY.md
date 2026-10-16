@@ -4,7 +4,7 @@ This application teaches query construction. It has no authority to access SecOp
 
 ## Required implementation controls
 
-- Closed-choice composer and reflection questions; every string literal comes from the bundled symbol catalog or documented public enums.
+- Transient training-query editor and fixed reflection questions; only bundled symbol literals and documented public enums are supported for grading. The textarea can receive accidental real data and does not make it safe to enter.
 - No user-controlled HTML, executable content, arbitrary regex execution, dynamic imports from user values, `eval`, or `new Function`.
 - Render text with text nodes; allow only bundled HTTPS reference links, opened on explicit user action with no referrer/opener.
 - No runtime backend/API, analytics, external asset fetches, remote content, SIEM links with query payloads, clipboard reads, or data uploads.
@@ -22,3 +22,7 @@ GitHub private vulnerability reporting was enabled and verified on 2026-10-15. U
 ## Release boundary
 
 Public hosting requires owner approval of the host/audience and an independent review of the implemented data boundary. The owner explicitly approved public GitHub Pages publication on 2026-10-15, following review, without adding an open-source license. Workplace use and optional browser storage still require organizational policy approval separately. Host IP logging and browser/extension observation are outside the app's control and must be disclosed. See `docs/PRIVACY.md` and `docs/threat-models/THREAT_MODEL.md`.
+
+## Training editor boundary (2026-10-16)
+
+The owner approved a training-query textarea after disclosure of accidental paste risk. It accepts untrusted text and grades only catalog placeholders with bounded parsing and fixed, non-echo diagnostics. Application code never submits, persists or logs query text; navigation/reload discards it. Input cannot prevent accidental workplace entry or endpoint/extension observation. Do not paste production queries with real values. The changed boundary requires focused independent review before this revision is republished; the historical review is not acceptance of the new editor.

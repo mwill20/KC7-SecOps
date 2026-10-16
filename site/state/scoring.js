@@ -1,9 +1,12 @@
 export const total = r => r.queryPoints + r.methodPoints + r.completionPoints;
 export function newAttempt(challengeId) {
-  return { challengeId, tokenIds: [], queryResult: null, methodChoices: { M1: null, M2: null }, methodPoints: null, executedAcknowledged: false, reviewedAcknowledged: false, highestHint: 0 };
+  return { challengeId, queryText: '', tokenIds: [], queryResult: null, methodChoices: { M1: null, M2: null }, methodPoints: null, executedAcknowledged: false, reviewedAcknowledged: false, highestHint: 0 };
 }
 export function changeTokens(attempt, tokenIds) {
   return { ...newAttempt(attempt.challengeId), tokenIds: [...tokenIds], highestHint: attempt.highestHint };
+}
+export function changeQuery(attempt, queryText) {
+  return { ...newAttempt(attempt.challengeId), queryText, highestHint: attempt.highestHint };
 }
 export function gradeMethod(attempt, challenge) {
   return challenge.methodQuestions.reduce((points, q) => points + (attempt.methodChoices[q.id] === q.correctOption ? 10 : 0), 0);

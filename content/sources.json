@@ -180,6 +180,11 @@
       "id": "P09",
       "title": "Node downloads",
       "url": "https://nodejs.org/en/download"
+    },
+    {
+      "id": "G17",
+      "title": "Distinct-user counting in YARA-L Search",
+      "url": "https://docs.cloud.google.com/chronicle/docs/yara-l/transition_spl_yaral"
     }
   ]
 }

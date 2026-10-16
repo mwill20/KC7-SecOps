@@ -7,10 +7,10 @@ The rows below define implementation acceptance coverage and bind PRD requiremen
 | ID | Requirement(s) | Success evidence | Should-fail / limitation evidence |
 |---|---|---|---|
 | T01 | R01,R11 | Real L01 flow: composer→serializer→parser→grade→method→progress in browser | Wrong-scope/type query cannot achieve mastery; no install required for learner |
-| T02 | R02 | Exactly six lessons/twelve challenges; all schema, IDs, references, hints, methods and dependencies valid | Unknown IDs, duplicate questions, cycle, unknown source/symbol, bad reference stop build |
+| T02 | R02 | Exactly six lessons/sixteen missions; all schema, IDs, references, hints, methods and dependencies valid | Unknown IDs, duplicate questions, cycle, unknown source/symbol, bad reference stop build |
 | T03 | R02,R10 | All reference and supported alternate queries give 70; prompts independently agree with intent | Mutation fixtures fail; docs-check label never says tenant validated |
 | T04 | R03 | Compose reordered/factored predicates, bound/direct keys, renamed outcome aliases | Unknown token/literal cannot enter supported composer/evaluator |
-| T05 | R03,R06,R11 | UI contains only closed choice controls, read-only preview and write-only copy | Paste/drop/type a synthetic out-of-catalog value: no input surface accepts it; no clipboard read |
+| T05 | R03,R06,R11 | UI has one training-query textarea, fixed method/gap controls and write-only copy | Paste/drop/type a synthetic out-of-catalog value: input receives the synthetic sentinel, grading rejects it, no diagnostic echo/storage/network transmission; no clipboard read |
 | T06 | R04 | Parentheses, implicit/explicit AND, comments, strings, regex tokens, types parsed correctly | Missing paren, escaped delimiter, quoted numeric value, duplicate/out-of-order section, invalid enum/type |
 | T07 | R04 | Equivalent Boolean distribution/reordering and catalog regex variants accepted | Broad OR, wrong role, extra nocase, omitted category/nonempty filter cannot pass filter block |
 | T08 | R04 | Group keys/aliases, outcomes, bucket, count threshold, sort and limit checked | Wrong count function, swapped metric, missing bucket, changed threshold/limit, extra transforms |
@@ -30,7 +30,7 @@ The rows below define implementation acceptance coverage and bind PRD requiremen
 
 Bounds tests: max and max+1 bytes/tokens/depth/nodes/atoms; duplicate bindings and alias cycles; condition on an undefined aggregate; unsupported field prefixes; malicious string-like token IDs; comment text containing expected answers; XSS-shaped lesson/stored strings rendered only as literal text or rejected; no `eval` calls. Wrong query intent must remain rejected even if all expected keywords are present.
 
-Privacy browser tests inspect all requests during onboarding, grading, hints, navigation, copy, practice flags and clear progress. Allow only exact GET paths for bundled runtime assets; assert no query parameters or body payloads. Explicit documentation navigation is tested separately: expected fixed URL, noopener/noreferrer, no referrer. Check browser storage after each flow against the strict projection. Assert no inputs of type text/file, textarea, contenteditable, custom datalist, hidden value transport, or custom tenant URL. Browser owner/extension tampering remains outside the control claim.
+Privacy browser tests inspect all requests during onboarding, grading, hints, navigation, copy, practice flags and clear progress. Allow only exact GET paths for bundled runtime assets; assert no query parameters or body payloads. Explicit documentation navigation is tested separately: expected fixed URL, noopener/noreferrer, no referrer. Check browser storage after each flow against the strict projection. Assert one labelled training textarea only; no text/file inputs, contenteditable, form, custom datalist, hidden value transport or tenant URL. Fill hostile synthetic text and verify fixed diagnostics/no storage/no network payload. Browser owner/extension tampering remains outside the control claim.
 
 ## Accessibility and visual QA
 

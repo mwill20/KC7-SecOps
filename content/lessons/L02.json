@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "contentVersion": 1,
+  "contentVersion": 2,
   "id": "L02",
-  "title": "Roles and Boolean boundaries",
+  "title": "The badge in two places",
   "level": "foundation",
   "estimatedMinutes": 35,
   "prerequisites": [
@@ -13,29 +13,29 @@
     "Construct a parenthesized OR inside an event-type boundary.",
     "Filter failure actions without equating failure with malicious intent."
   ],
-  "story": "Signal Desk needs a broader identity investigation: the same identity may appear as actor or target in normalized login records. Your next task is to preserve that scope while adding a failure-action question.",
+  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 2 — The fictional show account appears in a sign-in story and an account-management story. Mira asks whether it was doing something or having something done to it. Learn the principal/target distinction, then keep Boolean alternatives inside a clear boundary.",
   "teaching": [
     {
-      "heading": "Principal and target answer different questions",
-      "text": "Like actor and affected asset fields in a SIEM event, principal and target describe roles rather than two interchangeable usernames. A parser may place the authenticated account differently for a particular product. Inspect the actual UDM event before drawing a conclusion. In the symbolic task, both fields are deliberately searched."
+      "heading": "Actor is not a job title",
+      "text": "Principal describes an actor in an event. Target describes the affected or referenced thing. Neither means CEO, engineer or administrator. Your source's mapping decides what the fields contain."
     },
     {
-      "heading": "Parentheses protect the question",
-      "text": "The intended structure is category AND (actor identity OR target identity). Without that grouping, an OR branch can admit unrelated event categories. A validator must check the whole Boolean structure, not reward the presence of field names. Think of a correlation rule whose exception branch accidentally bypasses the event filter."
+      "heading": "AND narrows; OR offers alternatives",
+      "text": "A AND B requires both. A OR B permits either. To ask for login events involving either identity role, keep the identity alternatives inside parentheses."
     },
     {
-      "heading": "Failure is an action value",
-      "text": "security_result.action = \"FAIL\" is a documented UDM action filter. It does not encompass every source's raw failure representation unless normalization maps it that way. Failed login attempts also occur during ordinary user activity. Keep the hypothesis separate from the observable action."
+      "heading": "Read the whole question",
+      "text": "Category AND (principal OR target) keeps both branches inside the login category. Category AND principal OR target can let the final branch escape that category."
     },
     {
-      "heading": "Transfer from KQL carefully",
-      "text": "The concepts of filtering and combining predicates transfer from KQL. The exact syntax does not: YARA-L uses field = value here, not KQL table pipes and ==. Omitted conjunctions imply AND, but explicit AND and parentheses are easier to review."
+      "heading": "The query is a lead",
+      "text": "A failure record does not prove an attack. Use context and chronology privately. The course only checks whether the query asks its stated question."
     }
   ],
   "challenges": [
     {
       "id": "L02-C01",
-      "title": "Search either identity role",
+      "title": "Follow either identity role",
       "prompt": "Select only USER_LOGIN events in which [USER] appears in principal.user.userid OR target.user.userid. Preserve the event-type requirement for both branches. Use exact case-sensitive strings and return event rows.",
       "symbolIds": [
         "USER"
@@ -98,11 +98,39 @@
         "Compare a few relevant event details privately, checking what principal and target mean.",
         "If no rows return, check mapping and identity case before assuming absence."
       ],
-      "debrief": "Describe privately how a missing parenthesis would change scope. The app will demonstrate a synthetic counterexample, never a real event."
+      "debrief": "Describe privately how a missing parenthesis would change scope. The app will demonstrate a synthetic counterexample, never a real event.",
+      "mission": {
+        "support": "shown",
+        "beat": "The fictional badge card may appear as actor or target. Keep the whole question inside the login category.",
+        "example": "metadata.event_type = \"USER_LOGIN\" AND\n(principal.user.userid = \"__USER__\" OR target.user.userid = \"__USER__\")",
+        "starter": "metadata.event_type = \"USER_LOGIN\" AND\n(principal.user.userid = \"__USER__\" OR target.user.userid = \"__USER__\")",
+        "explanation": [
+          {
+            "part": "principal.user.userid",
+            "meaning": "The account recorded in the actor role specified by this query."
+          },
+          {
+            "part": "target.user.userid",
+            "meaning": "The account in the affected or referenced role. Check source meaning privately."
+          },
+          {
+            "part": "OR",
+            "meaning": "Permit either identity field to match the same course symbol."
+          },
+          {
+            "part": "AND (...)",
+            "meaning": "Require the login category for both alternatives. Parentheses keep that boundary intact."
+          }
+        ],
+        "remember": "OR opens alternatives. Parentheses keep the doorframe.",
+        "caseUpdate": "Case card unlocked: you can search both identity roles without admitting unrelated categories.",
+        "caveat": "",
+        "gaps": []
+      }
     },
     {
       "id": "L02-C02",
-      "title": "Add the failure-action question",
+      "title": "Keep the failure question focused",
       "prompt": "Select USER_LOGIN events with security_result.action = FAIL and principal.user.userid exactly [USER]. No target-role OR is requested in this challenge. Return event rows.",
       "symbolIds": [
         "USER"
@@ -164,7 +192,42 @@
         "Keep any interpretation in approved workplace notes.",
         "An empty result is a legitimate outcome after checking mapping and range."
       ],
-      "debrief": "Separate the observation 'matched a failure action' from the hypothesis 'an attack is occurring'."
+      "debrief": "Separate the observation 'matched a failure action' from the hypothesis 'an attack is occurring'.",
+      "mission": {
+        "support": "guided",
+        "beat": "Mira narrows the next fictional question to failures for the actor account. This mission does not ask for a target-role alternative.",
+        "example": "metadata.event_type = \"USER_LOGIN\"",
+        "starter": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = ___1___\nprincipal.user.userid = \"__USER__\"",
+        "explanation": [
+          {
+            "part": "security_result.action = \"FAIL\"",
+            "meaning": "Require the normalized failure action."
+          },
+          {
+            "part": "principal.user.userid = \"__USER__\"",
+            "meaning": "Require the stated actor account, using only the training symbol here."
+          },
+          {
+            "part": "Implicit AND",
+            "meaning": "All three requirements must hold together."
+          }
+        ],
+        "remember": "A narrow question needs every boundary attached.",
+        "caseUpdate": "Case card unlocked: the fictional account lead is scoped. Next, pivot to the workstation.",
+        "caveat": "",
+        "gaps": [
+          {
+            "marker": "___1___",
+            "label": "Failure action",
+            "options": [
+              "\"ALLOW\"",
+              "\"FAIL\"",
+              "\"BLOCK\""
+            ],
+            "answer": "\"FAIL\""
+          }
+        ]
+      }
     }
   ],
   "sourceIds": [
@@ -174,7 +237,7 @@
     "G03"
   ],
   "verification": {
-    "documentationCheckedOn": "2026-10-14",
+    "documentationCheckedOn": "2026-10-16",
     "tenantExecution": "not-tested"
   }
 }

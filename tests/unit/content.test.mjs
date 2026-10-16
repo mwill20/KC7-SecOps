@@ -5,6 +5,14 @@ import { contentBundle, validateContent } from '../../tools/validate-content.mjs
 const original = contentBundle();
 const cases = JSON.parse(fs.readFileSync(new URL('../../qa/query-cases.json', import.meta.url))).cases;
 const mutations = {
+  'wrong mission distribution': b => b.lessons[0].challenges.pop(),
+  'missing teaching mission': b => { delete b.lessons[0].challenges[0].mission; },
+  'wrong shown example': b => { b.lessons[0].challenges[0].mission.example = 'target.port = 443'; },
+  'unsafe example': b => { b.lessons[0].challenges[0].mission.example = 'principal.user.userid = "SYNTHETIC_PRIVATE"'; },
+  'missing gap marker': b => { b.lessons[0].challenges[2].mission.starter = 'metadata.event_type = "USER_LOGIN"'; },
+  'wrong gap answer': b => { b.lessons[0].challenges[2].mission.gaps[0].answer = 'sum'; },
+  'unknown gap option': b => { b.lessons[0].challenges[2].mission.gaps[0].answer = 'arbitrary'; },
+  'unknown mission property': b => { b.lessons[0].challenges[0].mission.actualResult = 'private'; },
   'missing lesson': b => b.lessons.pop(),
   'unknown lesson': b => { b.lessons[0].id = 'L99'; },
   'duplicate lesson': b => { b.lessons[1].id = 'L01'; },

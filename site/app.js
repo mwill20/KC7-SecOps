@@ -1,9 +1,6 @@
 import bundle from './content.js';
-import { tokens, tokenMap } from './query/catalog.js';
-import { lex } from './query/parser.js';
-import { serializeTokens } from './query/serializer.js';
-import { evaluateChallenge } from './query/evaluate.js';
-import { newAttempt, changeTokens, gradeMethod, reduceAttempt, bestAttempt, total, statusLabel } from './state/scoring.js';
+import { evaluateText } from './query/evaluate.js';
+import { newAttempt, changeQuery, gradeMethod, reduceAttempt, bestAttempt, total, statusLabel } from './state/scoring.js';
 import { loadProgress, saveProgress, clearProgress } from './state/progress.js';
 
 const app = document.getElementById('app');
@@ -13,7 +10,7 @@ const versions = new Map(lessons.flatMap(l => l.challenges.map(c => [c.id, l.con
 const storage = { getItem: k => localStorage.getItem(k), setItem: (k, v) => localStorage.setItem(k, v), removeItem: k => localStorage.removeItem(k) };
 const loaded = loadProgress(storage, versions);
 let remembered = loaded.mode === 'remembered', records = loaded.progress.records, warning = loaded.warningCode;
-let acknowledged = false, composerGroup = 'Field', selectedToken = null, insertAt = null;
+let acknowledged = false;
 const attempts = new Map();
 const messages = {
   STORAGE_UNAVAILABLE: 'Browser storage is unavailable. Progress continues in this session only.',
@@ -38,7 +35,7 @@ function rememberChoice() {
   });
   return add(wrap, box, node('span', 'Remember non-sensitive progress in this browser. Leave off on a shared device.'));
 }
-function attemptFor(c) { if (!attempts.has(c.id)) attempts.set(c.id, newAttempt(c.id)); return attempts.get(c.id); }
+function attemptFor(c) { if (!attempts.has(c.id)) attempts.set(c.id, { ...newAttempt(c.id), queryText: c.mission.starter }); return attempts.get(c.id); }
 function saveAttempt(c, a) {
   const previous = records.find(r => r.challengeId === c.id);
   const next = bestAttempt(previous, reduceAttempt(a, versions.get(c.id)));
@@ -67,15 +64,15 @@ function onboarding() {
 }
 function course() {
   const m = main(); const hero = node('section', null, 'hero'); const intro = node('div');
-  add(intro, paragraph('SIGNAL DESK / GOOGLE SECOPS', 'eyebrow'), node('h1', 'Ask a sharper question.'), paragraph('Build Search queries. Follow the evidence. Learn what your results can—and cannot—tell you.'), paragraph('Six original lessons take you from event filters to a cautious investigation capstone. Work at your own pace, then practice separately in your authorized SecOps.'), link('Start at lesson 01 →', '#L01', 'primary'));
+  add(intro, paragraph('SIGNAL DESK / GOOGLE SECOPS', 'eyebrow'), node('h1', 'Midnight at Meridian.'), paragraph('A planetarium. A midnight launch. A giant dancing potato on the main display. Your first job: find the access trail.'), paragraph('Follow one original case through six chapters. See a query, learn its parts, then change it yourself. Run it against your authorized work logs in SecOps; submit only the training query here.'), link('Start the case →', '#L01', 'primary'));
   const summary = panel('Your learning record');
-  add(summary, paragraph(String(records.reduce((n, r) => n + total(r), 0)), 'progress-big'), paragraph('of 1,200 formative points', 'muted'), add(node('div', null, 'metric'), node('span', 'Symbolic mastery'), node('strong', records.filter(r => r.queryPoints === 70 && r.methodPoints === 20).length + ' / 12')), add(node('div', null, 'metric'), node('span', 'Practice self-attested'), node('strong', records.filter(r => r.practiced && r.methodPoints === 20).length + ' / 12')), paragraph(remembered ? 'Remembered in this browser' : 'Session only', 'small muted'));
+  add(summary, paragraph(String(records.reduce((n, r) => n + total(r), 0)), 'progress-big'), paragraph('of ' + (challenges.length * 100).toLocaleString('en-US') + ' learning points', 'muted'), add(node('div', null, 'metric'), node('span', 'Symbolic mastery'), node('strong', records.filter(r => r.queryPoints === 70 && r.methodPoints === 20).length + ' / ' + challenges.length)), add(node('div', null, 'metric'), node('span', 'Practice self-attested'), node('strong', records.filter(r => r.practiced && r.methodPoints === 20).length + ' / ' + challenges.length)), paragraph(remembered ? 'Remembered in this browser' : 'Session only', 'small muted'));
   add(hero, intro, summary); add(m, hero);
-  add(m, add(node('div', null, 'row between'), node('h2', 'The learning path'), paragraph('06 lessons · 12 challenges · no time pressure', 'small muted')));
+  add(m, add(node('div', null, 'row between'), node('h2', 'The learning path'), paragraph('06 chapters · ' + challenges.length + ' query missions · no time pressure', 'small muted')));
   const cards = node('div', null, 'cards');
   for (const l of lessons) {
     const mastered = l.challenges.filter(c => records.some(r => r.challengeId === c.id && r.queryPoints === 70 && r.methodPoints === 20)).length;
-    add(cards, add(node('article', null, 'card'), node('span', l.id.slice(1), 'number'), paragraph(l.level.toUpperCase() + ' · ~' + l.estimatedMinutes + ' MIN', 'eyebrow'), node('h3', l.title), paragraph(l.objectives[0]), paragraph(mastered + ' / 2 challenges mastered', 'small good'), link('Open lesson →', '#' + l.id)));
+    add(cards, add(node('article', null, 'card'), node('span', l.id.slice(1), 'number'), paragraph(l.level.toUpperCase() + ' · ~' + l.estimatedMinutes + ' MIN', 'eyebrow'), node('h3', l.title), paragraph(l.objectives[0]), paragraph(mastered + ' / ' + l.challenges.length + ' missions mastered', 'small good'), link('Open chapter →', '#' + l.id)));
   }
   add(m, cards, paragraph('Documentation-checked examples · Not compiled in your tenant. Feature availability and source normalization may differ.', 'notice')); return m;
 }
@@ -89,57 +86,94 @@ function sourceLinks(l) {
   for (const id of l.sourceIds) { const s = bundle.sources.find(x => x.id === id); const a = link(s.title + ' ↗', s.url); a.target = '_blank'; a.rel = 'noopener noreferrer'; a.referrerPolicy = 'no-referrer'; add(list, add(node('li'), a)); }
   add(details, paragraph('Documentation checked ' + l.verification.documentationCheckedOn + '. Tenant execution: not tested. The course validator supports a bounded Search subset; it is not Google’s compiler.', 'small muted'), list); return details;
 }
+function breakdown(c) {
+  const dl = node('dl', null, 'breakdown');
+  for (const x of c.mission.explanation) add(dl, node('dt', x.part), node('dd', x.meaning));
+  return dl;
+}
+function exampleBlock(c, briefing = false) {
+  const p = panel(briefing ? 'Your first query' : c.mission.support === 'shown' ? 'See it first' : 'Previous building block');
+  add(p, paragraph(c.mission.support === 'shown' ? 'This is a complete Search query. Copy it into authorized SecOps, then select the last 30 minutes there.' : 'You already have this building block. Your next query below adds the change described in the mission.'), node('pre', c.mission.example, 'query-preview'));
+  add(p, button('Copy example', async () => {
+    try { await navigator.clipboard.writeText(c.mission.example); announce('Example copied. Choose real values only in workplace SecOps.'); }
+    catch { announce('Clipboard unavailable. Select the example and copy manually.'); p.querySelector('pre').focus(); }
+  }, 'copy-example'));
+  p.querySelector('pre').tabIndex = 0;
+  if (briefing) add(p, breakdown(c), paragraph(c.mission.remember, 'memory-hook'));
+  return p;
+}
 function lesson(l) {
   const m = main(), layout = node('div', null, 'workspace'), body = node('div'); add(layout, sidebar(l), body);
-  add(body, paragraph(l.id + ' / ' + l.level.toUpperCase(), 'eyebrow'), node('h1', l.title), paragraph(l.story, 'muted'));
-  const goals = panel('Your objectives'); const list = node('ul', null, 'checklist'); l.objectives.forEach(o => add(list, node('li', o))); add(goals, list);
-  if (l.prerequisites.length) add(goals, paragraph('Suggested preparation: ' + l.prerequisites.join(', ') + '. You can revisit any lesson.', 'small muted'));
-  const reading = panel('Briefing'); l.teaching.forEach(t => add(reading, node('h3', t.heading), paragraph(t.text)));
-  const tasks = panel('Put it into practice');
+  add(body, paragraph('CHAPTER ' + l.id.slice(1) + ' / MIDNIGHT AT MERIDIAN', 'eyebrow'), node('h1', l.title), paragraph(l.story, 'case-story'));
+  const first = l.challenges[0];
+  add(body, add(node('div', null, 'stack'), exampleBlock(first, true), link('Start mission 01 →', '#' + first.id, 'primary')));
+  const tasks = panel('Your missions');
   l.challenges.forEach((c, i) => add(tasks, add(node('div', null, 'metric'), link(String(i + 1).padStart(2, '0') + ' · ' + c.title + ' →', '#' + c.id), node('span', statusLabel(records.find(r => r.challengeId === c.id)), 'small muted'))));
-  add(body, add(node('div', null, 'stack'), goals, reading, tasks, sourceLinks(l))); add(m, layout); return m;
+  const reading = node('details'); add(reading, node('summary', 'Chapter field guide'));
+  const list = node('ul'); l.objectives.forEach(o => add(list, node('li', o))); add(reading, list);
+  l.teaching.forEach(t => add(reading, node('h3', t.heading), paragraph(t.text)));
+  add(body, add(node('div', null, 'stack'), tasks, reading, sourceLinks(l))); add(m, layout); return m;
 }
-function selectControl(text, values, selected, id, change) {
-  const label = node('label', null, 'control'); label.htmlFor = id; add(label, node('span', text)); const select = node('select'); select.id = id;
-  values.forEach(v => { const o = node('option', v.label); o.value = v.value; o.selected = v.value === selected; add(select, o); });
-  select.addEventListener('change', change); add(label, select); return label;
+function scorePanel(c, a) {
+  const score = panel('Current attempt'); score.id = 'current-score';
+  const current = reduceAttempt(a, versions.get(c.id)), transient = a.queryResult?.queryPoints === 70 ? (Number(a.executedAcknowledged) + Number(a.reviewedAcknowledged)) * 5 : 0;
+  add(score, paragraph(String(current.queryPoints + current.methodPoints + transient), 'progress-big'), paragraph('of 100 points', 'muted'));
+  const rubric = node('div', null, 'rubric');
+  [['Query', current.queryPoints, 70], ['Method', current.methodPoints, 20], ['Practice', transient, 10]].forEach(([label, n, max]) => add(rubric, add(node('div'), node('strong', String(n)), node('span', label + ' / ' + max))));
+  add(score, rubric, paragraph(statusLabel(current), 'small good'));
+  const best = records.find(r => r.challengeId === c.id); if (best) add(score, paragraph('Saved best: ' + total(best) + '/100 · ' + statusLabel(best), 'small muted'));
+  add(score, paragraph('Editing the query clears the current assessment and acknowledgments. Saved best stays separate.', 'small muted'));
+  return score;
 }
-function authoredTokens(query) {
-  const parts = lex(query), result = []; let i = 0;
-  const choices = tokens.filter(t => t.lexeme !== '\n').map(t => ({ id: t.id, parts: lex(t.lexeme) })).sort((a, b) => b.parts.length - a.parts.length);
-  while (i < parts.length) { const token = choices.find(t => t.parts.every((p, n) => parts[i + n]?.kind === p.kind && parts[i + n]?.value === p.value)); if (!token) throw new Error('CONTENT_INVALID'); result.push(token.id); i += token.parts.length; }
+function queryFeedback(c, a) {
+  const r = a.queryResult, result = node('div', null, 'result'); result.id = 'query-result'; result.tabIndex = -1;
+  const title = r.status === 'supported-correct' ? 'Supported query — intent matched' : r.status === 'supported-incorrect' ? 'Supported query — revise the intent' : r.status === 'unsupported' ? 'Unsupported by this course validator' : r.status === 'limit-exceeded' ? 'Course validator limit exceeded' : 'Cannot parse this course query';
+  add(result, node('h3', title), paragraph(r.queryPoints + ' / 70 query points', r.status === 'supported-correct' ? 'good' : 'bad'));
+  if (r.checks.syntax) add(result, paragraph('Syntax/catalog: 10/10 · Filter intent: ' + (r.checks.filter ? '35/35' : '0/35') + ' · Pipeline: ' + (r.checks.pipeline ? '25/25' : '0/25'), 'small'));
+  if (!r.checks.filter && r.checks.syntax) add(result, paragraph('Check what your whole filter selects: event type, action, user role and AND/OR grouping. A broad OR can let unrelated records in.', 'small'));
+  if (!r.checks.pipeline && r.checks.syntax) add(result, paragraph('Check what you count or group: users and event records are different. Compare the grouping, metric, sorting and limit with the question.', 'small'));
+  if (!r.checks.syntax) add(result, paragraph('Diagnostic: ' + r.diagnostics.map(d => d.code).join(', ') + '. Use the supplied fields, syntax and training placeholders. The editor checks a bounded subset, not every valid Google query. No workplace values belong here.', 'small'));
+  if (r.queryPoints === 70) add(result, paragraph('Fictional case card unlocked', 'eyebrow'), paragraph(c.mission.caseUpdate, 'case-update'));
   return result;
 }
 function composer(c, a) {
-  const p = panel('01 / Build the query');
-  add(p, paragraph('Choose tokens to construct manual YARA-L 2.0 Search. [USER] and [HOST] remain symbols here. This preview cannot accept typing or paste.', 'small muted'));
-  const code = node('pre', a.tokenIds.length ? serializeTokens(a.tokenIds) : '// Your symbolic query appears here', 'query-preview'); code.id = 'query-preview'; code.tabIndex = 0; code.setAttribute('aria-label', 'Read-only synthetic query preview'); add(p, code);
-  const options = tokens.filter(t => t.group === composerGroup); if (!options.some(t => t.id === selectedToken)) selectedToken = options[0].id;
-  const controls = node('div', null, 'row composer-controls');
-  add(controls, selectControl('Token group', [...new Set(tokens.map(t => t.group))].map(g => ({ value: g, label: g })), composerGroup, 'token-group', e => { composerGroup = e.target.value; selectedToken = null; refresh(null, 'token-group'); }), selectControl('Token', options.map(t => ({ value: t.id, label: t.label })), selectedToken, 'token-choice', e => { selectedToken = e.target.value; }));
-  add(controls, selectControl('Insert position', Array.from({ length: a.tokenIds.length + 1 }, (_, i) => ({ value: String(i), label: i === a.tokenIds.length ? 'At end' : 'Before token ' + (i + 1) })), String(insertAt ?? a.tokenIds.length), 'insert-position', e => { insertAt = Number(e.target.value); }));
-  const edit = (ids, message, focus = 'add-token') => { attempts.set(c.id, changeTokens(a, ids)); insertAt = null; refresh(message + ' Current assessment and acknowledgments reset.', focus); };
-  const addToken = button('Add token', () => { const ids = [...a.tokenIds]; ids.splice(insertAt ?? ids.length, 0, selectedToken); edit(ids, 'Token added.'); }, 'add-token'); addToken.disabled = a.tokenIds.length >= 512;
-  add(controls, addToken); add(p, controls);
-  const edits = node('details'); edits.id = 'token-editor'; add(edits, node('summary', 'Edit & reorder ' + a.tokenIds.length + ' tokens'));
-  const list = node('ol', null, 'tokens');
-  a.tokenIds.forEach((id, i) => {
-    const li = node('li'); const up = button('↑', () => { const ids = [...a.tokenIds]; [ids[i - 1], ids[i]] = [ids[i], ids[i - 1]]; edit(ids, 'Token moved.'); }, null); up.disabled = i === 0; up.setAttribute('aria-label', 'Move token ' + (i + 1) + ' up');
-    const down = button('↓', () => { const ids = [...a.tokenIds]; [ids[i + 1], ids[i]] = [ids[i], ids[i + 1]]; edit(ids, 'Token moved.'); }); down.disabled = i === a.tokenIds.length - 1; down.setAttribute('aria-label', 'Move token ' + (i + 1) + ' down');
-    const remove = button('Remove', () => edit(a.tokenIds.filter((_, n) => n !== i), 'Token removed.')); remove.setAttribute('aria-label', 'Remove token ' + (i + 1));
-    add(li, node('code', (i + 1) + '. ' + tokenMap.get(id).label), up, down, remove); add(list, li);
-  }); add(edits, list); add(p, edits);
-  add(p, add(node('div', null, 'row'), button('Check query', () => { a.queryResult = evaluateChallenge({ challengeId: c.id, tokens: a.tokenIds }, challenges); saveAttempt(c, a); refresh('Query checked. ' + a.queryResult.queryPoints + ' of 70 query points.', 'query-result'); }, 'check-query', 'primary'), button('Clear query', () => edit([], 'Query cleared.'), 'clear-query'), button('Copy synthetic query', async () => { try { await navigator.clipboard.writeText(serializeTokens(a.tokenIds)); announce('Synthetic query copied. Substitute values only inside workplace SecOps.'); } catch { announce('Clipboard unavailable. Select the read-only preview and copy manually.'); code.focus(); } }, 'copy-query')));
-  if (a.queryResult) {
-    const r = a.queryResult; const result = node('div', null, 'result'); result.id = 'query-result'; result.tabIndex = -1;
-    const title = r.status === 'supported-correct' ? 'Supported query — intent matched' : r.status === 'supported-incorrect' ? 'Supported query — revise the intent' : r.status === 'unsupported' ? 'Unsupported by this course validator' : r.status === 'limit-exceeded' ? 'Course validator limit exceeded' : 'Cannot parse this course query';
-    add(result, node('h3', title), paragraph(r.queryPoints + ' / 70 query points', r.status === 'supported-correct' ? 'good' : 'bad'));
-    if (r.checks.syntax) add(result, paragraph('Syntax/catalog: 10/10 · Filter intent: ' + (r.checks.filter ? '35/35' : '0/35') + ' · Pipeline: ' + (r.checks.pipeline ? '25/25' : '0/25'), 'small'));
-    if (!r.checks.filter && r.checks.syntax) add(result, paragraph('The whole filter must answer the prompt. Check the event category, actor/target role, operators, and Boolean grouping. A required predicate inside a broad OR is insufficient.', 'small'));
-    if (!r.checks.pipeline && r.checks.syntax) add(result, paragraph('Check grouping, metrics, bucket duration, threshold, sort direction, and limit against the prompt.', 'small'));
-    if (!r.checks.syntax) add(result, paragraph('Diagnostic: ' + r.diagnostics.map(d => d.code).join(', ') + '. Check token order, parentheses, field types, and supported sections. This is not a Google compiler verdict.', 'small'));
-    add(p, result);
+  const p = panel('Your training query');
+  add(p, paragraph('Type or paste the query using training placeholders only: "__USER__", "__HOST__", 192.0.2.17. Replace them with work values only inside SecOps. This editor never needs your results.', 'small muted'));
+  const label = node('label', 'Training query'); label.htmlFor = 'query-editor';
+  const editor = node('textarea'); editor.id = 'query-editor'; editor.value = a.queryText; editor.rows = Math.max(4, Math.min(12, a.queryText.split('\n').length + 1)); editor.maxLength = 8192;
+  editor.spellcheck = false; editor.autocomplete = 'off'; editor.autocapitalize = 'off'; editor.setAttribute('autocorrect', 'off'); editor.setAttribute('aria-describedby', 'editor-privacy');
+  const note = paragraph('Query text lives in this tab only; it is not saved or submitted. This is an external site, even on a work device. Keep real values in SecOps.', 'small muted'); note.id = 'editor-privacy';
+  editor.addEventListener('input', () => {
+    Object.assign(a, changeQuery(a, editor.value));
+    document.getElementById('query-result')?.remove(); document.getElementById('method-result')?.remove();
+    p.closest('.desk').querySelectorAll('.method-rationale').forEach(el => el.remove());
+    p.closest('.desk').querySelectorAll('input[type=radio], input[id$=Acknowledged]').forEach(el => { el.checked = false; if (el.type === 'checkbox') el.disabled = true; });
+    document.getElementById('current-score')?.replaceWith(scorePanel(c, a));
+    document.querySelectorAll('[data-gap]').forEach(el => { el.value = ''; });
+  });
+  add(p, label, editor, note);
+  if (c.mission.gaps.length) {
+    const help = node('details'); help.open = Boolean(a.gapHelpOpen); add(help, node('summary', 'Help me fill the blanks'));
+    for (const gap of c.mission.gaps) {
+      const label = node('label', null, 'control'); label.htmlFor = 'gap-' + gap.marker; add(label, node('span', gap.label));
+      const select = node('select'); select.id = label.htmlFor; select.dataset.gap = gap.marker;
+      const placeholder = node('option', 'Choose for ' + gap.marker); placeholder.value = ''; add(select, placeholder);
+      for (const value of gap.options) { const option = node('option', value); option.value = value; add(select, option); }
+      select.addEventListener('change', () => {
+        if (!select.value || !a.queryText.includes(gap.marker)) return;
+        attempts.set(c.id, { ...changeQuery(a, a.queryText.replaceAll(gap.marker, select.value)), gapHelpOpen: true });
+        refresh('Blank filled. Check the query when ready.', 'query-editor');
+      }); add(label, select); add(help, label);
+    } add(p, help);
   }
+  add(p, add(node('div', null, 'row'),
+    button('Check query', () => { a.queryResult = evaluateText(a.queryText, c.referenceQuery); saveAttempt(c, a); refresh('Query checked. ' + a.queryResult.queryPoints + ' of 70 query points.', 'query-result'); }, 'check-query', 'primary'),
+    button('Clear query', () => { attempts.set(c.id, changeQuery(a, '')); refresh('Query cleared. Current assessment reset.', 'query-editor'); }, 'clear-query'),
+    button('Copy training query', async () => {
+      try { await navigator.clipboard.writeText(a.queryText); announce('Training query copied. Substitute real values only inside workplace SecOps.'); }
+      catch { announce('Clipboard unavailable. Select the training query and copy manually.'); editor.focus(); editor.select(); }
+    }, 'copy-query')));
+  if (a.queryResult) add(p, queryFeedback(c, a));
   return p;
 }
 function method(c, a) {
@@ -148,7 +182,7 @@ function method(c, a) {
     const fs = node('fieldset'); add(fs, node('legend', q.prompt));
     q.options.forEach(o => { const label = node('label', null, 'choice'), radio = node('input'); radio.type = 'radio'; radio.name = q.id; radio.value = o.id; radio.id = q.id + '-' + o.id; radio.checked = a.methodChoices[q.id] === o.id;
       radio.addEventListener('change', () => { a.methodChoices[q.id] = o.id; a.methodPoints = null; refresh('Method choice changed. Check method to reassess.', radio.id); }); add(label, radio, node('span', o.label)); add(fs, label); });
-    if (a.methodPoints !== null) add(fs, paragraph((a.methodChoices[q.id] === q.correctOption ? 'Correct. ' : 'Reconsider. ') + q.rationale, 'small'));
+    if (a.methodPoints !== null) add(fs, paragraph((a.methodChoices[q.id] === q.correctOption ? 'Correct. ' : 'Reconsider. ') + q.rationale, 'small method-rationale'));
     add(p, fs);
   });
   add(p, button('Check method', () => { a.methodPoints = gradeMethod(a, c); saveAttempt(c, a); refresh('Method checked. ' + a.methodPoints + ' of 20 method points.', 'method-result'); }, 'check-method'));
@@ -157,7 +191,7 @@ function method(c, a) {
 }
 function practice(c, a) {
   const p = panel('03 / Practice in authorized SecOps');
-  add(p, paragraph('Open your approved SecOps manually. Replace symbols only there. Return no values, queries, logs, counts, or observations to this app.', 'notice'));
+  add(p, paragraph('Open your approved SecOps manually. Replace symbols only there. Keep real values, full workplace queries, logs, counts and observations there. Return only a training query with the supplied placeholders.', 'notice'));
   const list = node('ol'); c.executeSteps.forEach(s => add(list, node('li', s))); add(p, list, paragraph(c.debrief, 'small muted'));
   const enabled = a.queryResult?.queryPoints === 70;
   for (const [key, text] of [['executedAcknowledged', 'I ran the adapted query in authorized workplace SecOps'], ['reviewedAcknowledged', 'I reviewed results or a zero-result limitation inside workplace tools']]) {
@@ -168,27 +202,29 @@ function practice(c, a) {
 }
 function challenge(l, c) {
   const a = attemptFor(c), m = main(), layout = node('div', null, 'workspace'), body = node('div'); add(layout, sidebar(l), body);
-  add(body, link('← ' + l.id + ' briefing', '#' + l.id), paragraph(c.id + ' / SYMBOLIC CHALLENGE', 'eyebrow'), node('h1', c.title), paragraph(c.prompt), paragraph('Search · YARA-L 2.0 · documentation-checked / tenant-unverified', 'tag'));
+  const index = l.challenges.indexOf(c);
+  add(body, link('← ' + l.id + ' briefing', '#' + l.id), paragraph('CHAPTER ' + l.id.slice(1) + ' · MISSION ' + (index + 1) + ' OF ' + l.challenges.length, 'eyebrow'), node('h1', c.title));
+  const trail = node('nav', null, 'mission-trail'); trail.setAttribute('aria-label', 'Chapter missions');
+  for (const [i, mission] of l.challenges.entries()) { const a = link(String(i + 1), '#' + mission.id); a.setAttribute('aria-label', 'Mission ' + (i + 1) + ': ' + mission.title); if (mission === c) a.setAttribute('aria-current', 'step'); add(trail, a); }
+  add(body, trail, paragraph(c.mission.beat, 'case-story'), paragraph(c.prompt, 'mission-question'));
   const desk = node('div', null, 'desk'), left = node('div', null, 'stack'), right = node('aside', null, 'stack');
-  add(left, composer(c, a), method(c, a), practice(c, a));
-  const score = panel('Current attempt');
-  const current = reduceAttempt(a, l.contentVersion), transient = a.queryResult?.queryPoints === 70 ? (Number(a.executedAcknowledged) + Number(a.reviewedAcknowledged)) * 5 : 0;
-  add(score, paragraph(String(current.queryPoints + current.methodPoints + transient), 'progress-big'), paragraph('of 100 points', 'muted'));
-  const rubric = node('div', null, 'rubric'); [['Query', current.queryPoints, 70], ['Method', current.methodPoints, 20], ['Practice', transient, 10]].forEach(([label, n, max]) => add(rubric, add(node('div'), node('strong', String(n)), node('span', label + ' / ' + max)))); add(score, rubric, paragraph(statusLabel(current), 'small good'));
-  const best = records.find(r => r.challengeId === c.id); if (best) add(score, paragraph('Saved best: ' + total(best) + '/100 · ' + statusLabel(best), 'small muted'));
-  add(score, paragraph('Changing query tokens clears the current assessment and acknowledgments. Saved best remains separate.', 'small muted'));
-  const hints = panel('A nudge, when you need it');
-  add(hints, paragraph('Hints have no point penalty. Hint 3 reveals a worked solution; scores are formative feedback.', 'small muted'));
+  const teaching = panel({ shown: 'Watch one', guided: 'Build on it', independent: 'Your turn' }[c.mission.support]);
+  if (c.mission.example) add(teaching, exampleBlock(c));
+  add(teaching, breakdown(c), paragraph(c.mission.remember, 'memory-hook'));
+  if (c.mission.caveat) add(teaching, paragraph(c.mission.caveat, 'notice'));
+  const hints = panel('Need a hint?');
+  add(hints, paragraph('Three hints, no point penalty. The last one includes the full query.', 'small muted'));
   for (let i = 0; i < a.highestHint; i++) add(hints, node('h3', 'Hint ' + (i + 1)), i === 2 ? node('pre', c.hints[i], 'query-preview') : paragraph(c.hints[i], 'small'));
   if (a.highestHint < 3) add(hints, button('Reveal hint ' + (a.highestHint + 1), () => { a.highestHint++; saveAttempt(c, a); refresh('Hint ' + a.highestHint + ' revealed.', 'hint-panel'); }, 'next-hint'));
-  if (a.highestHint === 3) add(hints, button('Load worked example', () => { attempts.set(c.id, changeTokens(a, authoredTokens(c.hints[2]))); refresh('Worked example loaded. Assess it, then explain the method.', 'check-query'); }, 'load-example'));
+  if (a.highestHint === 3) add(hints, button('Load worked example', () => { attempts.set(c.id, changeQuery(a, c.hints[2])); refresh('Worked example loaded. Check it, then explain the method.', 'check-query'); }, 'load-example'));
   hints.id = 'hint-panel'; hints.tabIndex = -1;
-  add(right, score, hints, sourceLinks(l)); add(desk, left, right); add(body, desk);
-  const next = challenges[challenges.indexOf(c) + 1]; add(body, add(node('div', null, 'row'), link(next ? 'Next challenge →' : 'Review course progress →', next ? '#' + next.id : '#progress', 'button-link')));
+  add(left, teaching, composer(c, a), method(c, a), practice(c, a));
+  add(right, hints, scorePanel(c, a), sourceLinks(l)); add(desk, left, right); add(body, desk);
+  const next = challenges[challenges.indexOf(c) + 1]; add(body, add(node('div', null, 'row mission-next'), link(next ? (index === l.challenges.length - 1 ? 'Next chapter →' : 'Next mission →') : 'Review case progress →', next ? '#' + next.id : '#progress', 'primary')));
   add(m, layout); return m;
 }
 function progress() {
-  const m = main('narrow'); add(m, paragraph('YOUR LEARNING RECORD', 'eyebrow'), node('h1', 'Progress, at your pace.'), paragraph(records.reduce((n, r) => n + total(r), 0) + ' / 1,200 formative points', 'progress-big'));
+  const m = main('narrow'); add(m, paragraph('YOUR LEARNING RECORD', 'eyebrow'), node('h1', 'Progress, at your pace.'), paragraph(records.reduce((n, r) => n + total(r), 0) + ' / ' + (challenges.length * 100).toLocaleString('en-US') + ' learning points', 'progress-big'));
   const p = panel('Saved best, one attempt at a time');
   for (const c of challenges) { const r = records.find(x => x.challengeId === c.id); add(p, add(node('div', null, 'metric'), link(c.id + ' · ' + c.title, '#' + c.id), node('span', (r ? total(r) : 0) + '/100 · ' + statusLabel(r), 'small'))); }
   add(p, paragraph('A saved best combines query, method, and practice from one attempt. Highest hint use is tracked separately. A learner can edit browser storage; these records are not audit evidence.', 'small muted'), rememberChoice(), button('Clear progress', resetProgress, 'clear-progress'), paragraph('Clears only this course’s browser key and in-memory attempts. Other sites and courses are untouched.', 'small muted'));
@@ -197,7 +233,7 @@ function progress() {
 function privacy() {
   const m = main('narrow'); add(m, paragraph('THE WORKPLACE BOUNDARY', 'eyebrow'), node('h1', 'Keep the evidence where it belongs.'));
   const p = panel('What the app receives');
-  add(p, paragraph('Only fixed synthetic query tokens, fixed method choices, hints, and execution/review acknowledgments. There is no actual-data input, upload, free query editor, tenant URL, or clipboard-reading feature.'), node('h3', 'What the app stores'), paragraph('Nothing across sessions by default. If enabled, this browser remembers challenge/content IDs, score components, highest hint level, and self-attested practice flags. Query text, method answers, results, identifiers, and timestamps are not saved.'), node('h3', 'What the app contacts'), paragraph('The app loads its static files from the host. It has no runtime AI, analytics, SIEM integration, automatic external content, or backend. Clicking an official reference opens that fixed public documentation link without a referrer. The host may keep ordinary access logs.'), node('h3', 'Limits of this protection'), paragraph('Browser owners, extensions, compromised releases, and scripts on the same origin can change or inspect the app. Local progress is untrusted. Use a dedicated approved origin; do not embed the course in another site. Hosting must enforce framing restrictions if required.'), node('h3', 'Your approved Copilot'), paragraph('Optional Copilot use belongs separately inside your approved work environment and organizational policy. It is not part of the course, a validator, or a reason to send workplace data to another service.'), node('h3', 'What the scores mean'), paragraph('Query structure 70%, fixed method choices 20%, and execution/review self-attestation 10%. This is personal practice, not certification, incident verification, or proof that Google’s compiler accepted a query.'), rememberChoice(), button('Clear progress', resetProgress, 'clear-progress'));
+  add(p, paragraph('Training query text with predefined placeholders, fixed method choices, hints and practice acknowledgments. The editor can receive accidental real text: never paste workplace values. There is no upload, tenant URL or clipboard-reading feature.'), node('h3', 'What the app stores'), paragraph('Nothing across sessions by default. If enabled, this browser remembers challenge/content IDs, score components, highest hint level, and self-attested practice flags. Typed query text stays in tab memory and is discarded when you leave a mission or reload. It is never put in storage, a URL, telemetry or a network request by the app. Method answers, results, identifiers and timestamps are not saved.'), node('h3', 'What the app contacts'), paragraph('The app loads its static files from the host. It has no runtime AI, analytics, SIEM integration, automatic external content, or backend. Clicking an official reference opens that fixed public documentation link without a referrer. The host may keep ordinary access logs.'), node('h3', 'Limits of this protection'), paragraph('A managed device does not make this public website an internal tool. Browser owners, extensions, compromised releases and scripts on the same origin can inspect text entered here, even without saving it. Local progress is untrusted. Use a dedicated approved origin; do not embed the course in another site. Hosting must enforce framing restrictions if required.'), node('h3', 'Your approved Copilot'), paragraph('Optional Copilot use belongs separately inside your approved work environment and organizational policy. It is not part of the course, a validator, or a reason to send workplace data to another service.'), node('h3', 'What the scores mean'), paragraph('Query structure 70%, fixed method choices 20%, and execution/review self-attestation 10%. This is personal practice, not certification, incident verification, or proof that Google’s compiler accepted a query.'), rememberChoice(), button('Clear progress', resetProgress, 'clear-progress'));
   add(m, p); return m;
 }
 function render(routeChange = true) {
@@ -217,5 +253,5 @@ function render(routeChange = true) {
   if (routeChange) { view.focus(); window.scrollTo(0, 0); announce('Opened ' + (view.querySelector('h1')?.textContent ?? 'learning path') + '.'); }
 }
 document.querySelector('.skip').addEventListener('click', e => { e.preventDefault(); document.getElementById('main').focus(); });
-window.addEventListener('hashchange', () => { attempts.clear(); insertAt = null; render(); });
+window.addEventListener('hashchange', () => { attempts.clear(); render(); });
 render();

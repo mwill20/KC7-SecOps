@@ -3,7 +3,7 @@ import { enter, workedExample } from './helpers.mjs';
 import { contentBundle } from '../../tools/validate-content.mjs';
 import { STORAGE_KEY } from '../../site/state/progress.js';
 const bundle = contentBundle();
-test('T02/T04/T10/T15 all 12 challenges reach symbolic mastery without tenant execution', async ({ page }) => {
+test('T02/T04/T10/T15 all 16 missions reach symbolic mastery without tenant execution', async ({ page }) => {
   await enter(page);
   for (const l of bundle.lessons) for (const c of l.challenges) {
     await page.goto('/#' + c.id); await workedExample(page);
@@ -13,7 +13,7 @@ test('T02/T04/T10/T15 all 12 challenges reach symbolic mastery without tenant ex
     await expect(page.locator('#executedAcknowledged')).not.toBeChecked();
     await expect(page.locator('#reviewedAcknowledged')).not.toBeChecked();
   }
-  await page.goto('/#progress'); await expect(page.locator('.progress-big')).toContainText('1080 / 1,200');
+  await page.goto('/#progress'); await expect(page.locator('.progress-big')).toContainText('1440 / 1,600');
   expect(await page.evaluate(() => localStorage.length)).toBe(0);
 });
 test('T05/T11 actual flow makes only allowlisted static requests; no payload or secondary store', async ({ page }) => {
@@ -66,9 +66,10 @@ test('T14 keyboard path, route focus, reduced motion, forced colors and 320px re
   await page.goto('/#L01-C01'); await page.locator('#boundary').focus(); await page.keyboard.press('Space'); await page.keyboard.press('Tab');
   await page.locator('#open-course').focus(); await page.keyboard.press('Enter'); await expect(page.locator('main')).toBeFocused();
   await page.locator('.skip').focus(); await page.keyboard.press('Enter'); await expect(page.locator('main')).toBeFocused(); expect(page.url()).toContain('#L01-C01');
-  await page.locator('#token-choice').focus(); await page.keyboard.press('Home'); await page.keyboard.press('Tab'); await page.keyboard.press('Tab');
-  await expect(page.locator('#add-token')).toBeFocused(); await page.keyboard.press('Enter');
-  await expect(page.locator('#query-preview')).toContainText('metadata.event_type'); await expect(page.locator('#add-token')).toBeFocused();
+  await page.locator('#query-editor').focus(); await page.keyboard.press('Control+End');
+  await page.keyboard.type(' '); await expect(page.locator('#query-editor')).toBeFocused();
+  await page.keyboard.press('Tab'); await expect(page.locator('#check-query')).toBeFocused(); await page.keyboard.press('Enter');
+  await expect(page.locator('#query-result')).toContainText('70 / 70');
   await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' }); await page.setViewportSize({ width: 320, height: 800 });
   const overflow = await page.evaluate(() => [...document.querySelectorAll('main,main *')].filter(e => e.getBoundingClientRect().right > innerWidth + 1 && getComputedStyle(e).position !== 'absolute').slice(0, 8).map(e => ({ tag: e.tagName, cls: e.className, width: e.getBoundingClientRect().width })));
   await page.screenshot({ path: 'test-results/mobile.png', fullPage: true });
@@ -82,7 +83,7 @@ test('T10 route exit discards attempt inputs while keeping the non-sensitive sav
   await page.locator('#M1-A').check(); await page.locator('#M2-B').check(); await page.locator('#check-method').click();
   await page.locator('#executedAcknowledged').check(); await page.locator('#reviewedAcknowledged').check();
   await page.goto('/#course'); await page.goto('/#L01-C01');
-  await expect(page.locator('#query-preview')).toContainText('Your symbolic query appears here');
+  await expect(page.locator('#query-editor')).toHaveValue(bundle.lessons[0].challenges[0].mission.starter);
   await expect(page.locator('#M1-A')).not.toBeChecked(); await expect(page.locator('#executedAcknowledged')).not.toBeChecked();
   await expect(page.getByText('Saved best: 100/100 · Practiced — self-attested', { exact: true })).toBeVisible();
 });

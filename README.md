@@ -1,16 +1,16 @@
 # KC7 SecOps
 
-An original course for analysts learning **Google Security Operations SIEM Search with YARA-L 2.0**. Six lessons and twelve challenges teach query construction, investigation method, and appropriately bounded conclusions.
+An original course for analysts learning **Google Security Operations SIEM Search with YARA-L 2.0**. Six chapters and sixteen investigation missions teach query construction, investigation method, and appropriately bounded conclusions.
 
 **[Play KC7 SecOps →](https://mwill20.github.io/KC7-SecOps/)** — no install, account or setup command.
 
-Read the privacy notice, open the learning path and choose **Start at lesson 01**. Optional **Remember non-sensitive progress** lets you resume in the same browser. Leave it off on a shared device. Use workplace tools separately for any real query execution.
+Read the privacy notice, open the learning path and choose **Start the case**. Optional **Remember non-sensitive progress** lets you resume in the same browser. Leave it off on a shared device. Use workplace tools separately for any real query execution.
 
 Published on GitHub Pages on 2026-10-15 after the owner made the repository public and authorized independent review and publication. The separate AI security review approved the exact build; remote verification and real HTTPS/browser checks passed. See [deployment evidence](docs/DEPLOYMENT.md), [security review](docs/SECURITY_REVIEW.md) and [implementation status](docs/IMPLEMENTATION_STATUS.md). Workplace website/storage approval and tenant compatibility remain separate, unverified checks.
 
 ## Practice without exporting workplace data
 
-Build queries from fixed fields, operators and symbols such as `[USER]`. A deterministic local validator checks structure and supported alternate forms. Practice separately in authorized workplace SecOps, substituting values only there. The course receives no identifiers, logs, results, tenant URLs, screenshots or notes.
+Type training queries using the supplied fields, operators and placeholders such as `"__USER__"`. A deterministic local validator checks structure and supported alternate forms. Practice separately in authorized workplace SecOps, substituting values only there. The editor can receive accidental real text; never enter identifiers, logs, results, tenant URLs, screenshots or notes. Query text is never saved or sent by app code.
 
 Scoring is 70 query points, 20 fixed-choice method points, and 10 for execution/review self-attestation. Symbolic mastery needs no tenant execution. Hints have no penalty; the last reveals a worked solution. Scores are personal learning feedback, not certification or incident evidence.
 
@@ -48,7 +48,7 @@ The root also contains a browser runtime snapshot matching the validated build a
 
 ## Boundaries and limitations
 
-No runtime AI, backend, accounts, SIEM integration, event dataset, upload, raw editor, clipboard read, tracking or automatic external content. Optional storage contains only fixed IDs, scores, hint levels, versions and practice flags. Query/method inputs clear when leaving a challenge or reloading.
+No runtime AI, backend, accounts, SIEM integration, event dataset, upload, clipboard read, tracking or automatic external content. The training-query editor accepts symbolic syntax; optional storage contains only fixed IDs, scores, hint levels, versions and practice flags. Query/method inputs clear when leaving a mission or reloading.
 
 The validator supports a bounded Search subset, not Google's compiler. Queries are documentation-checked and **tenant-unverified**. Mapping, permissions, telemetry and features need private checks. L06 tumbling windows are preview/pre-GA and may be unavailable. Missing capability leaves practice pending; executed zero-result queries may qualify after limitation review.
 
@@ -59,3 +59,7 @@ Independent AI release review completed with no supported security findings. Ful
 Inspired by KC7's narrative investigations and graduated learning. Case, content, scoring and code are original; no KC7 question bank, artwork, code or datasets are included. Not affiliated with KC7, Google or Microsoft. Primary sources are linked in the matrix.
 
 The owner approved publication without adding an open-source license. No license was added.
+
+## Investigation-led learning revision
+
+Midnight at Meridian uses a fictional planetarium case, complete starter queries, short explanations, progressively reduced guidance and three hints per mission. Type or paste **training queries with placeholders** for local structural grading. Run against authorized workplace logs separately in SecOps; never return real identifiers or results. The first chapter grows from `USER_LOGIN` to successful sign-ins, distinct account counts, recorded job titles and failed attempts. Job titles depend on source/enrichment coverage and are not permission roles or proof of a historical position. Query text is never saved or sent by app code, but the editor can receive accidental real text; managed devices do not change that public-site boundary. See `docs/LEARNING_REDESIGN.md` for current revision status.

@@ -12,8 +12,8 @@ flowchart LR
   Build --> Preview[Developer loopback preview]
   Host --> Browser[Learner browser]
   Preview --> Browser
-  Browser --> Tokens[Closed symbolic tokens]
-  Tokens --> Parse[Serializer and bounded AST parser]
+  Browser --> Editor[Training query text in tab memory]
+  Editor --> Parse[Bounded AST parser]
   Parse --> Grade[Boolean and pipeline checks]
   Grade --> Score[70 query / 20 method / 10 self-attestation]
   Score --> Memory[Session-only progress]
@@ -68,3 +68,7 @@ Meta CSP cannot enforce frame-ancestors. The owner approved GitHub Pages on 2026
 One browser entry module keeps this six-lesson app small; reusable parser/state logic remains separate. Normalization lives beside parsing so type and binding checks precede equivalence. No generalized rule engine, plugin system, app login or audit backend is needed for this boundary. Local scores have no authorization value.
 
 Invalid authored content stops the build. Failed browser initialization leaves a fixed CONTENT_INVALID fallback without enabling assessment. Unsupported syntax earns no query points and is distinguished from incorrect intent and parse failure. Tests demonstrate the supported subset, not Google semantics across all possible inputs. See the threat model and evaluation record before release.
+
+## Learning revision — 2026-10-16
+
+The existing static shell now follows an original investigation across six chapters/16 missions. Bundled mission metadata supplies full examples, syntax breakdowns, guided starters and hints, then fades to independent construction. The primary input is the owner-approved training-query textarea; `evaluateText` calls the same bounded parser/Boolean/pipeline evaluator. `changeQuery` resets the current assessment/method/practice state; only `reduceAttempt`'s fixed projection can persist. Query text stays in memory/DOM and is discarded on route exit/reload. No typed query is encoded in navigation, storage or requests. The textarea can receive accidental real data; the prior closed-composer prevention claim no longer applies. See PRIVACY.md and the refreshed threat model.

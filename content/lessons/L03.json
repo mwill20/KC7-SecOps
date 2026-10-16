@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "contentVersion": 1,
+  "contentVersion": 2,
   "id": "L03",
-  "title": "Pivot to a host and process pattern",
+  "title": "Backstage on the workstation",
   "level": "developing",
   "estimatedMinutes": 40,
   "prerequisites": [
@@ -13,29 +13,29 @@
     "Use a bounded suffix regex with nocase.",
     "Distinguish process presence from execution intent and maliciousness."
   ],
-  "story": "Signal Desk asks whether an approved host launched a familiar shell. No execution is initiated by the course; you only search authorized telemetry. A process name is a pivot, not a verdict.",
+  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 3 — The fictional case card names a production workstation that can change the launch display. It also mentions a shell process. Learn to narrow process records to a host, then recognize two executable names without opening the scope to everything else.",
   "teaching": [
     {
-      "heading": "From an identity to an endpoint",
-      "text": "An IOC enrichment workflow changes the next question as evidence appears. Here the pivot is an approved host selected privately in SecOps, represented as [HOST] externally. The symbolic task uses principal.hostname as the actor host and target.process.file.full_path as the launched process path. Verify this mapping in your source."
+      "heading": "A host is another pivot",
+      "text": "[HOST] is a stand-in, not an actual computer name. Choose a permitted host inside SecOps and substitute it only there. Keep PROCESS_LAUNCH as the event category."
     },
     {
-      "heading": "Regex is a precise pattern",
-      "text": "The literal /\\\\powershell\\.exe$/ matches a Windows path ending with a backslash followed by powershell.exe. The escaped dot means a literal period, and $ means the suffix ends there. nocase handles filename case. A suffix does not verify the binary's hash, signer, command line, or intent."
+      "heading": "A path is text, not a verdict",
+      "text": "A filename ending in powershell.exe can be ordinary administration. Querying that path does not run the program or prove it is malicious."
     },
     {
-      "heading": "Know the engine",
-      "text": "SecOps documents RE2 regex behavior. Lookahead and lookbehind are not supported. Our app offers predefined patterns only and does not execute regex against data. A supported alternative can split shell names into OR branches or use the documented re.regex function; it must retain the same match semantics."
+      "heading": "Read a supplied pattern before changing it",
+      "text": "The provided pattern uses a backslash for a Windows path, an escaped dot for a literal period and $ for the end of the path. nocase ignores letter case. The mission explains the exact pattern."
     },
     {
-      "heading": "Preserve the investigative boundary",
-      "text": "Do not run or simulate a suspicious command to generate a match. Use existing authorized process telemetry. If the source stores a different path shape, adapt only inside SecOps and retain the limitation in workplace notes."
+      "heading": "Two names can share one boundary",
+      "text": "Parentheses and a vertical bar inside the supplied regex mean either shell name. Keep the event category and host filter outside that alternative. This is different from a KQL pipeline."
     }
   ],
   "challenges": [
     {
       "id": "L03-C01",
-      "title": "Find a PowerShell path suffix",
+      "title": "Find the supplied shell path",
       "prompt": "Select PROCESS_LAUNCH events on principal.hostname [HOST], with target.process.file.full_path ending in a Windows path suffix \\\\powershell.exe, case-insensitive. Return event rows.",
       "symbolIds": [
         "HOST"
@@ -97,11 +97,43 @@
         "Do not launch any process to manufacture results.",
         "If Linux paths or another mapping are used, note that this Windows-suffix exercise may be unavailable; complete symbolic mastery independently."
       ],
-      "debrief": "Privately list contextual evidence you would need before escalating a shell launch. Never put command lines or process paths from work into the site."
+      "debrief": "Privately list contextual evidence you would need before escalating a shell launch. Never put command lines or process paths from work into the site.",
+      "mission": {
+        "support": "shown",
+        "beat": "The fictional workstation lead names a familiar shell. Start with the complete supplied pattern, then read each piece.",
+        "example": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\powershell\\.exe$/ nocase",
+        "starter": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\powershell\\.exe$/ nocase",
+        "explanation": [
+          {
+            "part": "metadata.event_type = \"PROCESS_LAUNCH\"",
+            "meaning": "Select process-start records."
+          },
+          {
+            "part": "principal.hostname = \"__HOST__\"",
+            "meaning": "Keep the search on the requested actor host."
+          },
+          {
+            "part": "target.process.file.full_path",
+            "meaning": "The process path requested by this training task. Check its mapping in your source."
+          },
+          {
+            "part": "\\\\, \\. and $ in the pattern",
+            "meaning": "Match a Windows separator, a literal dot and the end of the path."
+          },
+          {
+            "part": "nocase",
+            "meaning": "Match filename letters regardless of case."
+          }
+        ],
+        "remember": "A path pattern finds text. It does not prove intent.",
+        "caseUpdate": "Case card unlocked: you can express a host-scoped process question. A second shell name is the next variation.",
+        "caveat": "Use existing authorized telemetry. Never execute a command just to create a training match.",
+        "gaps": []
+      }
     },
     {
       "id": "L03-C02",
-      "title": "Allow either shell name without broadening scope",
+      "title": "Allow a second shell name",
       "prompt": "Select PROCESS_LAUNCH events on [HOST] whose target process path ends with either \\\\powershell.exe or \\\\pwsh.exe, case-insensitive. Both alternatives must stay inside the event/host scope.",
       "symbolIds": [
         "HOST"
@@ -163,7 +195,42 @@
         "Compare privately against the single-name filter if telemetry exists.",
         "If unavailable, keep practice pending and continue the symbolic course; do not generate endpoint data."
       ],
-      "debrief": "Explain why this expansion is intentional and bounded, whereas dropping the host filter is a different question."
+      "debrief": "Explain why this expansion is intentional and bounded, whereas dropping the host filter is a different question.",
+      "mission": {
+        "support": "guided",
+        "beat": "The fictional case mentions either shell spelling. Expand only the filename alternative; keep the host and process category.",
+        "example": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\powershell\\.exe$/ nocase",
+        "starter": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = ___1___",
+        "explanation": [
+          {
+            "part": "(powershell|pwsh)",
+            "meaning": "Inside this provided regex, | means either name."
+          },
+          {
+            "part": "The final $",
+            "meaning": "Keep the end-of-path boundary; an unanchored substring is a different search."
+          },
+          {
+            "part": "The unchanged host/category filters",
+            "meaning": "Both shell alternatives must remain in scope."
+          }
+        ],
+        "remember": "Change the name choice, not the investigation boundary.",
+        "caseUpdate": "Case card unlocked: both supplied shell forms are covered. Next, investigate a network pivot.",
+        "caveat": "The course recognizes only its supplied RE2 patterns and does not execute regex against events.",
+        "gaps": [
+          {
+            "marker": "___1___",
+            "label": "A suffix for either shell",
+            "options": [
+              "/\\\\powershell\\.exe$/ nocase",
+              "/\\\\pwsh\\.exe$/ nocase",
+              "/\\\\(powershell|pwsh)\\.exe$/ nocase"
+            ],
+            "answer": "/\\\\(powershell|pwsh)\\.exe$/ nocase"
+          }
+        ]
+      }
     }
   ],
   "sourceIds": [
@@ -173,7 +240,7 @@
     "G15"
   ],
   "verification": {
-    "documentationCheckedOn": "2026-10-14",
+    "documentationCheckedOn": "2026-10-16",
     "tenantExecution": "not-tested"
   }
 }

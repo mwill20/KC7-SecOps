@@ -1,28 +1,28 @@
 # Product requirements — KC7 SecOps
 
-Version 1.1 • 2026-10-15 • owner: mwill20. See IMPLEMENTATION_STATUS.md for implementation and deployment evidence. The owner changed the repository to public and authorized independent review followed by GitHub Pages publication without adding an open-source license.
+Version 1.2 • 2026-10-16 • owner: mwill20. See IMPLEMENTATION_STATUS.md for implementation and deployment evidence. The owner changed the repository to public and authorized independent review followed by GitHub Pages publication without adding an open-source license.
 
 ## Goal and learner
 
 A working SOC analyst learns to turn hypotheses into Google SecOps SIEM Search queries using YARA-L 2.0, inspect UDM roles and field mappings, pivot cautiously, aggregate events, and state investigation limitations. The app provides symbolic training; practice uses existing authorized workplace SecOps access separately.
 
-Original case: **Signal Desk — investigate without overclaiming**. A training supervisor asks the learner to examine an approved identity or host, distinguish ordinary activity from questions worth investigating, and explain next steps. The story never asserts that a selected real employee is malicious or that an incident exists.
+Original case: **Midnight at Meridian**. A planetarium's midnight launch display turns into a giant dancing potato. Director Mira asks the learner to follow access, endpoint and network questions. Fictional case cards reward query progress independently of any workplace results. This never asserts that an actual employee is malicious or that a real incident exists.
 
 ## Success case
 
-On an approved workplace browser, open the training site, read the privacy boundary, complete a lesson using selectable query tokens, receive structural and method feedback, copy a synthetic query, and replace symbols only inside SecOps. Run the search within an authorized time range. Return to the site and attest only that the query ran and results/limitations were reviewed. Resume later using optional non-sensitive local progress.
+On an approved workplace browser, open the training site, read the privacy boundary, complete a lesson using a training-query editor with placeholders, receive structural and method feedback, copy a synthetic query, and replace symbols only inside SecOps. Run the search within an authorized time range. Return to the site and attest only that the query ran and results/limitations were reviewed. Resume later using optional non-sensitive local progress.
 
 ## Should-fail case
 
-Attempt to enter/paste a real username, IP, tenant URL, log, or result into the site. No input surface accepts it, no clipboard is read, no query/result is stored or transmitted, and unknown literals introduced through a tampered internal message fail closed. A broadened OR query cannot pass simply because it contains expected field names.
+Paste a synthetic out-of-catalog identity literal into the training editor. The parser rejects it without echoing it in feedback, and application code never stores or transmits that text. The textarea can receive accidental real text; privacy protection must not claim otherwise. Programmatic clipboard reading and result inputs are absent. A broadened OR query cannot pass simply because it contains expected field names.
 
 ## Requirements
 
 | ID | Requirement | Acceptance pointer |
 |---|---|---|
 | R01 | Learner needs only an approved browser; no install, extensions, terminal, or downloaded executable | T01, T16 |
-| R02 | Six complete ordered lessons, two challenges each, teaching, examples, three hints, explanation, method questions, and private execution steps | T02, T03 |
-| R03 | Compose alternate symbolic YARA-L Search queries using closed choices; no actual employer values accepted | T04, T05 |
+| R02 | Six complete ordered lessons, six missions in L01 and two in each later chapter, teaching, examples, three hints, explanation, method questions, and private execution steps | T02, T03 |
+| R03 | Compose alternate symbolic YARA-L Search queries by typing/pasting placeholders; no actual employer values supported by grading | T04, T05 |
 | R04 | Parse an AST, check field types and challenge intent, accept supported equivalent forms, distinguish unsupported syntax | T06–T09 |
 | R05 | Per challenge: query 70 + method 20 + completion 10; completion is self-attested, no fixed SIEM answers | T10 |
 | R06 | Keep all employer identifiers, logs, timestamps, row counts, screenshots, URLs, and investigative notes exclusively in employer systems | T05, T11 |
@@ -41,15 +41,15 @@ Test IDs refer to `docs/TEST_PLAN.md`.
 
 Manual event filtering, types, booleans, UDM principal/target roles, process regex, IP/CIDR pivots, basic aggregations, fixed time buckets, threshold filtering, interpretation, and zero-result troubleshooting. Source-specific field mapping and available telemetry are checked privately by the learner.
 
-Not included: rule creation/deployment, SOAR, response actions, dashboards creation, real indicators or logs, synthetic event datasets, automatic SIEM execution, AI tutoring, shared scores, public leaderboards, certificates, raw query typing, imports/exports, custom learning content, free-text notes, workplace identifier substitution in the app, or organizational reporting.
+Not included: rule creation/deployment, SOAR, response actions, dashboards creation, real indicators or logs, synthetic event datasets, automatic SIEM execution, AI tutoring, shared scores, public leaderboards, certificates, arbitrary real query values, imports/exports, custom learning content, free-text notes, workplace identifier substitution in the app, or organizational reporting.
 
 ## Product decisions
 
 1. Native HTML/CSS/JavaScript ES modules; no runtime framework or dependency. Static publishing suits the data boundary and avoids a server.
-2. Closed token composer rather than a raw editor. This sacrifices unrestricted typing to enforce the requirement that actual identifiers never enter the external site.
+2. Owner-approved training-query editor plus optional preset gap help. Supplied examples, concise breakdowns, guided starters and independent missions fade help gradually. The editor accepts typing/paste; only catalog values are graded. Text is transient and never saved/transmitted; accidental entry and endpoint/extension observation remain explicit limitations.
 3. Local AST validation for a documented subset. Full Google compilation and arbitrary semantic equivalence are not feasible without a Google engine/integration.
 4. No time pressure, hint penalties, streaks, or compulsory sequential locks. Learners can revisit lessons; the suggested order scaffolds skills.
-5. Maximum 1,200 course points, 100 per challenge. Scores show mastery feedback, not verified incident analysis.
+5. Maximum 1,600 course points, 100 per challenge. Scores show mastery feedback, not verified incident analysis.
 6. Query examples visibly say **Documentation checked / Tenant execution not independently verified**. A learner's run is labelled self-attested.
 
 ## Repository and hosting
@@ -60,6 +60,6 @@ Use GitHub Pages for the owner-approved public course. The manual-only publicati
 
 Workplace web access, external training approval, allowed local storage, telemetry, and Search capability remain unknown. Public publication is authorized; workplace approval and tenant capability are separate external checks. Publish only non-sensitive authored static assets. No additional paid dependency is assumed.
 
-## Definition of done for this specification task
+## Definition of done for the learning revision
 
-Complete source-backed design, six authored lessons, exact data and validator contracts, concrete should-fail fixtures, build instructions, and a downloadable package. Application code and tenant validation are later tasks. Repository creation may be performed under the owner's instruction if authenticated creation is available; record its actual outcome separately.
+A novice can see and understand the first complete query without using hints, run it separately in authorized SecOps, then build through sixteen missions with graded alternatives and meaningful failure cases. Full application validation, focused independent editor-boundary review, reviewed-artifact publication and actual HTTPS/browser checks pass. Tenant compilation, field population and workplace-use approval remain explicitly unverified external checks.
