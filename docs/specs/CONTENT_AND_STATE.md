@@ -21,7 +21,7 @@ The build may transform these JSON files into one local `site/content.js` ES mod
 
 Before a build, require exactly six lesson IDs, sixteen globally unique challenge IDs, matching Lxx parents, contentVersion >=1, no duplicate prerequisites/self-dependency/cycles, unique source/symbol IDs, source IDs resolving to the source map, exactly M1/M2 method IDs, and exactly one A/B/C option each with a matching answer key. Reference and alternate queries must parse/type-check within catalog/limits. Every alternate must produce query 70 against its challenge. Query fixtures must refer to existing challenge IDs. No unbound symbol or unknown literal allowed.
 
-Never accept a content file from URL parameters, storage, file upload, paste, or a network API. Invalid bundled content prevents grading and displays `CONTENT_INVALID`; it does not silently fall back to permissive evaluation.
+Never accept a content file from URL parameters, storage, file upload, paste, or a network API. Invalid authored content stops the build rather than falling back to permissive evaluation. If browser modules fail to initialize, the static fallback supplies a fixed manual play link and does not enable assessment; direct file opening is not evidence of invalid lesson content.
 
 ## Composer state
 

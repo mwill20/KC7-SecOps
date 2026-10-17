@@ -2,7 +2,7 @@
 
 Work from `C:\Projects\SecOps KC7` on the personal development machine. Nothing in this document is a workplace learner prerequisite.
 
-Preferred exact runtime is Node 24.21.0, recorded in `.node-version`. Final local verification passed on the official checksum-verified 24.21.0 binary; earlier development used installed Node 25.8.1. System Node was not changed. npm is 11.11.0. CI execution remains unperformed. Runtime browser code has no dependencies. The sole direct development dependency is exact `@playwright/test` 1.64.1, with lockfile.
+Preferred exact runtime is Node 24.21.0, recorded in `.node-version`. Local verification uses the official checksum-verified 24.21.0 binary; earlier development used installed Node 25.8.1. System Node was not changed. npm is 11.11.0. Actual remote CI evidence is recorded in DEPLOYMENT.md and IMPLEMENTATION_STATUS.md. Runtime browser code has no dependencies. The sole direct development dependency is exact `@playwright/test` 1.64.1, with lockfile.
 
 ```powershell
 npm ci --ignore-scripts --no-audit --no-fund

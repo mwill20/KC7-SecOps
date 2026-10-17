@@ -1,6 +1,6 @@
 # Current evaluation — feedback and investigation revision (2026-10-17)
 
-Full builder npm run verify on Node24.21.0 passed 121 unit/30 browser checks, 6 lessons/16 missions/37 sources/73 query fixtures. Artifact: fifteen files; SHA256 f6ef991fd76fd70cf882b60812541014eff044ec295a9bd858fc7737e2e375b6. Current review/publication evidence is recorded in IMPLEMENTATION_STATUS.md and DEPLOYMENT.md; the historical results below do not accept new bytes.
+Full builder npm run verify on Node24.21.0 passed121unit/30browser,6 lessons/16 missions/37 sources/73 query fixtures (artifact f6ef991fd76fd70cf882b60812541014eff044ec295a9bd858fc7737e2e375b6). A subsequent two-paragraph home-copy alignment passed121unit/build/artifact/eight smoke-story cases; final15-file SHA25612e3914595dbe37a06131cf432d2ae2b719aeac9b071d9018a6932166d17a859. Independent approval for both is in the2026-10-17 review and additive HOME_COPY report. Current publication evidence is in IMPLEMENTATION_STATUS.md/DEPLOYMENT.md; historical results below do not accept new bytes.
 
 The real browser path reaches 1600/1600 without workplace execution/output. Explicit/implicit AND both grade; outcome/count_distinct/empty-ID explanations precede questions. Every mission renders a practical analyst concept; wrong queries do not reveal authored clues, correct queries do. File-open source fallback supplies the manual playable URL. Existing hostile-input, stale-state, CSP/static-request and accessibility portions still pass.
 
