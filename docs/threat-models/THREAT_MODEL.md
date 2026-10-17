@@ -1,6 +1,6 @@
 # Threat Model — KC7 SecOps
 
-Version 2026-10-17 / 1.4. Framework: web verification concerns with LINDDUN privacy analysis, retained because the public static browser boundary primarily needs input/release integrity and privacy controls. Status: current local feedback/export revision independently reviewed APPROVE; SECURITY_REVIEW_2026-10-17.md binds the exact artifact and distinct full/focused checks. The 2026-10-16 report remains evidence for prior bytes only. Published build and actual HTTPS/browser evidence are in DEPLOYMENT.md. This is not a human audit or workplace approval.
+Version 2026-10-17 / 1.4. Framework: web verification concerns with LINDDUN privacy analysis, retained because the public static browser boundary primarily needs input/release integrity and privacy controls. Status: current local feedback/export revision independently reviewed APPROVE; SECURITY_REVIEW_2026-10-17.md and its additive HOME_COPY report bind the final artifact and distinct full/focused checks. Final publication/live evidence is in DEPLOYMENT.md. The 2026-10-16 report remains evidence for prior bytes only. Published build and actual HTTPS/browser evidence are in DEPLOYMENT.md. This is not a human audit or workplace approval.
 
 ## Scope, assets and trust boundaries
 

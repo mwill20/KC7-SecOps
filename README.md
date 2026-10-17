@@ -6,7 +6,7 @@ An original course for analysts learning **Google Security Operations SIEM Searc
 
 Read the privacy notice, open the learning path and choose **Start the case**. Optional **Remember non-sensitive progress** lets you resume in the same browser. Leave it off on a shared device. Use workplace tools separately for any real query execution.
 
-The 2026-10-17 teaching/feedback/investigation revision is implemented locally; see [implementation status](docs/IMPLEMENTATION_STATUS.md) for current review and publication evidence. Builder verification passed 121 unit and 30 browser tests. Workplace website/storage/transfer approval and tenant compatibility remain separate, unverified checks.
+The 2026-10-17 teaching/feedback/investigation revision is **live**. [GitHub Pages verification and deployment](https://github.com/mwill20/KC7-SecOps/actions/runs/39064425248) passed 121 unit and 30 browser tests; all fourteen live assets match the reviewed build. See [implementation status](docs/IMPLEMENTATION_STATUS.md) for independent review and browser evidence. Workplace website/storage/transfer approval and tenant compatibility remain separate, unverified checks.
 
 ## Practice without exporting workplace data
 
@@ -52,7 +52,7 @@ No runtime AI, backend, accounts, SIEM integration, event dataset, automatic upl
 
 The validator supports a bounded Search subset, not Google's compiler. Queries are documentation-checked and **tenant-unverified**. Mapping, permissions, telemetry and features need private checks. L06 tumbling windows are preview/pre-GA and may be unavailable. Missing capability limits private workplace practice, not course completion.
 
-Independent review is required for this changed local feedback boundary; see current status for its result. Full manual accessibility checks and tenant validation remain unperformed. Host metadata, compromised releases, same-origin scripts and extensions limit client-side protection. See [limitations](docs/LIMITATIONS.md). Updated lessons require reassessment of older saved content versions; query text is never part of saved progress.
+Independent review approved this local feedback boundary and corrected home copy; see current status for the exact reports and evidence. Full manual accessibility checks and tenant validation remain unperformed. Host metadata, compromised releases, same-origin scripts and extensions limit client-side protection. See [limitations](docs/LIMITATIONS.md). Updated lessons require reassessment of older saved content versions; query text is never part of saved progress.
 
 ## Attribution and license
 

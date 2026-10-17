@@ -17,7 +17,7 @@ PRD and security/privacy contracts constrain every component. Validator and scor
 
 ## Current status
 
-Current 2026-10-17 work is the feedback/teaching/investigation correction; read the newest IMPLEMENTATION_STATUS and HANDOFF before the historical release paragraph below. Feedback is a separate explicit local Save/Delete/JSON export flow, never automatic query capture or upload. No email/transfer destination selected. Mission completion now means query70 + method20; older practice records are preserved until Clear. Learners use https://mwill20.github.io/KC7-SecOps/ rather than opening site/index.html directly.
+Current 2026-10-17 revision is COMPLETE and LIVE. Remote121unit/30browser checks, independent review, fourteen matching live assets and actual Chrome query/method/feedback checks passed. Read current IMPLEMENTATION_STATUS/HANDOFF before historical records below. Feedback is separate explicit local Save/Delete/JSON export, never automatic query capture/upload/email. Transfer route remains undecided. Completion means query70+method20; old v1 is preserved until Clear. Learners use https://mwill20.github.io/KC7-SecOps/ instead of opening site/index.html.
 
 The 2026-10-16 learning revision is LIVE: six chapters/16 missions, explained examples before testing, guided blanks and a training-query text editor approved by the owner. Local/reviewer/remote full verification passes 116 unit/18 browser tests. The focused independent AI review is SECURITY_REVIEW_2026-10-16.md; actual published source/run/HTTPS/browser evidence is in DEPLOYMENT.md. Read the newest status before the historical release record below. Query text is never saved or sent by app code; accidental real-value entry remains possible and prohibited.
 

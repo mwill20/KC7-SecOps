@@ -6,6 +6,8 @@ The real browser path reaches 1600/1600 without workplace execution/output. Expl
 
 Feedback tests exercise synthetic PNG/JPEG/WebP paste/native decode/real IndexedDB/save/reload/local JSON download, invalid-image refusal, blocked/capacity/quota/transaction failure, malformed saved data, confirmed delete, keyboard/Escape/reflow and slow-save locking. New progress-schema and legacy preservation tests pass. Failure injection proves handling, not work-browser capability. No tenant, mail delivery, cross-device transfer, confidentiality detection, metadata stripping, full manual AT or employer-policy validation is claimed.
 
+Remote final release run39064425248 then passed the complete121unit/30browser suite on the corrected12e391... artifact. Actual HTTPS and live Chrome evidence, including a100-point temporary mission without output, is recorded in DEPLOYMENT.md. This is not tenant compilation, workplace approval or automatic feedback transfer.
+
 ## Historical 2026-10-16 evaluation
 
 Builder evidence below covers the current training-editor revision. The separate AI review in SECURITY_REVIEW_2026-10-16.md returned APPROVE with zero supported security findings and independently reproduced the full suite plus additional hostile/count/title/storage probes for the exact artifact. Pages run 38919299268 also passed the complete suite and published the identical artifact; actual HTTPS assets and all sixteen live mission pages were checked. See DEPLOYMENT.md for precise scope. Historical review/deployment remain preserved separately.

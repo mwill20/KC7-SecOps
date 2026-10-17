@@ -1,16 +1,16 @@
 # Product requirements — KC7 SecOps
 
-Version 1.2 • 2026-10-16 • owner: mwill20. See IMPLEMENTATION_STATUS.md for implementation and deployment evidence. The owner changed the repository to public and authorized independent review followed by GitHub Pages publication without adding an open-source license.
+Version 1.3 • 2026-10-17 • owner: mwill20. See IMPLEMENTATION_STATUS.md for implementation and deployment evidence. The owner changed the repository to public and authorized independent review followed by GitHub Pages publication without adding an open-source license.
 
 ## Goal and learner
 
 A working SOC analyst learns to turn hypotheses into Google SecOps SIEM Search queries using YARA-L 2.0, inspect UDM roles and field mappings, pivot cautiously, aggregate events, and state investigation limitations. The app provides symbolic training; practice uses existing authorized workplace SecOps access separately.
 
-Original case: **Midnight at Meridian**. A planetarium's midnight launch display turns into a giant dancing potato. Director Mira asks the learner to follow access, endpoint and network questions. Fictional case cards reward query progress independently of any workplace results. This never asserts that an actual employee is malicious or that a real incident exists.
+Original case: **Midnight at Meridian**. Before a charity premiere, an unapproved VIP donation screen appears. A sponsor update, shared publishing credentials and a blamed intern give the learner competing explanations to test through access, endpoint and network questions. Fictional case clues reward query progress independently of workplace results. Every mission teaches a practical analyst concept. This never asserts that an actual employee is malicious or that a real incident exists.
 
 ## Success case
 
-On an approved workplace browser, open the training site, read the privacy boundary, complete a lesson using a training-query editor with placeholders, receive structural and method feedback, copy a synthetic query, and replace symbols only inside SecOps. Run the search within an authorized time range. Return to the site and attest only that the query ran and results/limitations were reviewed. Resume later using optional non-sensitive local progress.
+On an approved workplace browser, open the training site, read the privacy boundary, learn from the case and explained query, then complete query/method checks using placeholders. Query70 plus method20 earns10 mission completion; no workplace execution/output is required. Optionally copy a synthetic query and replace symbols only inside authorized SecOps. Resume with optional non-sensitive progress. Separately save reviewed course feedback and export it for a permitted private handoff.
 
 ## Should-fail case
 

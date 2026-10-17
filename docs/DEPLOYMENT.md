@@ -1,5 +1,21 @@
 # GitHub Pages deployment
 
+## Current feedback and investigation release — 2026-10-17
+
+**[Play KC7 SecOps](https://mwill20.github.io/KC7-SecOps/#L01)**. No install or account. Use this HTTPS link instead of opening source site/index.html.
+
+- Published source: `174d35be38d0d7a8f0e8b5da76bdcabcdcde52a6`.
+- Successful manual [Pages run 39064425248](https://github.com/mwill20/KC7-SecOps/actions/runs/39064425248): build and deploy passed.
+- Remote full verification: 121 unit, 30 browser tests, six lessons/16 missions/37 sources/73 fixtures; final 15-file SHA256 `12e3914595dbe37a06131cf432d2ae2b719aeac9b071d9018a6932166d17a859`.
+- Independent AI review APPROVE: SECURITY_REVIEW_2026-10-17.md and additive SECURITY_REVIEW_2026-10-17_HOME_COPY.md. The reports distinguish independently executed full/focused evidence from builder/remote runs.
+- Actual HTTPS checker: fourteen byte-identical web assets with expected MIME; five development paths404. Only dist published; no feedback, docs/tests/source checkout or dependencies served.
+- Live Chrome: new home case, first briefing/example, analyst concepts, full count_distinct/outcome/empty-ID explanation, optional AND explanation and feedback modal/context/export controls verified. L01-C02 query/method reached100/100 without workplace data/execution. Remembering stayed off; reload discarded the temporary score and old saved progress remained untouched. No actual feedback or screenshot saved/deleted/transferred; isolated browser tests covered the complete synthetic image/IDB/export flow against the same bytes. First chapter left ready.
+- Run39064173669 was intentionally canceled before deployment to align a leftover home-story sentence; deploy skipped. Corrected final bytes were reviewed and published by the successful run above.
+
+New feedback remains browser-local with explicit JSON export. No automatic mail/upload/sync/Codex retrieval, recipient or service was added. Transfer route is undecided. Original image metadata remains; workplace website/storage/download/mail/transfer permission and tenant/full manual AT checks are unverified. Existing host-header/framing/shared-origin/metadata limitations remain. Later docs-only pushes do not auto-publish.
+
+## Historical release evidence
+
 ## Current learning revision — 2026-10-16
 
 **[Play the revised course](https://mwill20.github.io/KC7-SecOps/#L01)** — original case, six chapters, sixteen query missions, supplied examples and explanations, guided starters, training-query editor and progressive hints. No install or account.
