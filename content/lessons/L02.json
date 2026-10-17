@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "contentVersion": 2,
+  "contentVersion": 3,
   "id": "L02",
   "title": "The badge in two places",
   "level": "foundation",
@@ -13,7 +13,7 @@
     "Construct a parenthesized OR inside an event-type boundary.",
     "Filter failure actions without equating failure with malicious intent."
   ],
-  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 2 — The fictional show account appears in a sign-in story and an account-management story. Mira asks whether it was doing something or having something done to it. Learn the principal/target distinction, then keep Boolean alternatives inside a clear boundary.",
+  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 2 — Jules produces a cue sheet: his job was lighting, not donations. Meanwhile the shared publishing account appears on a support ticket and in an access review. The same account name can describe someone acting or something being acted on. Before blaming the badge holder, follow both roles and keep every alternative inside the login question.",
   "teaching": [
     {
       "heading": "Actor is not a job title",
@@ -30,6 +30,10 @@
     {
       "heading": "The query is a lead",
       "text": "A failure record does not prove an attack. Use context and chronology privately. The course only checks whether the query asks its stated question."
+    },
+    {
+      "heading": "Follow evidence across roles",
+      "text": "A pivot means taking one lead, such as an account, and asking a new scoped question about it. A match tells you where the identifier appears. Read the event category and principal/target roles before deciding what the person did."
     }
   ],
   "challenges": [
@@ -53,55 +57,48 @@
       "methodQuestions": [
         {
           "id": "M1",
-          "prompt": "Why are the identity alternatives grouped?",
+          "prompt": "What do the parentheses around the two identity alternatives preserve?",
           "options": [
             {
               "id": "A",
-              "label": "To make the query look shorter"
+              "label": "Only the principal alternative requires USER_LOGIN."
             },
             {
               "id": "B",
-              "label": "To keep both alternatives inside the USER_LOGIN scope"
+              "label": "The USER_LOGIN requirement applies to either identity match."
             },
             {
               "id": "C",
-              "label": "To automatically join two different events"
+              "label": "The two identity fields must both match."
             }
           ],
           "correctOption": "B",
-          "rationale": "The group expresses alternatives within one event filter. It does not perform a multi-event join."
+          "rationale": "AND (principal OR target) applies the event category to both alternatives."
         },
         {
           "id": "M2",
-          "prompt": "A username appears in target. What can you infer?",
+          "prompt": "What changes if OR between the identity fields becomes AND?",
           "options": [
             {
               "id": "A",
-              "label": "It is necessarily the actor responsible"
+              "label": "Either identity field can still match independently."
             },
             {
               "id": "B",
-              "label": "It is definitely compromised"
+              "label": "The query searches two records and joins them."
             },
             {
               "id": "C",
-              "label": "Its role must be interpreted using the event and parser mapping"
+              "label": "Both identity fields must match the symbol in the same record."
             }
           ],
           "correctOption": "C",
-          "rationale": "Field role and event context matter; names alone do not establish causality."
+          "rationale": "AND narrows the same-record filter. It is not a cross-event join."
         }
       ],
-      "executeSteps": [
-        "Check how both identity roles are populated in an authorized login source.",
-        "Replace the synthetic user only inside SecOps and run with an approved range.",
-        "Compare a few relevant event details privately, checking what principal and target mean.",
-        "If no rows return, check mapping and identity case before assuming absence."
-      ],
-      "debrief": "Describe privately how a missing parenthesis would change scope. The app will demonstrate a synthetic counterexample, never a real event.",
       "mission": {
         "support": "shown",
-        "beat": "The fictional badge card may appear as actor or target. Keep the whole question inside the login category.",
+        "beat": "The same publishing account appears in login records as actor or target. Jules asks, 'Does my name appearing mean I did it?' Search either role, but keep both alternatives inside USER_LOGIN.",
         "example": "metadata.event_type = \"USER_LOGIN\" AND\n(principal.user.userid = \"__USER__\" OR target.user.userid = \"__USER__\")",
         "starter": "metadata.event_type = \"USER_LOGIN\" AND\n(principal.user.userid = \"__USER__\" OR target.user.userid = \"__USER__\")",
         "explanation": [
@@ -123,9 +120,13 @@
           }
         ],
         "remember": "OR opens alternatives. Parentheses keep the doorframe.",
-        "caseUpdate": "Case card unlocked: you can search both identity roles without admitting unrelated categories.",
+        "caseUpdate": "Case clue: an access review mentions the account as the object being checked, not necessarily the operator. Role and event category matter before attribution.",
         "caveat": "",
-        "gaps": []
+        "gaps": [],
+        "analystNote": {
+          "concept": "Actor and target",
+          "text": "In UDM, principal generally describes the acting entity and target the entity acted upon. The same identifier in a different role can tell a different story. Check the source mapping and event context."
+        }
       }
     },
     {
@@ -147,55 +148,48 @@
       "methodQuestions": [
         {
           "id": "M1",
-          "prompt": "Do failed login records prove an attack?",
+          "prompt": "What happens if the account condition is removed from this failed-login query?",
           "options": [
             {
               "id": "A",
-              "label": "No; inspect context and source normalization before forming an incident conclusion"
+              "label": "It can return failed-login records for other accounts."
             },
             {
               "id": "B",
-              "label": "Yes, FAIL always means malicious"
+              "label": "It includes successful logins for that account."
             },
             {
               "id": "C",
-              "label": "Only if the query contains three fields"
+              "label": "It changes the failure action into a text search."
             }
           ],
           "correctOption": "A",
-          "rationale": "A failure action is an observation. Frequency, source, baseline, and surrounding activity determine what it might mean."
+          "rationale": "Removing the account constraint broadens account scope while retaining USER_LOGIN and FAIL."
         },
         {
           "id": "M2",
-          "prompt": "The source records a different failure representation. What next?",
+          "prompt": "What changes if the three conditions are joined with OR instead of AND?",
           "options": [
             {
               "id": "A",
-              "label": "Rename FAIL to an invented enum"
+              "label": "Every record must still satisfy all three conditions."
             },
             {
               "id": "B",
-              "label": "Verify normalization and adapt the private workplace search if appropriate"
+              "label": "A record can match any one condition, broadening the search."
             },
             {
               "id": "C",
-              "label": "Send the raw failure log to the course"
+              "label": "Only the most specific condition is used."
             }
           ],
           "correctOption": "B",
-          "rationale": "Use actual supported fields and values from the source mapping; do not invent enum values."
+          "rationale": "OR accepts alternatives. A FAIL action or an account match could admit records outside the intended combined scope."
         }
       ],
-      "executeSteps": [
-        "Privately confirm that the selected source populates security_result.action and the intended userid role.",
-        "Replace [USER] only in SecOps, run, and inspect action values in event details.",
-        "Keep any interpretation in approved workplace notes.",
-        "An empty result is a legitimate outcome after checking mapping and range."
-      ],
-      "debrief": "Separate the observation 'matched a failure action' from the hypothesis 'an attack is occurring'.",
       "mission": {
         "support": "guided",
-        "beat": "Mira narrows the next fictional question to failures for the actor account. This mission does not ask for a target-role alternative.",
+        "beat": "Mira now wants only failed logins where the publishing account is the principal. The broader two-role query answered an earlier question; narrow it deliberately.",
         "example": "metadata.event_type = \"USER_LOGIN\"",
         "starter": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = ___1___\nprincipal.user.userid = \"__USER__\"",
         "explanation": [
@@ -213,7 +207,7 @@
           }
         ],
         "remember": "A narrow question needs every boundary attached.",
-        "caseUpdate": "Case card unlocked: the fictional account lead is scoped. Next, pivot to the workstation.",
+        "caseUpdate": "Case clue: the support team confirms old credentials were tried during setup. That is a plausible explanation to test, not permission to ignore other access. The next lead is the publishing workstation.",
         "caveat": "",
         "gaps": [
           {
@@ -226,7 +220,11 @@
             ],
             "answer": "\"FAIL\""
           }
-        ]
+        ],
+        "analystNote": {
+          "concept": "Scope prevents false connections",
+          "text": "Keeping the right role, account and event category limits unrelated matches. A broad OR can produce convincing-looking records that never satisfied the account question."
+        }
       }
     }
   ],

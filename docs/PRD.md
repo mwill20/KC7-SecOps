@@ -21,10 +21,10 @@ Paste a synthetic out-of-catalog identity literal into the training editor. The 
 | ID | Requirement | Acceptance pointer |
 |---|---|---|
 | R01 | Learner needs only an approved browser; no install, extensions, terminal, or downloaded executable | T01, T16 |
-| R02 | Six complete ordered lessons, six missions in L01 and two in each later chapter, teaching, examples, three hints, explanation, method questions, and private execution steps | T02, T03 |
+| R02 | Six complete ordered lessons, six missions in L01 and two in each later chapter, teaching, examples, three hints, explanation, method questions and practical analyst concepts | T02, T03 |
 | R03 | Compose alternate symbolic YARA-L Search queries by typing/pasting placeholders; no actual employer values supported by grading | T04, T05 |
 | R04 | Parse an AST, check field types and challenge intent, accept supported equivalent forms, distinguish unsupported syntax | T06–T09 |
-| R05 | Per challenge: query 70 + method 20 + completion 10; completion is self-attested, no fixed SIEM answers | T10 |
+| R05 | Per challenge: query 70 + method 20 + completion 10; completion follows current query/method checks, no fixed SIEM answers | T10 |
 | R06 | Keep all employer identifiers, logs, timestamps, row counts, screenshots, URLs, and investigative notes exclusively in employer systems | T05, T11 |
 | R07 | No runtime AI, backend, SIEM/API integration, server learner storage, account, analytics, tracking, remote content, or datasets | T11, T12 |
 | R08 | Persist optional non-sensitive completion state only; session-only fallback and clear-progress control | T13 |
@@ -41,7 +41,7 @@ Test IDs refer to `docs/TEST_PLAN.md`.
 
 Manual event filtering, types, booleans, UDM principal/target roles, process regex, IP/CIDR pivots, basic aggregations, fixed time buckets, threshold filtering, interpretation, and zero-result troubleshooting. Source-specific field mapping and available telemetry are checked privately by the learner.
 
-Not included: rule creation/deployment, SOAR, response actions, dashboards creation, real indicators or logs, synthetic event datasets, automatic SIEM execution, AI tutoring, shared scores, public leaderboards, certificates, arbitrary real query values, imports/exports, custom learning content, free-text notes, workplace identifier substitution in the app, or organizational reporting.
+Not included: rule creation/deployment, SOAR, response actions, dashboards creation, real indicators or logs, synthetic event datasets, automatic SIEM execution, AI tutoring, shared scores, public leaderboards, certificates, arbitrary real query values, query/progress imports/exports, custom learning content, internal investigation notes, workplace identifier substitution in the app, or organizational reporting.
 
 ## Product decisions
 
@@ -50,7 +50,7 @@ Not included: rule creation/deployment, SOAR, response actions, dashboards creat
 3. Local AST validation for a documented subset. Full Google compilation and arbitrary semantic equivalence are not feasible without a Google engine/integration.
 4. No time pressure, hint penalties, streaks, or compulsory sequential locks. Learners can revisit lessons; the suggested order scaffolds skills.
 5. Maximum 1,600 course points, 100 per challenge. Scores show mastery feedback, not verified incident analysis.
-6. Query examples visibly say **Documentation checked / Tenant execution not independently verified**. A learner's run is labelled self-attested.
+6. Query examples visibly say **Documentation checked / Tenant execution not independently verified**. A learner's optional run is outside app measurement.
 
 ## Repository and hosting
 
@@ -63,3 +63,11 @@ Workplace web access, external training approval, allowed local storage, telemet
 ## Definition of done for the learning revision
 
 A novice can see and understand the first complete query without using hints, run it separately in authorized SecOps, then build through sixteen missions with graded alternatives and meaningful failure cases. Full application validation, focused independent editor-boundary review, reviewed-artifact publication and actual HTTPS/browser checks pass. Tenant compilation, field population and workplace-use approval remain explicitly unverified external checks.
+
+## Owner correction — 2026-10-17
+
+Add a separate accessible feedback dialog on every route with manually pasted reviewed still screenshots, explicit bounded local Save/Delete and JSON export; this is an exception to the former blanket no-notes/images/export scope. No automatic delivery/sync/backend or query capture. Work/home transfer destination remains undecided. Exact controls and residuals are in PRIVACY.md and FEEDBACK.md.
+
+Remove repeated private-practice panels and execution acknowledgments. Award completion 10 only when current query is 70 and method is 20; a 100 score means Mission complete. v2 progress is opt-in, preserves older v1 until explicit Clear, and never stores queries. Workplace practice is optional and unmeasured.
+
+Teach outcome/output naming, implicit AND, empty-string exclusion and count_distinct before testing; first count example fully shown. All 32 method questions use plausible syntax/scope/aggregation choices. Every mission has a short practical analyst concept and a connected authored clue, revealed after correct query grading. The original case now follows an unapproved donation-screen change, shared publishing credentials and competing explanations instead of generic unlocks. No workplace result determines the story. Direct source-file opening points to the published course; no learner install required.

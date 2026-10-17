@@ -15,7 +15,7 @@ The rows below define implementation acceptance coverage and bind PRD requiremen
 | T07 | R04 | Equivalent Boolean distribution/reordering and catalog regex variants accepted | Broad OR, wrong role, extra nocase, omitted category/nonempty filter cannot pass filter block |
 | T08 | R04 | Group keys/aliases, outcomes, bucket, count threshold, sort and limit checked | Wrong count function, swapped metric, missing bucket, changed threshold/limit, extra transforms |
 | T09 | R04 | Unsupported status distinct from invalid | Rule/SQL/dedup/multi-event/unknown regex catalog forms get no query points; size/depth/atom limits fail safely |
-| T10 | R05,R11 | 70/20/10 arithmetic, retries, zero-result self-attestation, saved best from one attempt | Stale acknowledgment after editing, partial completion persistence, max-by-component mixing, double-counted course score |
+| T10 | R05,R11 | 70/20/10 arithmetic, retries, mission completion after query70+method20, saved best from one attempt | Stale grade after editing, partial completion persistence, max-by-component mixing, double-counted course score |
 | T11 | R06,R07 | During full flow, only static allowlisted resource requests; no payload submission; no query in URL/storage/logs | Instrument fetch/XHR/beacon/WebSocket/clipboard read/form submission; attempts cause test failure; CSP enforcement checked |
 | T12 | R07,R12,R14 | Static artifact contains only allowed files; no runtime dependency/AI/remote assets/telemetry | Environment files, docs/QA payloads/maps/node_modules/remote script/Copilot API calls excluded |
 | T13 | R08 | Remembering opt-in, valid projection, exact-key clear, version invalidation, session fallback | Oversized/malformed/unknown-key/future-version/prototype/duplicate-ID state rejected; blocked/quota storage remains usable |
@@ -56,3 +56,23 @@ Development install uses Node 24.21.0 and exact @playwright/test 1.64.1 with a l
 4. **Hosting/workplace gate:** owner approves actual host/access policy and visibility before deployment/work use. No paid service assumed.
 
 Until the tenant pilot completes, label examples documentation-checked/tenant-unverified. Until hosting is approved, deliver static output without publishing. Do not stop local authorized work waiting for either external decision.
+
+## Owner feedback and investigation acceptance — 2026-10-17
+
+| Cases | Requirement / real-path evidence | Must fail or preserve |
+|---|---|---|
+| F01 | Feedback on every route; actual native-decoded synthetic PNG/JPEG/WebP paste, real IndexedDB save/reload and JSON download with fixed page/version context | Hostile text stays literal; no automatic request carrying feedback |
+| F02 | Strict image formats/bytes/header dimensions/native decoder bounds | SVG, forged PNG, oversized declarations and empty entry rejected |
+| F03/F05 | Blocked store/quota/aborted write keeps usable course and exportable draft | No partial transaction or draft loss |
+| F04 | Fifty-entry bound and aggregate limits; explicit delete only | Entry 51 refused without eviction; Clear progress retains feedback |
+| F06 | Loaded records treated as untrusted | Unknown keys/invalid record never reflected or silently deleted |
+| F07 | Native modal keyboard focus/Escape and 320px layout | No unreachable close control or horizontal overflow |
+| F08 | Slow real-IDB-open save locks draft inputs | No newer edits discarded after the awaited save |
+| T13 revision | v2 completion correlation and legacy-key preservation | Remember opt-out cannot delete v1; explicit Clear may remove both known keys |
+| R03 | Full first count example, outcome/empty-string/function-name explanations, explicit and implicit AND both70 | Wrong aggregation/method gets useful explanation; no repeated practice panel |
+| R04 | Every mission renders practical analyst concept and connected authored clue | Wrong query cannot reveal clue; no workplace result input |
+| R05 | Direct file opening shows fixed manually clicked playable HTTPS URL | No misleading CONTENT_INVALID diagnosis or enabled broken assessment |
+
+Unit coverage also rejects oversized declared images before invoking a decoder, missing required analyst notes, unknown feedback keys/page/context and inconsistent completion state. The current full builder run passed 121 unit and 30 browser tests. Exact review/release evidence belongs in IMPLEMENTATION_STATUS.md; no mock/shim result is mislabelled a real browser test.
+
+Feedback tests use synthetic images generated in isolated browser profiles, never employer data. Injected storage failures demonstrate app handling, not actual work-browser compatibility. No email delivery, automatic cross-device sync or organization transfer test is claimed. Tenant compilation, full manual AT and workplace website/storage/download/mail/transfer approval remain unverified.

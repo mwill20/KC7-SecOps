@@ -21,7 +21,7 @@ test('R02 first chapter teaches before testing and progressively grows six real 
     }
     await page.locator('#check-query').click(); await expect(page.locator('#query-result')).toContainText('70 / 70');
     await expect(page.locator('#query-result')).toContainText('Fictional case card unlocked');
-    await expect(page.locator('#executedAcknowledged')).not.toBeChecked();
+    await expect(page.getByRole('heading', { name: /Practice in authorized SecOps/ })).toHaveCount(0);
     expect(await page.locator('#hint-panel').textContent()).not.toContain('Hint 1');
     if (i < chapter.challenges.length - 1) await page.getByRole('link', { name: 'Next mission →', exact: true }).click();
   }
@@ -31,12 +31,12 @@ test('R03/R06 hostile typed text never becomes markup, network payload, URL or s
   await enter(page, '#L01-C01');
   await page.locator('#check-query').click();
   await page.locator('#M1-A').check(); await page.locator('#M2-B').check(); await page.locator('#check-method').click();
-  await page.locator('#executedAcknowledged').check(); await page.locator('#reviewedAcknowledged').check();
+
   const sentinel = '<img src="https://example.org/SYNTHETIC_SENTINEL" onerror="alert(1)">';
   await page.locator('#query-editor').fill(sentinel);
   await expect(page.locator('#query-editor')).toBeFocused();
   await expect(page.locator('#query-result')).toHaveCount(0); await expect(page.locator('#method-result')).toHaveCount(0);
-  await expect(page.locator('#M1-A')).not.toBeChecked(); await expect(page.locator('#executedAcknowledged')).not.toBeChecked(); await expect(page.locator('#executedAcknowledged')).toBeDisabled();
+  await expect(page.locator('#M1-A')).not.toBeChecked();
   await expect(page.locator('#current-score .progress-big')).toHaveText('0');
   await page.locator('#check-query').click();
   await expect(page.locator('#query-result')).toContainText('0 / 70'); await expect(page.locator('#query-result')).not.toContainText('SYNTHETIC_SENTINEL');

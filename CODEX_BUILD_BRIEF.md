@@ -1,41 +1,44 @@
-# Paste-ready Codex build brief
+# Codex build and maintenance brief
 
-Build **KC7 SecOps**, an original KC7-inspired Google SecOps **SIEM Search / YARA-L 2.0** training web app, from the specification package in this working directory. First read the live repository and `START_HERE.md`, `AGENTS.md`, `docs/PRD.md`, all component contracts, six lesson JSON files, `docs/BUILD_PLAN.md`, and `docs/TEST_PLAN.md`. Treat this as a later implementation task; the package has no working application yet.
+KC7 SecOps is already implemented; do not recreate the repository or restart the original build. Work in C:\Projects\SecOps KC7. Read START_HERE.md, AGENTS.md, HANDOFF.md, docs/IMPLEMENTATION_STATUS.md and the contracts relevant to the task. The preserved donor package contains the historical initial brief.
 
-## Repository setup
+## Product
 
-Owner is **mwill20**. Requested repository is **private**, display title **KC7 SecOps**, slug **KC7-SecOps**. Inspect existing repository state/visibility if it exists; preserve existing content. If absent, creation of that exact private repo is authorized by the owner. Verify authenticated account and private visibility. Do not infer repo creation support from an authenticated KC7 browser or connected file tools. Use the authenticated GitHub CLI or the user's GitHub session if available, or report the specific missing creation capability while continuing local work.
+An original investigation-led Google SecOps SIEM Search course using YARA-L 2.0: six chapters, sixteen missions. Teach a complete explained query first, then guided blanks and independent queries; progressive hints always available. Teach practical security reasoning beside syntax. KQL is a bridge, never copied syntax. UDM is the normalized schema; interactive Search and detection rules are different contexts.
 
-This brief authorizes local implementation once the owner sends it as a build request. It does **not** independently authorize commit, push, license selection, paid service activation, public hosting, external messaging, or workplace SIEM automation. Follow any additional explicit owner authorization in that build session. Do not convert the source to public or create a public deployment repository. Private source does not guarantee a private website. Hosting remains pending an approved route; free Pages only works for a public repository. No paid plan is assumed.
+Grade symbolic query structure 70, method 20, mission completion 10 when both pass. No workplace result or execution proof. Use the bounded AST/Boolean/pipeline validator and accept supported equivalent queries. Clearly distinguish invalid, unsupported and wrong intent. Scores are formative personal learning records.
 
-## Non-negotiable behavior
+## Current authorized delivery
 
-- Learner uses only an approved workplace browser; no install, extension, local server, terminal or executable on that device.
-- No runtime AI/Gemini/Copilot/LLM calls, backend, accounts, SIEM/API integration, analytics, tracking, remote runtime dependencies or datasets.
-- Real usernames, IPs, hostnames, domains, timestamps, logs, results, tenant URLs and investigation notes remain exclusively in workplace SecOps/approved tools.
-- Owner-approved training-query textarea with placeholders only; optional preset gap help. No query persistence/transmission, notes, upload, import/export, custom URL or actual-result input. Accidental real entry is possible and must be disclosed.
-- Copy synthetic query only. User manually replaces symbols inside SecOps. Never read clipboard or connect to another tab.
-- Score each challenge 70 query +20 method +10 self-attested completion. Query grading is an AST/schema/Boolean/pipeline check, not string matching/keywords/AI. Real execution is not independently observable. Zero-result practice can complete after reviewing limitations; unavailable capability leaves practice pending.
-- Optional storage is the strict non-sensitive projection only; default session-only, exact-key clear, graceful fallback. No query/AST/method-answer/result storage.
+Owner corrections (2026-10-17):
 
-## Stack and scope
+1. Feedback dialog on every page; manually pasted reviewed PNG/JPEG/WebP, explicit local Save/Delete/JSON export.
+2. Remove repeated Practice in authorized SecOps panel and execution acknowledgments. New v2 completion schema; preserve legacy v1 until Clear.
+3. Explain outcome, chosen $ output names, assignment, implicit AND, empty-string exclusion and full count_distinct name before testing.
+4. Replace all 32 implausible method questions with useful alternatives and specific explanatory feedback.
+5. Strengthen connected case evidence and practical analyst fundamentals on all sixteen missions.
+6. Direct source-file opening must point to the playable HTTPS course, not give a misleading CONTENT_INVALID diagnosis.
 
-Native HTML/CSS/JavaScript ES modules, no runtime dependency or bundler. Development Node **24.21.0** and exact `@playwright/test` **1.64.1** with lockfile; check advisories and document any verified exact patch update. Build tool validates JSON, generates a local content module, and copies only an allowlisted runtime artifact into `dist/`. Learners never install these tools.
+## Privacy and authority
 
-Initial content is complete: L01 safe search, L02 roles/Boolean logic, L03 host/process regex, L04 network/CIDR, L05 aggregates, L06 time-bucket capstone. Twelve challenges with method questions and progressive hints. Use the authored content files rather than inventing replacements or relying on KC7 copyrighted question banks.
+No runtime AI, SIEM integration, accounts, server learner database, analytics, actual logs or remote runtime dependencies. Queries are placeholders-only transient DOM/memory; never persist/transmit/export them. Real identifiers, results and investigation notes stay in workplace tools.
 
-## Implement in order
+Explicit feedback is a distinct approved local-retention exception. Never capture query/editor/DOM, screenshots of other tabs or clipboard history. Use user paste events only. Validate bounds/strict keys/format/dimensions and render literally. Preserve original image metadata disclosure; no DLP/redaction/encryption claim. Save failure retains an exportable draft. Feedback is separate from progress.
 
-1. **Issue 01 / M0:** private repo identity/setup; import specs; implementation status record.
-2. **Issue 02 / M1:** one real L01 path: training editor → parser → evaluator → method → score → local projection. Prove success and wrong-role/unsafe-input failure in the real browser path before expanding.
-3. **Issue 03 / M2:** complete bounded AST grammar, alias resolution, finite regex equivalence, Boolean scope, CIDR, grouping/outcomes/condition/order/limit. Pass every fixture and alternate; unsupported is distinct from invalid.
-4. **Issue 04 / M3:** all six chapters/sixteen missions, sources/hints/progress/retries and private execution instructions. No runtime AI.
-5. **Issue 05 / M4:** implement and run `npm run verify`: content/schema/semantic checks, unit/contract tests, safe artifact build, browser network/storage/CSP checks, Chrome/Edge root/subpath tests. Complete manual keyboard/screen-reader/reflow/contrast checks.
-6. **Issue 06 / M5:** request an independent review of actual consequential privacy/security boundaries through the authorized review workflow; resolve supported in-scope findings, zero findings permitted. Do not silently spawn chats/agents.
-7. **Issue 07 / M6:** user-run private tenant pilot and owner-approved host/audience decision. Deliver static output while external decisions are pending; no deployment bypass.
+No automatic feedback destination is selected. Work/home browsers differ; owner considers permitted email, private repository files or company sharing. Do not add a mail service, token, OAuth, webhook, recipient/address storage, new repository, issue posting or automatic upload without a scoped owner decision. Static GitHub Pages does not itself send mail.
+
+Source commit/push and publication to existing public mwill20/KC7-SecOps Pages are authorized after the focused independent review. Do not change visibility, select a license, spend money, switch hosts or send external messages. Keep synced sources/global instructions/historical reports unchanged.
+
+## Ordered completion
+
+1. Maintain content/schema/scoring/privacy contracts with owner corrections. Use authored lesson JSON as the only teaching source.
+2. Run npm run verify with exact Node 24.21.0 and locked Playwright 1.64.1. Tests use isolated browser profiles and synthetic inputs, never employer SecOps.
+3. Obtain focused independent review of changed feedback/input/storage/export/release boundaries; resolve supported findings. Builder validation is not independent acceptance.
+4. Commit/push reviewed source, dispatch the manual Pages workflow, verify remote checks and exact artifact digest.
+5. Run tools/check-live.mjs and actual HTTPS browser checks. Update status/deployment/handoff with revision/run/digest/evidence.
 
 ## Definition of done
 
-All sixteen authored challenges function; supported equivalent queries are accepted; broad OR, wrong fields/types/count/window/threshold/order/limit and unsafe literals fail as specified; all T01–T16 checks pass with honest evidence. Scores use exact 70/20/10 rules, stale attestations clear after edits, hints do not penalize, local storage contains only the allowed projection, and network traffic is static assets only during learning. Accessibility manual evidence and focused independent security result are recorded before release. Source labels distinguish documentation checks, app tests, tenant self-attestation, and independent review.
+All sixteen missions reach 100 without workplace execution; supported equivalents pass and wrong scope/types/counts fail. Every page has feedback; real browser synthetic image paste/save/reload/export and storage/format/capacity/slow-save failures pass. No query leaks to storage/network/downloads. Legacy records are preserved as specified. No automatic feedback upload. Relevant keyboard/reflow/CSP/static-artifact checks and focused review pass, then publication and live checks prove the delivered bytes.
 
-Provide `dist/`, validation results, material limitations, and a short updated `docs/IMPLEMENTATION_STATUS.md` bound to the actual revision/build. If tenant/hosting approvals are absent, state those precise remaining dependencies without claiming the workplace-access goal is complete. Do not invent logs, benchmarks, results, certifications or production-readiness claims. Do not expand into SOAR, rule deployment, AI tutoring, accounts or public leaderboards.
+Tenant compilation, field population, work browser/email/download permissions, full manual assistive-tech testing and workplace-use/storage/transfer approval remain external unknowns. Do not claim those fulfilled by passing local tests. Provide the playable website link and concise itemized changes; do not require learner installs.

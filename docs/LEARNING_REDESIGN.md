@@ -1,5 +1,7 @@
 # Investigation-led learning revision — 2026-10-16
 
+Current owner corrections (2026-10-17) supersede the historical plan below: connected donation-screen/shared-account case rather than a dancing-potato incident; practical analyst concept on every mission; full count_distinct example before questions; implicit-AND/outcome/empty-ID teaching; all32 useful method questions; no repeated practice panel or execution attestation. Query70+method20 earns10 mission completion. Separate local feedback Save/Delete/JSON export accepts reviewed screenshots without query capture or automatic transfer. Source-file fallback links to the online course. Current evidence is in IMPLEMENTATION_STATUS.md; prior publication paragraph below is historical.
+
 Completed and published: source 07e311bda6dd7afd1610a43697af745a59aedf2a, Pages run 38919299268. Local, separate reviewer and hosted full verification pass 116 unit/18 browser tests; focused review APPROVE; exact-byte HTTPS and all sixteen live mission-page checks pass. See IMPLEMENTATION_STATUS.md and DEPLOYMENT.md for actual evidence and remaining external limits. No new application stack or host was introduced.
 
 Owner correction: teach beginners through an engaging original investigation. Show a complete query and explain its parts before asking for a variation. Gradually remove supplied syntax, retain progressive hints, and grade the query rather than any workplace output. Passing application tests alone did not establish a usable beginner lesson.

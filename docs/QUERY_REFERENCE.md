@@ -2,6 +2,12 @@
 
 Checked 2026-10-14; distinct-user/title additions checked 2026-10-16. Examples are documentation-checked, not tenant-compiled. Each lesson carries source IDs from the research matrix.
 
+## Fundamentals clarified — 2026-10-17
+
+Adjacent filter predicates imply AND. Writing AND explicitly is optional in this context; a line break is formatting. The first success mission shows both forms. See [Search syntax](https://docs.cloud.google.com/chronicle/docs/investigation/search-syntax-reference).
+
+In `outcome:`, `$users = count_distinct(principal.user.userid)` names a calculated output `$users`. The chosen label does not decide what is counted; the field in parentheses does. The distinct operation is in the full function name `count_distinct`, not a separate KQL operator. Add `principal.user.userid != ""` to exclude empty strings before this account count. A repeated ID counts once; accounts do not necessarily equal humans. The first count mission now supplies the entire expression before assessment. See [Search aggregations](https://docs.cloud.google.com/chronicle/docs/investigation/statistics-aggregations-in-udm-search).
+
 ## Three different concepts
 
 **UDM** is the normalized event schema: much like a SIEM's normalized fields after ingestion. **Search** is the interactive UI and query execution context. **YARA-L 2.0** is a language used in Search and detection authoring, with context-dependent structures and capabilities. A known UDM field may be absent from a particular source's events. [UDM reference](https://docs.cloud.google.com/chronicle/docs/reference/udm-field-list).

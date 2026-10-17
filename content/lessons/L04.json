@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "contentVersion": 2,
+  "contentVersion": 3,
   "id": "L04",
   "title": "The trail leaves the dome",
   "level": "developing",
@@ -13,7 +13,7 @@
     "Use CIDR and numeric port filters with correct data types.",
     "Recognize repeated-field and direction limitations."
   ],
-  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 4 — A new fictional case card points toward network activity around the display host. Mira asks where the lead appears and then whether a destination belongs to a subnet. Learn direction and numeric field types before drawing conclusions.",
+  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 4 — Mira finds a sponsor support card beside the console: a remote service address, a subnet and port 443. The ticket says 'content delivery'; the operator remembers an unscheduled upload. Trace the address at either end first, then narrow to the destination range. A familiar port should not get a free pass.",
   "teaching": [
     {
       "heading": "An address is a search lead",
@@ -30,6 +30,10 @@
     {
       "heading": "A subnet is a range",
       "text": "net.ip_in_range_cidr tests whether an address is within the stated subnet. IP fields can have multiple values; the supplied positive tests avoid making unsupported claims about negation."
+    },
+    {
+      "heading": "Direction changes the question",
+      "text": "An address may be an origin, destination, proxy or shared service. A port number is a clue about a connection, not proof of its application or safety. Keep identity and timing context when deciding which lead deserves attention."
     }
   ],
   "challenges": [
@@ -53,55 +57,48 @@
       "methodQuestions": [
         {
           "id": "M1",
-          "prompt": "Is the grouped ip alias an equivalent replacement here?",
+          "prompt": "Why is grouped ip not guaranteed to match this task's scope?",
           "options": [
             {
               "id": "A",
-              "label": "Yes, it always searches exactly those two fields"
+              "label": "It only searches target.ip."
             },
             {
               "id": "B",
-              "label": "No; it can include additional UDM roles and broaden the task"
+              "label": "It can search additional UDM roles beyond principal.ip and target.ip."
             },
             {
               "id": "C",
-              "label": "It is a numeric port field"
+              "label": "It groups events by address before filtering."
             }
           ],
           "correctOption": "B",
-          "rationale": "Grouped aliases cover a wider set of fields. Preserve the explicitly requested direction scope."
+          "rationale": "Grouped aliases broaden the set of searched fields; they are different from explicitly naming two roles."
         },
         {
           "id": "M2",
-          "prompt": "Why must an IP match be interpreted cautiously?",
+          "prompt": "What does the OR between principal.ip and target.ip request?",
           "options": [
             {
               "id": "A",
-              "label": "An address alone proves the responsible person"
+              "label": "Both fields must contain the address."
             },
             {
               "id": "B",
-              "label": "Addresses never appear in arrays"
+              "label": "Only target.ip is tested after the first field matches."
             },
             {
               "id": "C",
-              "label": "Shared infrastructure, NAT/proxies, timing, and roles can affect attribution"
+              "label": "Either directional field may contain the requested address."
             }
           ],
           "correctOption": "C",
-          "rationale": "A match is a lead. It needs additional contextual evidence inside the workplace investigation."
+          "rationale": "The parentheses contain two alternative predicates; AND outside keeps the event-type condition for both."
         }
       ],
-      "executeSteps": [
-        "Select an authorized IP from workplace evidence or an approved practice scope.",
-        "Replace 192.0.2.17 only inside SecOps; do not try to map it in the site.",
-        "Run and inspect principal/target direction and repeated values privately.",
-        "No rows may be a valid result; check range and network telemetry availability."
-      ],
-      "debrief": "Plan a next pivot privately without exporting an IP, domain, or row count.",
       "mission": {
         "support": "shown",
-        "beat": "Mira's fictional network card has an address lead. Ask whether it appears at either end of a network record.",
+        "beat": "The support card supplies an address lead. It could appear as the origin or destination of network activity. Search either end while staying within network-connection records.",
         "example": "metadata.event_type = \"NETWORK_CONNECTION\" AND\n(principal.ip = \"192.0.2.17\" OR target.ip = \"192.0.2.17\")",
         "starter": "metadata.event_type = \"NETWORK_CONNECTION\" AND\n(principal.ip = \"192.0.2.17\" OR target.ip = \"192.0.2.17\")",
         "explanation": [
@@ -123,9 +120,13 @@
           }
         ],
         "remember": "Two ends, one clear question.",
-        "caseUpdate": "Case card unlocked: the address pivot is scoped. The next card asks about a destination subnet.",
+        "caseUpdate": "Case clue: the card names a service used by more than one customer. An IP match alone cannot identify the operator or prove the VIP slide arrived through it.",
         "caveat": "NAT, proxies, shared systems and timing limit attribution. An IP match is not proof of an attacker.",
-        "gaps": []
+        "gaps": [],
+        "analystNote": {
+          "concept": "An address is not a person",
+          "text": "NAT, proxies and shared services can put many users behind one address. Pair the address with direction, host, time and account context before attribution."
+        }
       }
     },
     {
@@ -147,55 +148,48 @@
       "methodQuestions": [
         {
           "id": "M1",
-          "prompt": "What is the type of 443 in this filter?",
+          "prompt": "Which form uses the documented numeric port type?",
           "options": [
             {
               "id": "A",
-              "label": "An unquoted numeric value"
+              "label": "target.port = 443"
             },
             {
               "id": "B",
-              "label": "A quoted username string"
+              "label": "target.port = \"443\""
             },
             {
               "id": "C",
-              "label": "A regex delimiter"
+              "label": "target.port = /443/"
             }
           ],
           "correctOption": "A",
-          "rationale": "Port comparisons use the field's numeric type."
+          "rationale": "443 is numeric here. Quotes create a string and slashes introduce a regex; neither is the numeric comparison requested."
         },
         {
           "id": "M2",
-          "prompt": "Do matches prove safe HTTPS traffic?",
+          "prompt": "What changes if the CIDR function uses principal.ip rather than target.ip?",
           "options": [
             {
               "id": "A",
-              "label": "Yes, port 443 always means HTTPS"
+              "label": "It searches both roles automatically."
             },
             {
               "id": "B",
-              "label": "No; port, destination, action, application and event context need review"
+              "label": "The subnet test applies to a different directional role."
             },
             {
               "id": "C",
-              "label": "Yes, because the subnet uses CIDR"
+              "label": "It changes CIDR membership into an exact address comparison."
             }
           ],
           "correctOption": "B",
-          "rationale": "A port and subnet describe a selection criterion, not safety, protocol verification, or attribution."
+          "rationale": "The function's first argument chooses the field tested for subnet membership."
         }
       ],
-      "executeSteps": [
-        "Choose an authorized destination subnet only in SecOps; inspect network field mapping.",
-        "Replace the documentation CIDR there and run within a bounded approved range.",
-        "Inspect direction, action, and product context privately.",
-        "Do not scan, connect to, block, or query reputation for the subnet as part of the course."
-      ],
-      "debrief": "Explain why a CIDR predicate is more precise than a textual IP-prefix match for subnet membership.",
       "mission": {
         "support": "guided",
-        "beat": "The next fictional card gives a destination subnet and a port. Reuse the network category and keep the direction specific.",
+        "beat": "Rafi says, 'It used 443, so it was secure.' Mira asks a better question: did the destination belong to the supplied subnet on that port? Build exactly that filter.",
         "example": "metadata.event_type = \"NETWORK_CONNECTION\" AND\n(principal.ip = \"192.0.2.17\" OR target.ip = \"192.0.2.17\")",
         "starter": "metadata.event_type = \"NETWORK_CONNECTION\"\nnet.ip_in_range_cidr(target.ip, \"192.0.2.0/24\")\ntarget.port = ___1___",
         "explanation": [
@@ -213,7 +207,7 @@
           }
         ],
         "remember": "A port number is a number, not a promise of HTTPS.",
-        "caseUpdate": "Case card unlocked: the destination question is precise. Next, summarize useful leads.",
+        "caseUpdate": "Case clue: the sponsor's service uses a familiar web port. That describes transport context, not whether the content was approved or harmless.",
         "caveat": "Replace addresses and ranges only inside workplace SecOps.",
         "gaps": [
           {
@@ -226,7 +220,11 @@
             ],
             "answer": "443"
           }
-        ]
+        ],
+        "analystNote": {
+          "concept": "A port is a clue",
+          "text": "Port 443 is commonly associated with HTTPS, but the number alone proves neither encryption nor legitimacy. Destination, protocol and business purpose still need investigation."
+        }
       }
     }
   ],

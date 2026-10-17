@@ -1,5 +1,7 @@
 # Research evidence and source matrix
 
+Current supplement: [2026-10-17 feedback/browser/email and investigation-fundamentals evidence](FEEDBACK_AND_INVESTIGATION_2026-10-17.md). The original 37 bundled sources remain unchanged; additional implementation/fundamentals references are documented in the supplement. Earlier research records below are dated evidence, not claims about current runtime scope.
+
 Research date: **2026-10-14**. Sources were opened/read through web or GitHub tools. Evidence is paraphrased; no authenticated KC7 session, question bank, credentials, copied scenarios, full articles, or datasets are included. The referenced ChatGPT conversation supplied intent only; its earlier file claims were not treated as verified artifacts.
 
 ## KC7 findings and design translation

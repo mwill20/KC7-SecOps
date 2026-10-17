@@ -91,6 +91,18 @@
   .mission-trail a { min-width:44px; min-height:44px; padding:.6rem; text-align:center; border:1px solid var(--line); border-radius:50%; }
   .mission-trail a[aria-current] { background:var(--mint); color:#12241d; }
   .mission-next { margin-top:2rem; }
+  #feedback-root { position:fixed; bottom:1rem; right:1rem; z-index:10; }
+  #feedback-open { border-color:var(--mint); box-shadow:0 2px 12px #0008; }
+  .feedback-dialog { width:min(800px,calc(100vw - 2rem)); max-height:90dvh; overflow:auto; color:var(--text); background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:1.5rem; }
+  .feedback-dialog::backdrop { background:#000b; }
+  .feedback-dialog label { display:block; margin-top:1rem; }
+  .feedback-dialog .row h2 { margin:0; }
+  .feedback-images { display:flex; flex-wrap:wrap; gap:1rem; }
+  .feedback-images figure { margin:0 0 1rem; max-width:100%; }
+  .feedback-dialog img { display:block; width:auto; max-width:100%; max-height:260px; height:auto; object-fit:contain; border:1px solid var(--line); margin-bottom:.75rem; }
+  .feedback-entry { border-top:1px solid var(--line); margin-top:1rem; padding-top:1rem; overflow-wrap:anywhere; }
+  .feedback-note { white-space:pre-wrap; }
+  #feedback-status { margin:1rem 0; color:var(--mint); }
   .composer-controls { margin:1.25rem 0; }
   label.control { display:flex; flex-direction:column; gap:.35rem; font-size:.8rem; color:var(--muted); }
   label.choice { display:flex; align-items:start; gap:.65rem; padding:.6rem; border:1px solid transparent; border-radius:5px; cursor:pointer; }

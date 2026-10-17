@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "contentVersion": 2,
+  "contentVersion": 3,
   "id": "L03",
   "title": "Backstage on the workstation",
   "level": "developing",
@@ -13,7 +13,7 @@
     "Use a bounded suffix regex with nocase.",
     "Distinguish process presence from execution intent and maliciousness."
   ],
-  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 3 — The fictional case card names a production workstation that can change the launch display. It also mentions a shell process. Learn to narrow process records to a host, then recognize two executable names without opening the scope to everything else.",
+  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 3 — The show technician points to the publishing workstation. Rafi says a PowerShell window was 'just the sponsor update.' Jules says the console runs scripts every night. Both explanations are possible. Find the host's process records before turning a familiar tool into a verdict, then cover both PowerShell executable names without searching every workstation.",
   "teaching": [
     {
       "heading": "A host is another pivot",
@@ -30,6 +30,10 @@
     {
       "heading": "Two names can share one boundary",
       "text": "Parentheses and a vertical bar inside the supplied regex mean either shell name. Keep the event category and host filter outside that alternative. This is different from a KQL pipeline."
+    },
+    {
+      "heading": "Useful tools can serve either side",
+      "text": "PowerShell is an administration tool and can also be abused. Its name is a lead, not proof of malware. A useful next check is the command line, parent process, account and expected maintenance context, reviewed only inside approved investigation tools."
     }
   ],
   "challenges": [
@@ -52,55 +56,48 @@
       "methodQuestions": [
         {
           "id": "M1",
-          "prompt": "What does this process pattern establish?",
+          "prompt": "What does the final $ in the supplied regex require?",
           "options": [
             {
               "id": "A",
-              "label": "That every PowerShell launch is malicious"
+              "label": "The filename may occur anywhere in the path."
             },
             {
               "id": "B",
-              "label": "That the binary has a trusted signer"
+              "label": "The filename must be the first directory in the path."
             },
             {
               "id": "C",
-              "label": "That the normalized path matches the specified suffix"
+              "label": "The matched filename must be at the end of the path."
             }
           ],
           "correctOption": "C",
-          "rationale": "The pattern checks path text. It is not a hash, signer, execution intent, or compromise test."
+          "rationale": "The $ anchor closes the suffix match. Without it, additional trailing text could still match."
         },
         {
           "id": "M2",
-          "prompt": "Which proposed pattern feature needs rejection for RE2?",
+          "prompt": "What does nocase change in this process-path filter?",
           "options": [
             {
               "id": "A",
-              "label": "A literal escaped period"
+              "label": "The final $ anchor is ignored."
             },
             {
               "id": "B",
-              "label": "A lookbehind assertion"
+              "label": "Letter case no longer affects whether the supplied pattern matches."
             },
             {
               "id": "C",
-              "label": "An end anchor"
+              "label": "The regex becomes an exact string comparison."
             }
           ],
           "correctOption": "B",
-          "rationale": "Google documents RE2 without lookahead/lookbehind. Use supported pattern forms."
+          "rationale": "nocase affects letter case. The pattern and its anchors still apply."
         }
       ],
-      "executeSteps": [
-        "Choose an approved host in SecOps and inspect the process event's field mapping.",
-        "Replace __HOST__ only there, run the query, and inspect available process details.",
-        "Do not launch any process to manufacture results.",
-        "If Linux paths or another mapping are used, note that this Windows-suffix exercise may be unavailable; complete symbolic mastery independently."
-      ],
-      "debrief": "Privately list contextual evidence you would need before escalating a shell launch. Never put command lines or process paths from work into the site.",
       "mission": {
         "support": "shown",
-        "beat": "The fictional workstation lead names a familiar shell. Start with the complete supplied pattern, then read each piece.",
+        "beat": "The publishing workstation can push content to the dome. Its operator recalls a PowerShell window during setup. Use the supplied host and executable-path pattern to locate that process category.",
         "example": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\powershell\\.exe$/ nocase",
         "starter": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\powershell\\.exe$/ nocase",
         "explanation": [
@@ -126,9 +123,13 @@
           }
         ],
         "remember": "A path pattern finds text. It does not prove intent.",
-        "caseUpdate": "Case card unlocked: you can express a host-scoped process question. A second shell name is the next variation.",
+        "caseUpdate": "Case clue: the technician says scripts normally load show assets. A shell name alone cannot distinguish maintenance from misuse. Compare its context before making a claim.",
         "caveat": "Use existing authorized telemetry. Never execute a command just to create a training match.",
-        "gaps": []
+        "gaps": [],
+        "analystNote": {
+          "concept": "Dual-use tools",
+          "text": "PowerShell supports legitimate administration and can be abused. The host and process record are a starting point. Command line, parent process, account and change approval help explain why it ran."
+        }
       }
     },
     {
@@ -150,55 +151,48 @@
       "methodQuestions": [
         {
           "id": "M1",
-          "prompt": "Why is an unanchored /powershell/ pattern not equivalent?",
+          "prompt": "How does /powershell/ differ from the supplied anchored suffix pattern?",
           "options": [
             {
               "id": "A",
-              "label": "It can match unrelated path substrings rather than the exact suffix"
+              "label": "It can match that text within a longer path or filename."
             },
             {
               "id": "B",
-              "label": "It automatically matches fewer fields"
+              "label": "It requires the same Windows separator and .exe suffix."
             },
             {
               "id": "C",
-              "label": "It creates a detection rule"
+              "label": "It matches only the beginning of the path."
             }
           ],
           "correctOption": "A",
-          "rationale": "Anchors and escaping define intent. Looser matches may be useful elsewhere but do not meet this task."
+          "rationale": "The shorter unanchored regex does not enforce the supplied separator, literal dot, filename suffix or end boundary."
         },
         {
           "id": "M2",
-          "prompt": "No process rows appear. What should you do?",
+          "prompt": "Which change keeps both shell alternatives restricted to the requested host?",
           "options": [
             {
               "id": "A",
-              "label": "Conclude the host never launches shells"
+              "label": "Apply the host filter only to powershell, then OR pwsh outside the group."
             },
             {
               "id": "B",
-              "label": "Check available endpoint telemetry, source mapping, range, and platform applicability"
+              "label": "Keep the host filter AND the grouped shell alternatives."
             },
             {
               "id": "C",
-              "label": "Install an agent on the work device"
+              "label": "Replace the host filter with OR before the shell group."
             }
           ],
           "correctOption": "B",
-          "rationale": "The course requires no installation and cannot establish telemetry coverage. Missing data remains a limitation."
+          "rationale": "Keep common category/host requirements outside and ANDed with the parenthesized alternatives."
         }
       ],
-      "executeSteps": [
-        "Reuse the authorized host privately and run the two-name query.",
-        "Check event details to distinguish path pattern matches from actual activity context.",
-        "Compare privately against the single-name filter if telemetry exists.",
-        "If unavailable, keep practice pending and continue the symbolic course; do not generate endpoint data."
-      ],
-      "debrief": "Explain why this expansion is intentional and bounded, whereas dropping the host filter is a different question.",
       "mission": {
         "support": "guided",
-        "beat": "The fictional case mentions either shell spelling. Expand only the filename alternative; keep the host and process category.",
+        "beat": "The sponsor guide mentions pwsh.exe as well as powershell.exe. Expand the filename alternative while keeping the host boundary. Do not widen the hunt to every process ending in exe.",
         "example": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = /\\\\powershell\\.exe$/ nocase",
         "starter": "metadata.event_type = \"PROCESS_LAUNCH\"\nprincipal.hostname = \"__HOST__\"\ntarget.process.file.full_path = ___1___",
         "explanation": [
@@ -216,7 +210,7 @@
           }
         ],
         "remember": "Change the name choice, not the investigation boundary.",
-        "caseUpdate": "Case card unlocked: both supplied shell forms are covered. Next, investigate a network pivot.",
+        "caseUpdate": "Case clue: the update guide uses both PowerShell names. You have covered the stated variants without declaring either malicious. Next, check the network lead from the support card.",
         "caveat": "The course recognizes only its supplied RE2 patterns and does not execute regex against events.",
         "gaps": [
           {
@@ -229,7 +223,11 @@
             ],
             "answer": "/\\\\(powershell|pwsh)\\.exe$/ nocase"
           }
-        ]
+        ],
+        "analystNote": {
+          "concept": "Search coverage versus specificity",
+          "text": "A narrow pattern can miss a known variant; a loose one can admit unrelated names. Change only the part your evidence justifies and keep the surrounding constraints."
+        }
       }
     }
   ],

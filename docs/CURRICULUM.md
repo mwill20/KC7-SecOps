@@ -13,7 +13,7 @@ The case is **Midnight at Meridian**, an original fictional planetarium investig
 | L05 — Aggregate summaries | 45 min | Group keys, distinct record IDs, byte-field limitations | match, outcome, count_distinct, sum, order, limit | Two exact pipeline contracts with alias alternatives |
 | L06 — Time and capstone | 50 min | Fixed buckets, count threshold, private timeline pivot, evidence limits | by 5m, outcome condition | Threshold/bucket mutation tests and private chronology review |
 
-The six lesson JSON files are complete authoring sources: chapter field guides, six L01 missions and two in each later chapter, reference and alternate queries, three progressive hints, two scored method questions per challenge, private execution steps, debrief, and documentation status. No lesson requires real datasets or fixed SIEM answers on the site.
+The six lesson JSON files are complete authoring sources: chapter field guides, six L01 missions and two in each later chapter, reference and alternate queries, three progressive hints, two scored method questions per challenge, practical analyst concepts, authored case clues, and documentation status. No lesson requires real datasets or fixed SIEM answers on the site.
 
 ## Learning loop
 
@@ -22,20 +22,20 @@ The six lesson JSON files are complete authoring sources: chapter field guides, 
 3. **Check:** deterministic feedback identifies syntax, scope and pipeline problems separately.
 4. **Reason:** two multiple-choice investigation decisions, with explanations after grading.
 5. **Practice privately:** copy safe synthetic text and adapt inside workplace SecOps.
-6. **Reflect:** consider an original debrief in approved workplace notes; submit only fixed acknowledgment flags.
+6. **Reflect:** consider an original debrief in approved workplace notes; keep actual observations in workplace tools; no acknowledgment is scored.
 7. **Revisit:** retry without penalty; saved mastery is separate from current attempt.
 
 ## Assessment evidence
 
 - Observable locally: constructed query syntax in the supported subset, Boolean scope equivalence, group/outcome/threshold/order/limit structure, selected method answers.
-- Self-attested: actual SecOps compilation/execution and review, including an empty result with troubleshooting.
+- Separate private practice: actual SecOps compilation/execution and review is not measured by this site.
 - Unobservable: selected real values, real search results, private reasoning quality, actual incident detection, complete coverage, or query performance in the tenant.
 
 Hints are staged: conceptual nudge, syntax scaffold, worked answer. No points deducted. The UI records highest hint level as a non-sensitive flag and says hints support learning. Worked answers can produce full points; therefore mastery scores are formative, not proof of unassisted skill. Progress badges are personal and not shareable credentials.
 
 ## Prerequisites and unavailable data
 
-Prerequisite links recommend order without locking later lessons. If authorized telemetry/capability is missing, learners can achieve symbolic mastery (90/100) and leave workplace practice pending. Practice completion requires a query that actually ran, not merely opening SecOps. Zero results can count after reviewing the range/mapping/coverage limitation. Do not fabricate matching activity, generate suspicious events, or bypass access restrictions.
+Prerequisite links recommend order without locking later lessons. If authorized telemetry/capability is missing, learners can still complete the course (100/100) by passing current query and method checks. Private workplace practice is unmeasured. Review empty results against range/mapping/coverage rather than inventing data. Do not fabricate matching activity, generate suspicious events, or bypass access restrictions.
 
 ## Later course progression — not part of initial build
 
@@ -46,3 +46,9 @@ Prerequisite links recommend order without locking later lessons. If authorized 
 5. Detection rule literacy as a separately scoped course; deployment still needs employer authority.
 
 These are backlog, not additional initial lessons. Do not add SOAR or operational automation.
+
+## Investigation and fundamentals correction — 2026-10-17
+
+The original story now follows an unapproved donation-screen change before a charity premiere: a blamed intern, sponsor demo package and shared publishing account. Each query follows a concrete investigative question; earned authored clues develop competing explanations. A practical analyst concept is visible on every mission: event versus incident, authentication versus business authorization, account versus human, titles versus privileges, failure baselines, pivots, UDM roles, scope, dual-use tools, pattern precision, address attribution, ports, triage, bytes, burst corroboration and evidence-based handoff.
+
+These are teaching concepts, not new SIEM capabilities. No story fact is generated from workplace results. First count_distinct is fully shown; outcome/alias/empty-string/implicit-AND explanations precede assessment. All 32 method questions were revised to test plausible constructions and reasoning. Story originality is retained; no KC7 question bank or case is copied.

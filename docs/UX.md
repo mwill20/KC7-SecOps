@@ -1,94 +1,46 @@
-# Current flow — 2026-10-16
+# Accessible course flow — 2026-10-17
 
-This revision supersedes the earlier token-only wireframe below. Keep the existing responsive shell. Home introduces Midnight at Meridian; a chapter briefing immediately shows its first complete query and explanation. Mission pages show story beat → investigative question → supplied example or previous building block → concise syntax breakdown → training-query editor → query feedback and fictional earned case card → optional method and private practice → next mission. A numbered chapter trail and visible hint panel support movement. Guidance fades from full examples to marked blanks to an empty editor; new concepts still get examples. There is no SIEM-output question or actual-data field. Query editing must preserve caret/focus, clear stale current grades, and retain only non-sensitive saved best. Copy is write-only; failures select text for manual copy. Keyboard, screen-reader status, forced colors, reduced motion and 320px reflow remain targets. The old wireframe is historical design rationale where it conflicts.
+Keep the existing responsive native shell. Learners open the approved HTTPS course; directly opened source HTML shows a fixed Play KC7 SecOps online link rather than a misleading content-error diagnosis.
 
-# Accessible flow and wireframes
+## Learning path
 
-## Interaction decisions
+Onboarding explains the workplace boundary and offers optional non-sensitive progress remembering. No login, name, employer-policy attestation substitute or compulsory sequential lock. Six chapter cards lead to the original Midnight at Meridian case. Briefings immediately show the first complete query/explanation; a field guide is available for more detail.
 
-Use a quiet case-workspace style with original typography and CSS shapes. No KC7 mascot, copied artwork, branded imitation, confetti, animations required for meaning, chat interface, leaderboard, login, or personal name. System fonts; responsive single-column flow on small screens. Desktop can show teaching and composer side by side. Estimated times are labelled estimates.
+Mission flow: story beat → investigative question → Think like an analyst concept → complete example/previous building block → concise syntax breakdown and memory hook → training-query editor → Check query → authored case clue → two useful method decisions → next mission. The case follows an unapproved donation-screen change, shared account and sponsor package with competing explanations. Case clues are authored fiction, never inferred from workplace results.
 
-## Onboarding
-
-```text
-KC7 SecOps — Google SecOps SIEM Search practice
-Original course. Not affiliated with KC7 or Google.
-
-Use symbols here. Real values and results stay in workplace SecOps.
-[Read privacy details]
-[ ] I understand this site never takes workplace identifiers or logs.
-
-(o) Session only — progress clears when this tab is reloaded
-( ) Remember non-sensitive progress in this browser
-
-[Start lesson 1]  [Browse curriculum]
-```
-
-The privacy acknowledgment is required before entering the composer but is not persisted as a personal consent record. Do not require employer-policy attestation on the site as a substitute for actual approval. Work-browser use begins only once the owner has established policy approval.
-
-## Course view
-
-Six cards show title, level, objectives, planning estimate, two challenge status labels, and suggested prerequisites. All cards are reachable; prereqs recommend sequence without locks. Total score and progress show query mastery and self-attested practice separately. Do not advertise a completed investigation or verified finding.
-
-## Challenge view
+Shown examples fade to guided blanks and independent construction. New concepts receive full examples. The first count_distinct mission shows the function before asking about it; explanation locates distinct in its name, excludes empty IDs and distinguishes account count from record count. Explicit/implicit AND forms are explained and accepted. Hints remain visible, progressive and penalty-free.
 
 ```text
-Skip to main content
-KC7 SecOps | Course | Progress | Privacy | Clear progress
-
-L02 / Challenge 1: Search either identity role
-Documentation checked 2026-10-14 • Tenant execution not independently verified
-
-Case question and short teaching
-Use [USER]. Pick its real value only inside SecOps.
-
-QUERY COMPOSER
-[Field ▼] [Operator ▼] [Symbol/constant ▼] [Add token]
-[AND] [OR] [(] [)] [NOT] [Section ▼] [Alias ▼]
-Ordered token list: [Move left] [Move right] [Remove]
-Read-only syntax preview
-[Check query] [Hint 1] [Copy synthetic query]
-
-FEEDBACK
-Syntax 10/10 • Filter 35/35 • Structure 25/25
-or: “Your target-user branch can bypass the login filter.”
-Unsupported: “This form is not graded by the course validator.”
-
-METHOD
-M1 labelled radio group (A/B/C)
-M2 labelled radio group (A/B/C)
-[Check method] — explanation appears after check
-
-WORKPLACE PRACTICE — manually switch to your SecOps tab
-Private steps; no tenant URL/input control
-[ ] I ran the adapted query in authorized workplace SecOps.
-[ ] I reviewed results or a zero-result limitation in workplace tools.
-[Record self-attested practice]
-
-Query 70 | Method 20 | Completion 0 → Symbolic mastery
-[Previous] [Next challenge] [Back to course]
+Story and investigative question
+[Think like an analyst: concept + why it matters]
+[Watch one / Build on it / Your turn]
+Complete query + short breakdown
+Training-query editor [Check query]
+Syntax / filter / structure feedback
+Authored case clue after correct query
+Method M1/M2 [Check method] -> specific explanation
+Query 70 + method 20 + completion 10 = Mission complete
+[Next mission]                         [Feedback & ideas]
 ```
 
-Hints reveal one level at a time, explain that there is no penalty, and do not steal focus. Worked answer appears at level 3; it must remain labelled as a worked answer. Copy button is disabled until the query is supported-correct, preventing accidental copying of malformed syntax. This is a learning safeguard, not employer security approval. Learners may read/reference teaching regardless.
+No repeated Practice in authorized SecOps panel, result questions, work-run boxes or scolding generic wrong-answer copy. Optional workplace practice happens separately. Changing query resets current grades/method choices without moving caret; navigation discards attempt input. Saved best is labelled separately.
 
-## Feedback states
+## Feedback on every page
 
-- Invalid syntax/types: mark the selected token location with a textual explanation and move focus to an error summary on Check Query.
-- Supported incorrect: show which scoring blocks failed, explain scope or pipeline difference, and permit retry.
-- Unsupported: neutral message with supported-subset link; do not label Google syntax invalid.
-- Limit exceeded: fixed message and Reset Composer button.
-- Storage unavailable: persistent, non-blocking session-only banner.
-- Missing tenant telemetry/capability: explain how to leave practice pending; no score entry for invented results.
-- Saved best attempt vs current attempt: clearly label both to avoid stale attestation carrying over.
+Floating Feedback & ideas button opens one labelled native modal dialog on onboarding, course, briefing, mission, progress, privacy and missing routes. Focus enters the textarea; Escape/Close returns to launcher. At 320px the dialog scrolls without horizontal overflow. Labels, status announcements, visible focus, reduced motion and forced colors are supported.
 
-## Accessibility requirements
+```text
+Feedback & upgrade ideas                 [Close]
+Page: fixed lesson/mission ID
+Category [preset]  Comment [text box; paste reviewed image]
+[Image preview + Remove] ... up to three
+[Save feedback in this browser] [Export draft]
+Saved entries: text + images + page/date
+[Export saved feedback] [Delete this feedback -> Confirm/Cancel]
+```
 
-Target WCAG 2.2 AA: semantic landmarks/headings, skip link, labelled native controls, complete keyboard operation, no keyboard traps, visible focus unobscured by sticky elements, no color-only feedback, text contrast >=4.5:1 (large text >=3:1), non-text contrast >=3:1, minimum 24x24 CSS-pixel targets with spacing, and 320px reflow. Query code may scroll in its region without forcing whole-page horizontal scrolling. Support text zoom 200%, forced colors, and reduced motion. No timed tasks.
+Only a user paste event in this textarea obtains images. No screen/editor/clipboard-history capture. Save is explicit and locks editing while pending; errors keep draft and export available. Export downloads a local JSON file, not email/upload/sync. Transfer destination remains undecided; show local-device retention and metadata review limits. Clearing progress never deletes feedback.
 
-After route changes focus the main heading. Results use a concise aria-live polite status; avoid rereading the whole query. Radio group question and result explanations have explicit associations. Validation error list identifies affected controls by safe label. Progress meters have textual equivalents and accessible names.
+## Evidence and remaining checks
 
-Reference links have descriptive titles and announce a new tab if used; `noopener noreferrer` and referrer policy apply. No automatic external navigation. Test keyboard-only and a screen reader manually in addition to browser assertions; automated checks do not establish complete conformance. [WCAG 2.2](https://www.w3.org/TR/WCAG22/).
-
-## Usability acceptance
-
-A new learner can find the privacy rule, compose an alternative query, see why broad Boolean logic fails, use a hint, complete method questions, leave practice pending, and clear saved progress without needing a terminal, app installation, free-text entry, or access to external AI.
+Browser tests cover keyboard route focus, native dialog/Escape, 320px reflow, reduced motion, forced colors, literal hostile text, invalid images, storage errors and actual synthetic image paste/save/reload/download. These are partial accessibility evidence. Full manual screen-reader and zoom review, employer browser/download/mail permissions and workplace approval remain unverified.

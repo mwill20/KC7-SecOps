@@ -6,13 +6,13 @@ An original course for analysts learning **Google Security Operations SIEM Searc
 
 Read the privacy notice, open the learning path and choose **Start the case**. Optional **Remember non-sensitive progress** lets you resume in the same browser. Leave it off on a shared device. Use workplace tools separately for any real query execution.
 
-Revised course published on GitHub Pages on 2026-10-16. The owner made the repository public and authorized independent review and publication. The [focused AI security review](docs/SECURITY_REVIEW_2026-10-16.md) approved this editor revision; local/reviewer/remote verification passed 116 unit and 18 browser tests, and actual HTTPS assets/all sixteen live mission pages were checked. See [deployment evidence](docs/DEPLOYMENT.md) and [implementation status](docs/IMPLEMENTATION_STATUS.md). Workplace website/storage approval and tenant compatibility remain separate, unverified checks.
+The 2026-10-17 teaching/feedback/investigation revision is implemented locally; see [implementation status](docs/IMPLEMENTATION_STATUS.md) for current review and publication evidence. Builder verification passed 121 unit and 30 browser tests. Workplace website/storage/transfer approval and tenant compatibility remain separate, unverified checks.
 
 ## Practice without exporting workplace data
 
-Type training queries using the supplied fields, operators and placeholders such as `"__USER__"`. A deterministic local validator checks structure and supported alternate forms. Practice separately in authorized workplace SecOps, substituting values only there. The editor can receive accidental real text; never enter identifiers, logs, results, tenant URLs, screenshots or notes. Query text is never saved or sent by app code.
+Type training queries using the supplied fields, operators and placeholders such as `"__USER__"`. A deterministic local validator checks structure and supported alternate forms. Practice separately in authorized workplace SecOps, substituting values only there. The editor can receive accidental real text; never enter identifiers, logs, results, tenant URLs, screenshots or notes in the query editor. Query text is never saved or sent by app code.
 
-Scoring is 70 query points, 20 fixed-choice method points, and 10 for execution/review self-attestation. Symbolic mastery needs no tenant execution. Hints have no penalty; the last reveals a worked solution. Scores are personal learning feedback, not certification or incident evidence.
+Scoring is 70 query points, 20 fixed-choice method points, and 10 for mission completion when query 70 and method 20 both pass. No tenant execution or output is needed for a score. Hints have no penalty; the last reveals a worked solution. Scores are personal learning feedback, not certification or incident evidence.
 
 ## Developer quickstart
 
@@ -32,12 +32,12 @@ Learners use the website link above. Workplace use requires organizational appro
 ## Repository map
 
 - [START_HERE](START_HERE.md), [HANDOFF](HANDOFF.md): startup and current work.
-- `site/`: native HTML/CSS/modules, composer, bounded AST validator, scoring and optional local progress.
-- `content/lessons/`: six complete lessons, challenges, hints, method questions and private practice steps.
+- `site/`: native HTML/CSS/modules, composer, bounded AST validator, scoring, optional local progress and separate local feedback.
+- `content/lessons/`: six complete lessons, challenges, hints, method questions and worked explanations.
 - [PRD](docs/PRD.md), [architecture](docs/ARCHITECTURE.md), [privacy](docs/PRIVACY.md), [threat model](docs/threat-models/THREAT_MODEL.md), [SECURITY](SECURITY.md).
 - [Sources](docs/research/SOURCE_MATRIX.md), [query reference](docs/QUERY_REFERENCE.md), [curriculum](docs/CURRICULUM.md), [validator contract](docs/specs/VALIDATOR.md), and [evaluation](docs/EVALUATION.md).
 - `tests/`, `qa/`, `schemas/`: executable checks, mutation fixtures, content/state contracts and private pilot protocol.
-- `dist/`, after building: thirteen allowlisted static files, excluding development/evidence files.
+- `dist/`, after building: fifteen allowlisted static files, excluding development/evidence files.
 - `.github/workflows/verify.yml`: separate pinned, manual-only verification configuration.
 - `.github/workflows/pages.yml`: manual-only publication; verifies the course before uploading only `dist/`, then deploys through GitHub Pages. First run passed.
 - `tools/check-live.mjs`: verifies actual HTTPS asset bytes/MIME types and excluded development paths after publication.
@@ -48,11 +48,11 @@ The root also contains a browser runtime snapshot matching the validated build a
 
 ## Boundaries and limitations
 
-No runtime AI, backend, accounts, SIEM integration, event dataset, upload, clipboard read, tracking or automatic external content. The training-query editor accepts symbolic syntax; optional storage contains only fixed IDs, scores, hint levels, versions and practice flags. Query/method inputs clear when leaving a mission or reloading.
+No runtime AI, backend, accounts, SIEM integration, event dataset, automatic upload, programmatic clipboard read, tracking or automatic external content. The training-query editor accepts symbolic syntax; optional storage contains only fixed IDs, scores, hint levels, versions and completion flags. Explicit feedback is separate: manually entered comments/screenshots can be saved locally and exported. Query/method inputs clear when leaving a mission or reloading.
 
-The validator supports a bounded Search subset, not Google's compiler. Queries are documentation-checked and **tenant-unverified**. Mapping, permissions, telemetry and features need private checks. L06 tumbling windows are preview/pre-GA and may be unavailable. Missing capability leaves practice pending; executed zero-result queries may qualify after limitation review.
+The validator supports a bounded Search subset, not Google's compiler. Queries are documentation-checked and **tenant-unverified**. Mapping, permissions, telemetry and features need private checks. L06 tumbling windows are preview/pre-GA and may be unavailable. Missing capability limits private workplace practice, not course completion.
 
-Independent AI release review completed with no supported security findings. Full manual accessibility checks and tenant validation remain unperformed. Host metadata, compromised releases, same-origin scripts and extensions limit client-side protection. See [limitations](docs/LIMITATIONS.md). Updated lessons require reassessment of older saved content versions; query text is never part of saved progress.
+Independent review is required for this changed local feedback boundary; see current status for its result. Full manual accessibility checks and tenant validation remain unperformed. Host metadata, compromised releases, same-origin scripts and extensions limit client-side protection. See [limitations](docs/LIMITATIONS.md). Updated lessons require reassessment of older saved content versions; query text is never part of saved progress.
 
 ## Attribution and license
 
@@ -63,3 +63,9 @@ The owner approved publication without adding an open-source license. No license
 ## Investigation-led learning revision
 
 Midnight at Meridian uses a fictional planetarium case, complete starter queries, short explanations, progressively reduced guidance and three hints per mission. Type or paste **training queries with placeholders** for local structural grading. Run against authorized workplace logs separately in SecOps; never return real identifiers or results. The first chapter grows from `USER_LOGIN` to successful sign-ins, distinct account counts, recorded job titles and failed attempts. Job titles depend on source/enrichment coverage and are not permission roles or proof of a historical position. Query text is never saved or sent by app code, but the editor can receive accidental real text; managed devices do not change that public-site boundary. See `docs/LEARNING_REDESIGN.md` for current revision status.
+
+## Feedback from work to home
+
+Use **Feedback & ideas** on any page. Write a comment, optionally paste a reviewed PNG/JPEG/WebP screenshot, then save in this browser. Export saved feedback as a JSON file for later retrieval. The app does not upload, sync or send it. Different home/work browsers are fine after an employer-permitted file transfer; the destination is undecided. Do not put feedback in this public repository.
+
+Saved feedback stays separate from progress and can be deleted entry by entry with confirmation. Original image metadata is retained; review it before sharing. See [feedback usage and limits](docs/FEEDBACK.md) and [privacy](docs/PRIVACY.md).

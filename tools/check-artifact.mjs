@@ -8,7 +8,9 @@ const walk = (dir, prefix = '') => fs.readdirSync(dir, { withFileTypes: true }).
 assert.deepEqual(walk(dist).sort(), [...outputFiles].sort());
 for (const file of runtimeFiles) assert.deepEqual(fs.readFileSync(path.join(dist, file)), fs.readFileSync(path.join(root, 'site', file)), 'Runtime source mismatch');
 const html = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
-assert.doesNotMatch(html, /(?:src|href)=["'](?:https?:|\/\/|\/)/i);
+const withoutPlayLink = html.replace('href="https://mwill20.github.io/KC7-SecOps/"', 'href="#course"');
+assert.notEqual(withoutPlayLink, html, 'Missing fixed manual play link');
+assert.doesNotMatch(withoutPlayLink, /(?:src|href)=["'](?:https?:|\/\/|\/)/i);
 for (const file of runtimeFiles.filter(f => f.endsWith('.js'))) {
   const text = fs.readFileSync(path.join(dist, file), 'utf8');
   for (const match of text.matchAll(/\bfrom\s+['"]([^'"]+)['"]/g)) {

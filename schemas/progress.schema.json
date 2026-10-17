@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:kc7-secops:progress:v1",
-  "title": "KC7 SecOps progress v1",
+  "$id": "urn:kc7-secops:progress:v2",
+  "title": "KC7 SecOps progress v2",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "courseVersion": {
       "const": 1
@@ -66,9 +66,6 @@
               10
             ]
           },
-          "practiced": {
-            "type": "boolean"
-          },
           "highestHint": {
             "enum": [
               0,
@@ -76,6 +73,9 @@
               2,
               3
             ]
+          },
+          "completed": {
+            "type": "boolean"
           }
         },
         "required": [
@@ -84,14 +84,14 @@
           "queryPoints",
           "methodPoints",
           "completionPoints",
-          "practiced",
+          "completed",
           "highestHint"
         ],
         "allOf": [
           {
             "if": {
               "properties": {
-                "practiced": {
+                "completed": {
                   "const": true
                 }
               }
@@ -103,6 +103,9 @@
                 },
                 "completionPoints": {
                   "const": 10
+                },
+                "methodPoints": {
+                  "const": 20
                 }
               }
             },

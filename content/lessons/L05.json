@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "contentVersion": 2,
+  "contentVersion": 3,
   "id": "L05",
   "title": "Turn the noise into a shortlist",
   "level": "intermediate",
@@ -13,7 +13,7 @@
     "Sort an aggregate result and limit displayed rows.",
     "Separate distinct record IDs, vendor duplication, missing values, and real-world actions."
   ],
-  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 5 — Mira cannot review a wall of fictional access and network activity one record at a time. Build summaries that rank useful leads. Keep the difference between a record count, an account count and a byte sum clear.",
+  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 5 — Ten minutes until doors open. The sponsor wants the screen back; Mira wants a shortlist instead of a wall of events. Rank failed-login activity, then compare recorded byte volume by destination port. Your job is to decide what to examine next without promoting the loudest entry straight to 'attacker.'",
   "teaching": [
     {
       "heading": "Reuse the summary tools",
@@ -30,6 +30,10 @@
     {
       "heading": "Bytes need context",
       "text": "sum(network.sent_bytes) adds the normalized byte values within a group. Missing fields, units and repeated data affect interpretation. A high total does not prove exfiltration."
+    },
+    {
+      "heading": "Triage buys attention, not certainty",
+      "text": "Ranking helps choose where to look first. Repeated records, stale passwords, automation and legitimate bulk transfers can dominate a list. Summarize one measure at a time, then inspect the underlying activity and business context before escalating a conclusion."
     }
   ],
   "challenges": [
@@ -50,55 +54,48 @@
       "methodQuestions": [
         {
           "id": "M1",
-          "prompt": "What does the aggregate count represent?",
+          "prompt": "What does count_distinct(metadata.id) calculate in each user group?",
           "options": [
             {
               "id": "A",
-              "label": "Distinct real attackers"
+              "label": "The number of different account IDs in the whole search."
             },
             {
               "id": "B",
-              "label": "Distinct metadata.id values within each selected user group"
+              "label": "The number of different normalized record IDs."
             },
             {
               "id": "C",
-              "label": "The number of fields in each record"
+              "label": "The number of result groups returned after limit."
             }
           ],
           "correctOption": "B",
-          "rationale": "The requirement is distinct normalized records. It does not deduplicate every real action across source vendors."
+          "rationale": "match chooses the groups; the aggregate argument chooses what is counted within each group."
         },
         {
           "id": "M2",
-          "prompt": "What does limit 20 control?",
+          "prompt": "Where does limit: 20 apply in this pipeline?",
           "options": [
             {
               "id": "A",
-              "label": "The number of events scanned"
+              "label": "To the first twenty input events before counting."
             },
             {
               "id": "B",
-              "label": "The earliest twenty login events only"
+              "label": "To twenty records within every user group."
             },
             {
               "id": "C",
-              "label": "The maximum number of returned aggregate rows"
+              "label": "To the returned summary rows after grouping and sorting."
             }
           ],
           "correctOption": "C",
-          "rationale": "It limits output after the grouping/sorting pipeline, not investigation coverage."
+          "rationale": "limit caps output rows. It is not an event-scan budget or a per-group input cap."
         }
       ],
-      "executeSteps": [
-        "Verify USER_LOGIN, FAIL action, userid and metadata.id availability privately.",
-        "Run the grouped query with an approved narrow range; no identifier substitution is needed.",
-        "Inspect a selected group's underlying events in SecOps rather than treating the ranking as an incident verdict.",
-        "Keep usernames and counts in workplace tools; do not report them to the site."
-      ],
-      "debrief": "Explain privately why a high count might warrant context review but does not prove a brute-force attack.",
       "mission": {
         "support": "shown",
-        "beat": "The fictional access story has become a queue of leads. Ask for the accounts with the largest distinct failed-record counts.",
+        "beat": "Mira has time to review only a small account shortlist. Group failed-login records by nonempty principal account, count distinct record IDs, and rank the largest counts first.",
         "example": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
         "starter": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
         "explanation": [
@@ -124,9 +121,13 @@
           }
         ],
         "remember": "Group, calculate, sort, display.",
-        "caseUpdate": "Case card unlocked: you can build an account shortlist without inventing a conclusion.",
+        "caseUpdate": "Case clue: a high-volume account deserves review, not an automatic guilty verdict. A shared service with stale credentials can outrank a quieter unauthorized login.",
         "caveat": "Distinct record IDs may still represent multiple products' records of the same real action.",
-        "gaps": []
+        "gaps": [],
+        "analystNote": {
+          "concept": "Triage and false positives",
+          "text": "Sort to prioritize attention. Compare automation, normal volume and the underlying events before treating a high count as an attack. Event counts and account counts answer different questions."
+        }
       }
     },
     {
@@ -148,55 +149,48 @@
       "methodQuestions": [
         {
           "id": "M1",
-          "prompt": "What must you verify before interpreting the byte sum?",
+          "prompt": "Which order expression ranks the byte sums from largest to smallest?",
           "options": [
             {
               "id": "A",
-              "label": "That every high-volume port is malicious"
+              "label": "order: $events desc"
             },
             {
               "id": "B",
-              "label": "Whether network.sent_bytes is populated and what the source measures"
+              "label": "order: $bytes desc"
             },
             {
               "id": "C",
-              "label": "That limit 20 scanned all network data"
+              "label": "order: $bytes asc"
             }
           ],
           "correctOption": "B",
-          "rationale": "Mapping, units, missing values and source coverage determine how useful the metric is."
+          "rationale": "The selected output alias chooses the metric; desc puts larger values first."
         },
         {
           "id": "M2",
-          "prompt": "Which interpretation is justified by the query alone?",
+          "prompt": "What changes if match: target.port becomes match: principal.user.userid?",
           "options": [
             {
               "id": "A",
-              "label": "It summarizes selected normalized records by target port"
+              "label": "The summaries are grouped by account rather than destination port."
             },
             {
               "id": "B",
-              "label": "It proves data exfiltration"
+              "label": "Only the sort order changes."
             },
             {
               "id": "C",
-              "label": "It proves the endpoint was compromised"
+              "label": "The byte sum becomes a count of accounts."
             }
           ],
           "correctOption": "A",
-          "rationale": "The query defines a descriptive summary. Security conclusions need independent context."
+          "rationale": "Changing match keys changes groups. sum(network.sent_bytes) still calculates byte sums inside those new groups."
         }
       ],
-      "executeSteps": [
-        "Choose the approved host privately and inspect the network byte-field mapping.",
-        "Substitute __HOST__ only in SecOps, run, and inspect available aggregate output.",
-        "Check source units and missing/default values using approved event details.",
-        "If the byte field is unavailable, keep actual practice pending for this challenge and complete symbolic mastery."
-      ],
-      "debrief": "Privately identify how missing telemetry would affect this summary and what additional evidence would improve it.",
       "mission": {
         "support": "guided",
-        "beat": "Mira asks for a different shortlist: destination ports for the fictional host, ordered by recorded byte volume.",
+        "beat": "Next, compare recorded byte volume by destination port for the publishing host. A large transfer may be a full show package, a backup or something unexpected. Rank the evidence before choosing a hypothesis.",
         "example": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user\noutcome:\n  $events = count_distinct(metadata.id)\norder:\n  $events desc\nlimit:\n  20",
         "starter": "metadata.event_type = \"NETWORK_CONNECTION\"\nprincipal.hostname = \"__HOST__\"\nmatch:\n  target.port\noutcome:\n  $events = count_distinct(metadata.id)\n  $bytes = sum(network.sent_bytes)\norder:\n  ___1___ desc\nlimit:\n  20",
         "explanation": [
@@ -218,7 +212,7 @@
           }
         ],
         "remember": "Sort by the thing the question asks about.",
-        "caseUpdate": "Case card unlocked: your shortlist separates record volume from byte volume. The final chapter adds time.",
+        "caseUpdate": "Case clue: a show package is legitimately large. Volume helps choose what to inspect; it cannot identify file contents or prove data theft.",
         "caveat": "Verify units, field population and duplication before interpreting a workplace sum.",
         "gaps": [
           {
@@ -231,7 +225,11 @@
             ],
             "answer": "$bytes"
           }
-        ]
+        ],
+        "analystNote": {
+          "concept": "Volume is not content",
+          "text": "Summed bytes describe the populated field in matching records. Check units, missing values and duplicate reporting. A large total is a lead, not proof of exfiltration."
+        }
       }
     }
   ],

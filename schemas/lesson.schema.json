@@ -221,21 +221,6 @@
             "minItems": 2,
             "maxItems": 2
           },
-          "executeSteps": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 1500
-            },
-            "minItems": 3,
-            "maxItems": 8
-          },
-          "debrief": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 2000
-          },
           "mission": {
             "type": "object",
             "additionalProperties": false,
@@ -251,6 +236,15 @@
                 "type": "string",
                 "minLength": 1,
                 "maxLength": 2000
+              },
+              "analystNote": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "concept": { "type": "string", "minLength": 1, "maxLength": 200 },
+                  "text": { "type": "string", "minLength": 1, "maxLength": 1200 }
+                },
+                "required": ["concept", "text"]
               },
               "example": {
                 "type": "string",
@@ -347,6 +341,7 @@
             "required": [
               "support",
               "beat",
+              "analystNote",
               "example",
               "starter",
               "explanation",
@@ -366,8 +361,6 @@
           "acceptedVariants",
           "hints",
           "methodQuestions",
-          "executeSteps",
-          "debrief",
           "mission"
         ]
       },

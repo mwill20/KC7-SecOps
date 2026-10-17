@@ -1,7 +1,8 @@
 import bundle from './content.js';
+import { mountFeedback } from './feedback/widget.js';
 import { evaluateText } from './query/evaluate.js';
 import { newAttempt, changeQuery, gradeMethod, reduceAttempt, bestAttempt, total, statusLabel } from './state/scoring.js';
-import { loadProgress, saveProgress, clearProgress } from './state/progress.js';
+import { loadProgress, saveProgress, clearProgress, forgetProgress } from './state/progress.js';
 
 const app = document.getElementById('app');
 const lessons = bundle.lessons;
@@ -15,7 +16,7 @@ const attempts = new Map();
 const messages = {
   STORAGE_UNAVAILABLE: 'Browser storage is unavailable. Progress continues in this session only.',
   PROGRESS_INVALID: 'Saved progress could not be used. It has been left untouched; Clear progress removes it. This session starts fresh.',
-  LESSON_CHANGED: 'This lesson changed; please reassess. Unchanged lesson scores were retained.',
+  LESSON_CHANGED: 'These lessons or completion rules changed; please reassess. Older saved progress remains preserved until you clear it.',
 };
 const node = (tag, text, cls) => { const el = document.createElement(tag); if (text !== null && text !== undefined) el.textContent = text; if (cls) el.className = cls; return el; };
 const add = (el, ...children) => { children.filter(Boolean).forEach(c => el.append(c)); return el; };
@@ -30,7 +31,7 @@ function rememberChoice() {
   box.addEventListener('change', () => {
     remembered = box.checked;
     if (remembered) { warning = null; persist(); }
-    else warning = clearProgress(storage);
+    else warning = forgetProgress(storage);
     refresh(remembered ? 'Progress remembering enabled.' : 'Progress is session only.', 'remember');
   });
   return add(wrap, box, node('span', 'Remember non-sensitive progress in this browser. Leave off on a shared device.'));
@@ -59,14 +60,14 @@ function onboarding() {
   const start = button('Open the learning path →', () => { acknowledged = true; refresh('Learning path opened.'); document.getElementById('main').focus(); }, 'open-course', 'primary'); start.disabled = true;
   cb.addEventListener('change', () => { start.disabled = !cb.checked; });
   add(label, cb, node('span', 'I will keep actual identifiers, queries with real values, and results exclusively in approved workplace tools.'));
-  add(p, label, rememberChoice(), paragraph('Default: session only. Remembering stores scores, hint levels, content versions, and fixed completion flags. No query or answer text is stored.', 'small muted'), start);
+  add(p, label, rememberChoice(), paragraph('Default: session only. Remembering stores scores, hint levels, content versions, and fixed mission flags. No query or answer text is stored.', 'small muted'), start);
   add(m, p); return m;
 }
 function course() {
   const m = main(); const hero = node('section', null, 'hero'); const intro = node('div');
   add(intro, paragraph('SIGNAL DESK / GOOGLE SECOPS', 'eyebrow'), node('h1', 'Midnight at Meridian.'), paragraph('A planetarium. A midnight launch. A giant dancing potato on the main display. Your first job: find the access trail.'), paragraph('Follow one original case through six chapters. See a query, learn its parts, then change it yourself. Run it against your authorized work logs in SecOps; submit only the training query here.'), link('Start the case →', '#L01', 'primary'));
   const summary = panel('Your learning record');
-  add(summary, paragraph(String(records.reduce((n, r) => n + total(r), 0)), 'progress-big'), paragraph('of ' + (challenges.length * 100).toLocaleString('en-US') + ' learning points', 'muted'), add(node('div', null, 'metric'), node('span', 'Symbolic mastery'), node('strong', records.filter(r => r.queryPoints === 70 && r.methodPoints === 20).length + ' / ' + challenges.length)), add(node('div', null, 'metric'), node('span', 'Practice self-attested'), node('strong', records.filter(r => r.practiced && r.methodPoints === 20).length + ' / ' + challenges.length)), paragraph(remembered ? 'Remembered in this browser' : 'Session only', 'small muted'));
+  add(summary, paragraph(String(records.reduce((n, r) => n + total(r), 0)), 'progress-big'), paragraph('of ' + (challenges.length * 100).toLocaleString('en-US') + ' learning points', 'muted'), add(node('div', null, 'metric'), node('span', 'Symbolic mastery'), node('strong', records.filter(r => r.queryPoints === 70 && r.methodPoints === 20).length + ' / ' + challenges.length)), add(node('div', null, 'metric'), node('span', 'Missions completed'), node('strong', records.filter(r => r.completed && r.methodPoints === 20).length + ' / ' + challenges.length)), paragraph(remembered ? 'Remembered in this browser' : 'Session only', 'small muted'));
   add(hero, intro, summary); add(m, hero);
   add(m, add(node('div', null, 'row between'), node('h2', 'The learning path'), paragraph('06 chapters · ' + challenges.length + ' query missions · no time pressure', 'small muted')));
   const cards = node('div', null, 'cards');
@@ -79,7 +80,7 @@ function course() {
 function sidebar(active) {
   const aside = node('aside', null, 'sidebar'); add(aside, paragraph('LEARNING PATH', 'eyebrow')); const nav = node('nav'); nav.setAttribute('aria-label', 'Lessons'); const list = node('ol');
   for (const l of lessons) { const a = link('', '#' + l.id); add(a, node('small', l.id + ' / ' + l.level.toUpperCase()), node('span', l.title)); if (l.id === active.id) a.setAttribute('aria-current', 'step'); add(list, add(node('li'), a)); }
-  add(nav, list); add(aside, nav, paragraph('70% query · 20% method · 10% practice', 'small muted'), paragraph('Progress is personal learning feedback. It is not certification or evidence of a security finding.', 'small muted')); return aside;
+  add(nav, list); add(aside, nav, paragraph('70% query · 20% method · 10% mission completion', 'small muted'), paragraph('Progress is personal learning feedback. It is not certification or evidence of a security finding.', 'small muted')); return aside;
 }
 function sourceLinks(l) {
   const details = node('details'); add(details, node('summary', 'Official references & verification')); const list = node('ul');
@@ -116,13 +117,13 @@ function lesson(l) {
 }
 function scorePanel(c, a) {
   const score = panel('Current attempt'); score.id = 'current-score';
-  const current = reduceAttempt(a, versions.get(c.id)), transient = a.queryResult?.queryPoints === 70 ? (Number(a.executedAcknowledged) + Number(a.reviewedAcknowledged)) * 5 : 0;
-  add(score, paragraph(String(current.queryPoints + current.methodPoints + transient), 'progress-big'), paragraph('of 100 points', 'muted'));
+  const current = reduceAttempt(a, versions.get(c.id));
+  add(score, paragraph(String(total(current)), 'progress-big'), paragraph('of 100 points', 'muted'));
   const rubric = node('div', null, 'rubric');
-  [['Query', current.queryPoints, 70], ['Method', current.methodPoints, 20], ['Practice', transient, 10]].forEach(([label, n, max]) => add(rubric, add(node('div'), node('strong', String(n)), node('span', label + ' / ' + max))));
+  [['Query', current.queryPoints, 70], ['Method', current.methodPoints, 20], ['Completed', current.completionPoints, 10]].forEach(([label, n, max]) => add(rubric, add(node('div'), node('strong', String(n)), node('span', label + ' / ' + max))));
   add(score, rubric, paragraph(statusLabel(current), 'small good'));
   const best = records.find(r => r.challengeId === c.id); if (best) add(score, paragraph('Saved best: ' + total(best) + '/100 · ' + statusLabel(best), 'small muted'));
-  add(score, paragraph('Editing the query clears the current assessment and acknowledgments. Saved best stays separate.', 'small muted'));
+  add(score, paragraph('Query 70 + method 20 completes the mission and adds 10 completion points. Editing resets the current assessment; saved best stays separate.', 'small muted'));
   return score;
 }
 function queryFeedback(c, a) {
@@ -147,7 +148,7 @@ function composer(c, a) {
     Object.assign(a, changeQuery(a, editor.value));
     document.getElementById('query-result')?.remove(); document.getElementById('method-result')?.remove();
     p.closest('.desk').querySelectorAll('.method-rationale').forEach(el => el.remove());
-    p.closest('.desk').querySelectorAll('input[type=radio], input[id$=Acknowledged]').forEach(el => { el.checked = false; if (el.type === 'checkbox') el.disabled = true; });
+    p.closest('.desk').querySelectorAll('input[type=radio]').forEach(el => { el.checked = false; });
     document.getElementById('current-score')?.replaceWith(scorePanel(c, a));
     document.querySelectorAll('[data-gap]').forEach(el => { el.value = ''; });
   });
@@ -182,23 +183,12 @@ function method(c, a) {
     const fs = node('fieldset'); add(fs, node('legend', q.prompt));
     q.options.forEach(o => { const label = node('label', null, 'choice'), radio = node('input'); radio.type = 'radio'; radio.name = q.id; radio.value = o.id; radio.id = q.id + '-' + o.id; radio.checked = a.methodChoices[q.id] === o.id;
       radio.addEventListener('change', () => { a.methodChoices[q.id] = o.id; a.methodPoints = null; refresh('Method choice changed. Check method to reassess.', radio.id); }); add(label, radio, node('span', o.label)); add(fs, label); });
-    if (a.methodPoints !== null) add(fs, paragraph((a.methodChoices[q.id] === q.correctOption ? 'Correct. ' : 'Reconsider. ') + q.rationale, 'small method-rationale'));
+    if (a.methodPoints !== null) add(fs, paragraph((a.methodChoices[q.id] === q.correctOption ? 'Correct: ' : 'Explanation: ') + q.rationale, 'small method-rationale'));
     add(p, fs);
   });
   add(p, button('Check method', () => { a.methodPoints = gradeMethod(a, c); saveAttempt(c, a); refresh('Method checked. ' + a.methodPoints + ' of 20 method points.', 'method-result'); }, 'check-method'));
   if (a.methodPoints !== null) { const r = paragraph(a.methodPoints + ' / 20 method points', 'result'); r.id = 'method-result'; r.tabIndex = -1; add(p, r); }
   return p;
-}
-function practice(c, a) {
-  const p = panel('03 / Practice in authorized SecOps');
-  add(p, paragraph('Open your approved SecOps manually. Replace symbols only there. Keep real values, full workplace queries, logs, counts and observations there. Return only a training query with the supplied placeholders.', 'notice'));
-  const list = node('ol'); c.executeSteps.forEach(s => add(list, node('li', s))); add(p, list, paragraph(c.debrief, 'small muted'));
-  const enabled = a.queryResult?.queryPoints === 70;
-  for (const [key, text] of [['executedAcknowledged', 'I ran the adapted query in authorized workplace SecOps'], ['reviewedAcknowledged', 'I reviewed results or a zero-result limitation inside workplace tools']]) {
-    const label = node('label', null, 'choice'), box = node('input'); box.type = 'checkbox'; box.id = key; box.checked = a[key]; box.disabled = !enabled;
-    box.addEventListener('change', () => { a[key] = box.checked; saveAttempt(c, a); refresh('Practice acknowledgment updated. Execution remains self-attested.', key); }); add(label, box, node('span', text)); add(p, label);
-  }
-  add(p, paragraph(enabled ? 'Each acknowledgment gives 5 current-attempt points. Only both together save 10 practice points. If execution is unavailable, leave practice pending.' : 'First match the current symbolic query intent (70/70) to enable practice acknowledgments.', 'small muted')); return p;
 }
 function challenge(l, c) {
   const a = attemptFor(c), m = main(), layout = node('div', null, 'workspace'), body = node('div'); add(layout, sidebar(l), body);
@@ -207,6 +197,8 @@ function challenge(l, c) {
   const trail = node('nav', null, 'mission-trail'); trail.setAttribute('aria-label', 'Chapter missions');
   for (const [i, mission] of l.challenges.entries()) { const a = link(String(i + 1), '#' + mission.id); a.setAttribute('aria-label', 'Mission ' + (i + 1) + ': ' + mission.title); if (mission === c) a.setAttribute('aria-current', 'step'); add(trail, a); }
   add(body, trail, paragraph(c.mission.beat, 'case-story'), paragraph(c.prompt, 'mission-question'));
+  const analyst = panel('Think like an analyst'); analyst.classList.add('analyst-note');
+  add(analyst, node('h3', c.mission.analystNote.concept), paragraph(c.mission.analystNote.text)); add(body, analyst);
   const desk = node('div', null, 'desk'), left = node('div', null, 'stack'), right = node('aside', null, 'stack');
   const teaching = panel({ shown: 'Watch one', guided: 'Build on it', independent: 'Your turn' }[c.mission.support]);
   if (c.mission.example) add(teaching, exampleBlock(c));
@@ -218,7 +210,7 @@ function challenge(l, c) {
   if (a.highestHint < 3) add(hints, button('Reveal hint ' + (a.highestHint + 1), () => { a.highestHint++; saveAttempt(c, a); refresh('Hint ' + a.highestHint + ' revealed.', 'hint-panel'); }, 'next-hint'));
   if (a.highestHint === 3) add(hints, button('Load worked example', () => { attempts.set(c.id, changeQuery(a, c.hints[2])); refresh('Worked example loaded. Check it, then explain the method.', 'check-query'); }, 'load-example'));
   hints.id = 'hint-panel'; hints.tabIndex = -1;
-  add(left, teaching, composer(c, a), method(c, a), practice(c, a));
+  add(left, teaching, composer(c, a), method(c, a));
   add(right, hints, scorePanel(c, a), sourceLinks(l)); add(desk, left, right); add(body, desk);
   const next = challenges[challenges.indexOf(c) + 1]; add(body, add(node('div', null, 'row mission-next'), link(next ? (index === l.challenges.length - 1 ? 'Next chapter →' : 'Next mission →') : 'Review case progress →', next ? '#' + next.id : '#progress', 'primary')));
   add(m, layout); return m;
@@ -227,13 +219,13 @@ function progress() {
   const m = main('narrow'); add(m, paragraph('YOUR LEARNING RECORD', 'eyebrow'), node('h1', 'Progress, at your pace.'), paragraph(records.reduce((n, r) => n + total(r), 0) + ' / ' + (challenges.length * 100).toLocaleString('en-US') + ' learning points', 'progress-big'));
   const p = panel('Saved best, one attempt at a time');
   for (const c of challenges) { const r = records.find(x => x.challengeId === c.id); add(p, add(node('div', null, 'metric'), link(c.id + ' · ' + c.title, '#' + c.id), node('span', (r ? total(r) : 0) + '/100 · ' + statusLabel(r), 'small'))); }
-  add(p, paragraph('A saved best combines query, method, and practice from one attempt. Highest hint use is tracked separately. A learner can edit browser storage; these records are not audit evidence.', 'small muted'), rememberChoice(), button('Clear progress', resetProgress, 'clear-progress'), paragraph('Clears only this course’s browser key and in-memory attempts. Other sites and courses are untouched.', 'small muted'));
+  add(p, paragraph('A saved best combines query, method and mission-completion points from one attempt. Highest hint use is tracked separately. A learner can edit browser storage; these records are not audit evidence.', 'small muted'), rememberChoice(), button('Clear progress', resetProgress, 'clear-progress'), paragraph('Clears this course’s current and older progress keys and in-memory attempts. Saved feedback is separate; other sites and courses are untouched.', 'small muted'));
   add(m, p); return m;
 }
 function privacy() {
   const m = main('narrow'); add(m, paragraph('THE WORKPLACE BOUNDARY', 'eyebrow'), node('h1', 'Keep the evidence where it belongs.'));
   const p = panel('What the app receives');
-  add(p, paragraph('Training query text with predefined placeholders, fixed method choices, hints and practice acknowledgments. The editor can receive accidental real text: never paste workplace values. There is no upload, tenant URL or clipboard-reading feature.'), node('h3', 'What the app stores'), paragraph('Nothing across sessions by default. If enabled, this browser remembers challenge/content IDs, score components, highest hint level, and self-attested practice flags. Typed query text stays in tab memory and is discarded when you leave a mission or reload. It is never put in storage, a URL, telemetry or a network request by the app. Method answers, results, identifiers and timestamps are not saved.'), node('h3', 'What the app contacts'), paragraph('The app loads its static files from the host. It has no runtime AI, analytics, SIEM integration, automatic external content, or backend. Clicking an official reference opens that fixed public documentation link without a referrer. The host may keep ordinary access logs.'), node('h3', 'Limits of this protection'), paragraph('A managed device does not make this public website an internal tool. Browser owners, extensions, compromised releases and scripts on the same origin can inspect text entered here, even without saving it. Local progress is untrusted. Use a dedicated approved origin; do not embed the course in another site. Hosting must enforce framing restrictions if required.'), node('h3', 'Your approved Copilot'), paragraph('Optional Copilot use belongs separately inside your approved work environment and organizational policy. It is not part of the course, a validator, or a reason to send workplace data to another service.'), node('h3', 'What the scores mean'), paragraph('Query structure 70%, fixed method choices 20%, and execution/review self-attestation 10%. This is personal practice, not certification, incident verification, or proof that Google’s compiler accepted a query.'), rememberChoice(), button('Clear progress', resetProgress, 'clear-progress'));
+  add(p, paragraph('Training queries with predefined placeholders and fixed method choices. The separate Feedback button accepts your comments and explicitly pasted sanitized UI/error screenshots; nothing is uploaded automatically. Never enter workplace identifiers, logs or results.'), node('h3', 'What the app stores'), paragraph('Course progress is session-only unless you enable remembering; it stores fixed IDs, scores, hint level and mission-completion flags. Training query text is discarded when you leave a mission or reload and is never saved or sent by app code. Feedback is separate: Save feedback keeps your entered comment, explicitly pasted images, page context and feedback date in this browser’s IndexedDB. Export retrieves a file for you to share later. It is not synchronized or automatically available to Codex.'), node('h3', 'What the app contacts'), paragraph('The app loads its static files from the host. It has no runtime AI, analytics, SIEM integration, automatic external content, or backend. Clicking an official reference opens that fixed public documentation link without a referrer. The host may keep ordinary access logs.'), node('h3', 'Limits of this protection'), paragraph('A managed device does not make this public website an internal tool. Browser owners, extensions, compromised releases and scripts on the same origin can inspect text entered here, even without saving it. Local progress is untrusted. Use a dedicated approved origin; do not embed the course in another site. Hosting must enforce framing restrictions if required.'), node('h3', 'Your approved Copilot'), paragraph('Optional Copilot use belongs separately inside your approved work environment and organizational policy. It is not part of the course, a validator, or a reason to send workplace data to another service.'), node('h3', 'What the scores mean'), paragraph('Query structure 70%, method choices 20%, mission completion 10% when both pass. Completion does not attest to a workplace run. This is personal practice, not certification, incident verification, or proof that Google’s compiler accepted a query.'), rememberChoice(), button('Clear progress', resetProgress, 'clear-progress'));
   add(m, p); return m;
 }
 function render(routeChange = true) {
@@ -255,3 +247,9 @@ function render(routeChange = true) {
 document.querySelector('.skip').addEventListener('click', e => { e.preventDefault(); document.getElementById('main').focus(); });
 window.addEventListener('hashchange', () => { attempts.clear(); render(); });
 render();
+
+mountFeedback(document.getElementById('feedback-root'), () => {
+  const route = currentRoute();
+  if (!acknowledged && route.view !== 'privacy') return { pageId: 'onboarding', contentVersion: null };
+  return { pageId: route.challenge?.id ?? route.lesson?.id ?? route.view, contentVersion: route.lesson?.contentVersion ?? null };
+});

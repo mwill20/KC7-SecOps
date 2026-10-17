@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "contentVersion": 3,
+  "contentVersion": 4,
   "id": "L06",
   "title": "At the control-room door",
   "level": "capstone",
@@ -14,7 +14,7 @@
     "Follow up with a focused success-action search and check chronology manually.",
     "Distinguish Search output from detection rules and verified incident conclusions."
   ],
-  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 6 — The fictional case reaches its final access question: do failures cluster into short periods, and how would you follow up on an allowed login? Use the earlier toolkit, keep the limits clear, and finish with a query rather than a claim about your workplace.",
+  "story": "MIDNIGHT AT MERIDIAN / CHAPTER 6 — The sponsor finally admits the VIP slide came in a demonstration package. A backstage checklist also exposes a shared publishing password. That explains a risky path, but who used it and when are still open questions. Check short failure bursts and prepare a focused successful-login follow-up. Finish with a defensible handoff, not a convenient culprit.",
   "teaching": [
     {
       "heading": "Check capability before using windows",
@@ -31,6 +31,10 @@
     {
       "heading": "Follow up and keep chronology private",
       "text": "A second ALLOW search for an account can support a follow-up. Compare times and identity context inside SecOps. Two independent queries alone do not prove that success followed failure or shared a session."
+    },
+    {
+      "heading": "A useful handoff separates facts from hypotheses",
+      "text": "State the observed change, relevant account/host/time scope, competing explanations and next evidence needed. Failure bursts followed by success can matter, but these separate queries do not establish a sequence or who was behind an account. Do not turn a teaching threshold into a detection standard."
     }
   ],
   "challenges": [
@@ -51,55 +55,48 @@
       "methodQuestions": [
         {
           "id": "M1",
-          "prompt": "What might fixed bucket boundaries miss?",
+          "prompt": "Why can a short burst be split into two lower counts?",
           "options": [
             {
               "id": "A",
-              "label": "Every single failed login record"
+              "label": "order desc divides large groups into equal halves."
             },
             {
               "id": "B",
-              "label": "A burst split across two neighboring buckets that falls below the per-bucket threshold"
+              "label": "Its events can fall on opposite sides of a fixed bucket boundary."
             },
             {
               "id": "C",
-              "label": "Nothing; by 5m is identical to every rolling detection window"
+              "label": "limit 20 divides the input time range into twenty buckets."
             }
           ],
           "correctOption": "B",
-          "rationale": "A fixed-bucket summary has boundary effects. Do not claim it is interchangeable with sliding/hop detection logic."
+          "rationale": "Fixed five-minute buckets have boundaries; one short sequence can span two of them."
         },
         {
           "id": "M2",
-          "prompt": "A group exceeds the teaching threshold. What does that prove?",
+          "prompt": "Which integer-count condition is equivalent to $failures > 3?",
           "options": [
             {
               "id": "A",
-              "label": "Only that the selected normalized records met the query's grouping and count criterion"
+              "label": "$failures >= 4"
             },
             {
               "id": "B",
-              "label": "That an attack succeeded"
+              "label": "$failures >= 3"
             },
             {
               "id": "C",
-              "label": "That this should be deployed as a production rule without review"
+              "label": "$failures = 4"
             }
           ],
           "correctOption": "A",
-          "rationale": "A training threshold is not incident proof or an operational rule approval."
+          "rationale": "> 3 retains counts 4, 5, 6 and higher. >= 4 does the same; = 4 would exclude higher counts."
         }
       ],
-      "executeSteps": [
-        "Verify statistical Search, preview tumbling-window availability, and the condition syntax in the authorized tenant. Do not enable a preview setting for this course.",
-        "Run the summary on an approved range. If tenant capability is unavailable, keep practice pending without changing the scored syntax silently.",
-        "Inspect any candidate group privately and check its actual event timestamps and normalization.",
-        "No group above threshold is a legitimate outcome after checking telemetry and bucket limitations."
-      ],
-      "debrief": "Privately explain at least one alternative benign explanation and one coverage limitation. No user, count, or exact timestamp returns to the app.",
       "mission": {
         "support": "shown",
-        "beat": "The final fictional access card asks about short concentrations of failures. Learn the window syntax before using the supplied teaching threshold.",
+        "beat": "Could failures be clustered into a short burst rather than spread across rehearsal? Build five-minute buckets and use the supplied teaching threshold. This is a Search summary, not a deployed detection rule.",
         "example": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user by 5m\noutcome:\n  $failures = count_distinct(metadata.id)\ncondition:\n  $failures > 3\norder:\n  $failures desc\nlimit:\n  20",
         "starter": "metadata.event_type = \"USER_LOGIN\"\nsecurity_result.action = \"FAIL\"\nprincipal.user.userid != \"\"\n$user = principal.user.userid\nmatch:\n  $user by 5m\noutcome:\n  $failures = count_distinct(metadata.id)\ncondition:\n  $failures > 3\norder:\n  $failures desc\nlimit:\n  20",
         "explanation": [
@@ -121,9 +118,13 @@
           }
         ],
         "remember": "A bucket has edges. A threshold is not a verdict.",
-        "caseUpdate": "Case card unlocked: you can express a bounded time-summary question. One independent follow-up remains.",
-        "caveat": "Google documents tumbling windows as preview/pre-GA and customer/region dependent. Do not enable a preview for this course. Missing capability leaves practice pending.",
-        "gaps": []
+        "caseUpdate": "Case clue: a failure burst would justify a timing follow-up. It would not, by itself, prove password spraying, a successful compromise or which person used the account.",
+        "caveat": "Google documents tumbling windows as preview/pre-GA and customer/region dependent. Do not enable a preview for this course. If unavailable, continue with the course example.",
+        "gaps": [],
+        "analystNote": {
+          "concept": "Pattern needs corroboration",
+          "text": "A burst can come from retries or automation. Password spraying usually concerns attempts across accounts; this account-grouped query alone cannot establish it. Bucket boundaries can split a burst."
+        }
       }
     },
     {
@@ -145,55 +146,48 @@
       "methodQuestions": [
         {
           "id": "M1",
-          "prompt": "How do you check whether success occurred after failures?",
+          "prompt": "Does this separate ALLOW search prove those events occurred after the earlier failures?",
           "options": [
             {
               "id": "A",
-              "label": "The two searches automatically prove the order"
+              "label": "Yes; running the ALLOW query second establishes event order."
             },
             {
               "id": "B",
-              "label": "Upload both result sets to the site"
+              "label": "Yes; the USER_LOGIN type links each success to its previous failure."
             },
             {
               "id": "C",
-              "label": "Compare the relevant event timestamps and context inside approved workplace tools"
+              "label": "No; the filters do not join the searches or enforce their time order."
             }
           ],
           "correctOption": "C",
-          "rationale": "The app performs no join and sees no results. Chronology and identity context must be reviewed privately."
+          "rationale": "Query execution order is not event chronology. A separate filter does not express a cross-event time relationship."
         },
         {
           "id": "M2",
-          "prompt": "What can the course's final completion badge mean?",
+          "prompt": "Which version preserves the requested successful-login account scope?",
           "options": [
             {
               "id": "A",
-              "label": "A verified compromise finding"
+              "label": "USER_LOGIN OR ALLOW OR the exact principal account."
             },
             {
               "id": "B",
-              "label": "That training challenges were mastered and any execution was self-attested"
+              "label": "USER_LOGIN AND ALLOW AND the exact principal account."
             },
             {
               "id": "C",
-              "label": "Official Google certification"
+              "label": "USER_LOGIN AND (ALLOW OR the exact principal account)."
             }
           ],
           "correctOption": "B",
-          "rationale": "The score is private formative feedback, not independent validation or certification."
+          "rationale": "All three requirements must hold together. The alternatives admit records that fail at least one required condition."
         }
       ],
-      "executeSteps": [
-        "If a candidate exists in the previous results, choose that identity privately. Otherwise choose another authorized practice identity; do not invent an incident.",
-        "Replace __USER__ only in SecOps, check ALLOW normalization, and run.",
-        "Review chronology privately if relevant evidence exists; otherwise document the limitation in workplace notes.",
-        "Return only fixed execution/review acknowledgments. Do not deploy a detection or take a response action."
-      ],
-      "debrief": "Conclude the original training case with an appropriately bounded private statement: observation, interpretation, limitation, next authorized question.",
       "mission": {
         "support": "independent",
-        "beat": "Mira asks for one last query: allowed login records for the actor account on the sealed badge card. Use the earlier filters without a supplied starting query.",
+        "beat": "Mira needs one precise follow-up: allowed login records for the principal publishing account. Write it from memory. Compare chronology only in SecOps; the course needs your query, not the evidence.",
         "example": "",
         "starter": "",
         "explanation": [
@@ -211,9 +205,13 @@
           }
         ],
         "remember": "A good final query answers a precise question and knows its limits.",
-        "caseUpdate": "CASE FILE COMPLETE — you built the queries for an original investigation, from a single filter to a cautious capstone. The fictional show can move on; your workplace searches remain private and no real incident is claimed.",
+        "caseUpdate": "CASE HANDOFF — The unapproved VIP slide came with the sponsor's demo package; a shared password left the publishing path poorly controlled. Your queries scoped access, roles, process and network leads. The intern is not proven responsible, and the operator remains unconfirmed. Hand off the evidence gaps instead of inventing a culprit.",
         "caveat": "This query alone does not establish success-after-failure. Compare chronology and identity context only in workplace tools.",
-        "gaps": []
+        "gaps": [],
+        "analystNote": {
+          "concept": "Facts, hypotheses and next checks",
+          "text": "An allowed-login query does not prove success-after-failure. Keep account/host context and event times together when following up privately. A good handoff states what is supported and what evidence is still missing."
+        }
       }
     }
   ],

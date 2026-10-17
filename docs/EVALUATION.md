@@ -1,4 +1,12 @@
-# Evaluation — investigation learning revision (2026-10-16)
+# Current evaluation — feedback and investigation revision (2026-10-17)
+
+Full builder npm run verify on Node24.21.0 passed 121 unit/30 browser checks, 6 lessons/16 missions/37 sources/73 query fixtures. Artifact: fifteen files; SHA256 f6ef991fd76fd70cf882b60812541014eff044ec295a9bd858fc7737e2e375b6. Current review/publication evidence is recorded in IMPLEMENTATION_STATUS.md and DEPLOYMENT.md; the historical results below do not accept new bytes.
+
+The real browser path reaches 1600/1600 without workplace execution/output. Explicit/implicit AND both grade; outcome/count_distinct/empty-ID explanations precede questions. Every mission renders a practical analyst concept; wrong queries do not reveal authored clues, correct queries do. File-open source fallback supplies the manual playable URL. Existing hostile-input, stale-state, CSP/static-request and accessibility portions still pass.
+
+Feedback tests exercise synthetic PNG/JPEG/WebP paste/native decode/real IndexedDB/save/reload/local JSON download, invalid-image refusal, blocked/capacity/quota/transaction failure, malformed saved data, confirmed delete, keyboard/Escape/reflow and slow-save locking. New progress-schema and legacy preservation tests pass. Failure injection proves handling, not work-browser capability. No tenant, mail delivery, cross-device transfer, confidentiality detection, metadata stripping, full manual AT or employer-policy validation is claimed.
+
+## Historical 2026-10-16 evaluation
 
 Builder evidence below covers the current training-editor revision. The separate AI review in SECURITY_REVIEW_2026-10-16.md returned APPROVE with zero supported security findings and independently reproduced the full suite plus additional hostile/count/title/storage probes for the exact artifact. Pages run 38919299268 also passed the complete suite and published the identical artifact; actual HTTPS assets and all sixteen live mission pages were checked. See DEPLOYMENT.md for precise scope. Historical review/deployment remain preserved separately.
 

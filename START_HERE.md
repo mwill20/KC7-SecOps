@@ -17,6 +17,8 @@ PRD and security/privacy contracts constrain every component. Validator and scor
 
 ## Current status
 
+Current 2026-10-17 work is the feedback/teaching/investigation correction; read the newest IMPLEMENTATION_STATUS and HANDOFF before the historical release paragraph below. Feedback is a separate explicit local Save/Delete/JSON export flow, never automatic query capture or upload. No email/transfer destination selected. Mission completion now means query70 + method20; older practice records are preserved until Clear. Learners use https://mwill20.github.io/KC7-SecOps/ rather than opening site/index.html directly.
+
 The 2026-10-16 learning revision is LIVE: six chapters/16 missions, explained examples before testing, guided blanks and a training-query text editor approved by the owner. Local/reviewer/remote full verification passes 116 unit/18 browser tests. The focused independent AI review is SECURITY_REVIEW_2026-10-16.md; actual published source/run/HTTPS/browser evidence is in DEPLOYMENT.md. Read the newest status before the historical release record below. Query text is never saved or sent by app code; accidental real-value entry remains possible and prohibited.
 
 Research, six lessons, and the static application are implemented. Initial source upload was authorized on 2026-10-14. On 2026-10-15 the owner made `mwill20/KC7-SecOps` public and authorized independent review followed by GitHub Pages publication without adding an open-source license. The separate AI review returned APPROVE; see `docs/SECURITY_REVIEW.md`. Pages is configured for manual Actions publication; consult `docs/DEPLOYMENT.md` and live GitHub run status for actual website evidence. Full manual assistive-technology checks, private tenant pilot and workplace-use/storage approval remain unverified.
@@ -27,4 +29,4 @@ Research, six lessons, and the static application are implemented. Initial sourc
 
 ## No expansion
 
-No runtime AI, SIEM/API connections, actual logs, datasets, accounts, telemetry, leaderboards, notes, progress export/import, custom workplace identifiers, or automatic detection deployment. No commit, push, or hosting activation without explicit authority for that action.
+No runtime AI, SIEM/API connections, actual logs, datasets, accounts, telemetry, leaderboards, internal investigation notes, progress export/import, custom workplace identifiers, or automatic detection deployment. Separate reviewed course feedback and manual screenshot paste/local export are the owner-approved exception described in docs/FEEDBACK.md. No commit, push, or hosting activation without explicit authority for that action.

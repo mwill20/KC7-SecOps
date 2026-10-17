@@ -1,6 +1,6 @@
 export const total = r => r.queryPoints + r.methodPoints + r.completionPoints;
 export function newAttempt(challengeId) {
-  return { challengeId, queryText: '', tokenIds: [], queryResult: null, methodChoices: { M1: null, M2: null }, methodPoints: null, executedAcknowledged: false, reviewedAcknowledged: false, highestHint: 0 };
+  return { challengeId, queryText: '', tokenIds: [], queryResult: null, methodChoices: { M1: null, M2: null }, methodPoints: null, highestHint: 0 };
 }
 export function changeTokens(attempt, tokenIds) {
   return { ...newAttempt(attempt.challengeId), tokenIds: [...tokenIds], highestHint: attempt.highestHint };
@@ -13,8 +13,8 @@ export function gradeMethod(attempt, challenge) {
 }
 export function reduceAttempt(attempt, contentVersion) {
   const q = attempt.queryResult?.queryPoints ?? 0;
-  const completion = q === 70 && attempt.executedAcknowledged && attempt.reviewedAcknowledged ? 10 : 0;
-  return { challengeId: attempt.challengeId, contentVersion, queryPoints: q, methodPoints: attempt.methodPoints ?? 0, completionPoints: completion, practiced: completion === 10, highestHint: attempt.highestHint };
+  const completion = q === 70 && attempt.methodPoints === 20 ? 10 : 0;
+  return { challengeId: attempt.challengeId, contentVersion, queryPoints: q, methodPoints: attempt.methodPoints ?? 0, completionPoints: completion, completed: completion === 10, highestHint: attempt.highestHint };
 }
 export function bestAttempt(saved, current) {
   if (!saved) return { ...current };
@@ -26,5 +26,5 @@ export function bestAttempt(saved, current) {
 }
 export function statusLabel(record) {
   if (!record || record.queryPoints !== 70 || record.methodPoints !== 20) return 'In progress';
-  return record.practiced ? 'Practiced — self-attested' : 'Symbolic mastery';
+  return record.completed ? 'Mission complete' : 'Query and method matched';
 }

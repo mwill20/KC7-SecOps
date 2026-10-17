@@ -1,0 +1,24 @@
+# Research supplement — feedback, investigation and local opening
+
+Checked 2026-10-17 against primary sources. These are documentation checks, not tenant execution, mail delivery or employer-policy approval. All case characters/clues are original authored fiction.
+
+| Source | Evidence used | Application consequence / limit |
+|---|---|---|
+| [Search syntax](https://docs.cloud.google.com/chronicle/docs/investigation/search-syntax-reference) | Adjacent search filters imply conjunction; explicit Boolean forms supported | Teach and grade explicit/implicit AND; do not confuse newline with OR |
+| [Search statistics](https://docs.cloud.google.com/chronicle/docs/investigation/statistics-aggregations-in-udm-search) and [SPL transition](https://docs.cloud.google.com/chronicle/docs/yara-l/transition_spl_yaral) | outcome calculations and count_distinct examples | Name chosen output separately from counted field; exclude empty user ID for this task |
+| [UDM overview](https://docs.cloud.google.com/chronicle/docs/event-processing/udm-overview) | Category, principal/target entity roles and source-dependent details | Separate event type, role and recorded context; dictionary does not establish population |
+| [MITRE Valid Accounts](https://attack.mitre.org/techniques/T1078/) | Existing valid credentials can be abused | Allowed authentication is not proof of legitimate business activity or a specific human |
+| [MITRE PowerShell](https://attack.mitre.org/techniques/T1059/001/) | Scripting tool can be used by adversaries | Process name is a lead requiring context, not a malware verdict |
+| [MITRE Password Spraying](https://attack.mitre.org/techniques/T1110/003/) | Spraying concerns password attempts across accounts | Failure burst in account groups alone cannot prove spraying |
+| [MITRE Web Protocols](https://attack.mitre.org/techniques/T1071/001/) | Legitimate-looking web traffic may be used for adversary communications | Familiar web port does not establish safety; do not claim a port proves actual protocol |
+| [MDN paste event](https://developer.mozilla.org/en-US/docs/Web/API/Element/paste_event), [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API), [createImageBitmap](https://developer.mozilla.org/en-US/docs/Web/API/Window/createImageBitmap), [dialog showModal](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal) | Browser local paste/store/decode/modal APIs | Scope to explicit paste and local retention, real-browser test actual supported path |
+| [PNG specification](https://www.w3.org/TR/png-3/) and [WebP container](https://developers.google.com/speed/webp/docs/riff_container) | Header sizes/dimensions and animation flags | Bound before decoding; reject animated PNG/WebP; no metadata removal claim |
+| [GitHub Pages setup](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site) | Static publishing; no server-side application languages | Pages itself does not send mail. An automatic mail backend would be a new service/boundary |
+| [MDN email links](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Creating_links) and [RFC6068](https://www.rfc-editor.org/rfc/rfc6068) | mailto opens a user mail draft; standard subject/body parameters | A draft helper is not guaranteed delivery or attachment transfer; manually attach exported file in approved mail client |
+| [Private repositories](https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories), [browser file upload](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository), [SharePoint external sharing](https://learn.microsoft.com/en-us/sharepoint/external-sharing-overview) | Access and file-sharing routes depend on permissions/policy | Possible manual private handoffs only; do not use public course repo or assume org approval |
+
+Entering an email address in a public page selects a destination; it is not sender authentication. No email service, credential, webhook or mailto helper was implemented. Work Copilot may help draft non-sensitive issue descriptions within policy, but is not needed for capture, course runtime or home development.
+
+The source module imports generated content.js from the build. Opening source site/index.html as file: cannot supply the deployed module graph; browser file-origin module restrictions are another reason this is not the supported learner route. An actual isolated-browser test verifies the static play-link fallback; the live HTTPS build is separately checked after publication.
+
+Unknowns: organizational website/storage/export/email/private-GitHub/sharing rules; work browser mail handler and downloads; tenant compiler/features/field population; complete manual AT. No successful email or workplace transfer is claimed.

@@ -20,7 +20,7 @@ Confirm manual YL2 Search access, an approved investigation range, source teleme
 | L06-C01 | Preview/pre-GA tumbling-window availability confirmed without enabling features; by 5m and numeric outcome condition compile; fixed buckets understood | compiled / capability unavailable / syntax correction needed |
 | L06-C02 | ALLOW/user follow-up compiles; chronology reviewed privately if evidence exists | compiled / unavailable / syntax correction needed |
 
-Share at most the challenge ID and one fixed capability/compiler status. No actual row count, event/result category, real values, exact range, screenshots, raw logs, or sensitive error text. Compatibility status is not proof of result correctness or coverage. The app itself stores only the generic practiced flag and score projection.
+Share at most the challenge ID and one fixed capability/compiler status. No actual row count, event/result category, real values, exact range, raw logs, or sensitive error text. Compatibility status is not proof of result correctness or coverage. Progress v2 stores course completion, not practice/execution. Separate optional feedback may retain reviewed platform/error screenshots with no internal data, per docs/PRIVACY.md; it does not automatically capture or validate confidentiality and has no automatic transfer destination. Workplace use/storage/transfer still requires policy permission.
 
 ## Empty results
 

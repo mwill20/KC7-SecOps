@@ -1,3 +1,15 @@
+# Current feedback and investigation revision — 2026-10-17
+
+The owner requested retained feedback/screenshots on every page, removal of repeated workplace-practice panels, clear outcome/implicit-AND/count_distinct teaching, useful method questions, a stronger investigation/fundamentals story, and help for direct source-file opening.
+
+- Implemented: separate local feedback dialog, manual image paste/Save/Delete/JSON export with no automatic transfer; query editor still transient. All 32 method questions revised; first count example fully shown; every mission includes an analyst concept and connected original case clue. Repeated execution panels/flags removed. Query70+method20 earns10 completion. Strict optional progress v2 preserves older v1 until explicit Clear.
+- Evidence: full builder npm run verify on exact Node24.21.0 passes 121 unit and30 browser tests;6 lessons/16 missions/37 sources/73 query fixtures. Tests exercise actual synthetic PNG/JPEG/WebP paste, native decode, real IndexedDB/reload/download, capacity/storage rollback/slow-save failures, legacy opt-out preservation, all16 mission completion, wrong-query clue gating, source file fallback, network/CSP and keyboard/reflow.
+- Artifact:15 allowlisted files, SHA256 f6ef991fd76fd70cf882b60812541014eff044ec295a9bd858fc7737e2e375b6. Focused independent AI review APPROVE in SECURITY_REVIEW_2026-10-17.md; reviewer independently passed the preceding feedback-only120unit/28browser run, then current121unit/build/artifact and both added story/file-open browser checks. Unchanged feedback/progress component hashes bind the earlier pipeline evidence. Two preservation issues were fixed/rechecked; no supported finding remains. This is not a human audit or employer approval.
+- Publication: current corrections not yet published in this snapshot. Preserve the historical records below. After focused approval, commit/push and dispatch manual Pages workflow, verify remote digest and actual HTTPS/browser behavior, then record the exact revision/run.
+- Transfer: owner needs private work-to-home handoff. Email/private-repository files/approved company sharing are options, no destination selected. No automatic email/upload, new service, recipient collection or Codex access configured. Local export is transport-independent.
+- External limitations: tenant compilation/mapping/title population/L06 preview, full manual AT, and workplace website/storage/download/mail/transfer permissions remain unverified. Directly opened site/index.html is a source file, not a self-contained course; learners use the HTTPS website.
+
+## Historical 2026-10-16 release record
 # Current learning revision — 2026-10-16
 
 The owner requested KC7's story → explained example → incremental query → hints flow, with query grading and separate workplace execution. The owner selected a training-query text editor after disclosure that accidental real text can enter. This authorizes transient symbolic input, not workplace data collection.

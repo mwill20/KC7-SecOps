@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta name="color-scheme" content="dark">
@@ -19,8 +19,9 @@
     <nav aria-label="Main"><a href="#course">Learning path</a><a href="#progress">Progress</a><a href="#privacy">Privacy</a></nav>
     <span class="local-badge">LOCAL ASSESSMENT</span>
   </header>
-  <div id="app"><main class="narrow"><h1>Course unavailable</h1><p>CONTENT_INVALID: the course could not initialize. Reload the approved build; assessment is unavailable.</p></main></div>
+  <div id="app"><main id="main" class="narrow"><h1>Open KC7 SecOps</h1><p>The course needs its approved web build. Opening a development HTML file directly cannot start the course.</p><p><a class="primary" href="https://mwill20.github.io/KC7-SecOps/" referrerpolicy="no-referrer">Play KC7 SecOps online →</a></p><p>If the web course does not load, reload once. Developers can use npm start after building; learners only need the link above.</p></main></div>
   <div id="live" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+  <aside id="feedback-root" aria-label="Course feedback"></aside>
   <footer>Original independent training · Inspired by KC7's investigative approach · Not affiliated with KC7 or Google.<span>Manual Google SecOps Search · YARA-L 2.0 subset</span></footer>
   <noscript>This course needs browser JavaScript for local symbolic assessment. It makes no SIEM connection.</noscript>
 </body>
